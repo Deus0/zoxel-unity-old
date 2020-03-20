@@ -1,0 +1,81 @@
+.unity-toggle {
+    -unity-font-style: normal;
+}
+
+#header {
+    color: rgb(5, 255, 0);
+    -unity-font-style: bold;
+    font-size: 16px;
+    -unity-text-align: upper-center;
+    -unity-font: url('/Assets/Fonts/Pixels.ttf');
+}
+
+.unity-button {
+    font-size: 22px;
+    color: rgb(14, 212, 0);
+    background-color: rgb(24, 26, 25);
+    border-left-color: rgb(37, 51, 25);
+    border-right-color: rgb(37, 51, 25);
+    border-top-color: rgb(37, 51, 25);
+    border-bottom-color: rgb(37, 51, 25);
+    border-left-width: 4px;
+    border-right-width: 4px;
+    border-top-width: 4px;
+    border-bottom-width: 4px;
+    border-top-left-radius: 24px;
+    border-bottom-left-radius: 24px;
+    border-top-right-radius: 24px;
+    border-bottom-right-radius: 24px;
+    cursor: url('/Assets/Textures/Cursors/ActionCursor.png');
+    -unity-font: url('/Assets/Fonts/Pixels.ttf');
+    margin-left: 5px;
+    margin-right: 5px;
+    margin-top: 5px;
+    margin-bottom: 5px;
+    padding-left: 5px;
+    padding-right: 5px;
+    padding-top: 5px;
+    padding-bottom: 5px;
+    -unity-font-style: bold;
+}
+
+.unity-button:hover {
+    border-left-color: rgb(156, 161, 30);
+    border-right-color: rgb(156, 161, 30);
+    border-top-color: rgb(156, 161, 30);
+    border-bottom-color: rgb(156, 161, 30);
+    cursor: url('/Assets/Textures/Cursors/ActionCursor.png');
+    background-color: rgb(32, 38, 35);
+}
+
+.unity-button:active {
+    border-left-color: rgb(78, 149, 16);
+    border-right-color: rgb(78, 149, 16);
+    border-top-color: rgb(78, 149, 16);
+    border-bottom-color: rgb(78, 149, 16);
+    cursor: url('/Assets/Textures/Cursors/ActionCursor.png');
+    background-color: rgb(44, 58, 51);
+}
+
+.unity-button:focus {
+    border-left-color: rgb(207, 84, 28);
+    border-right-color: rgb(207, 84, 28);
+    border-top-color: rgb(207, 84, 28);
+    border-bottom-color: rgb(207, 84, 28);
+}
+
+#unity-base-slider {
+    padding-left: 6px;
+    padding-right: 6px;
+    padding-top: 6px;
+    padding-bottom: 6px;
+    margin-left: 6px;
+    margin-right: 6px;
+    margin-top: 6px;
+    margin-bottom: 6px;
+}
+
+.unity-label:focus {
+    color: rgb(238, 127, 1);
+    -unity-font-style: bold;
+}

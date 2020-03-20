@@ -1,0 +1,13 @@
+fileFormatVersion: 2
+guid: 3d7f26b858101ce41bb2dc3cb3d6290e
+ScriptedImporter:
+  internalIDToNameTable: []
+  externalObjects: {}
+  serializedVersion: 2
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+  script: {fileID: 11500000, guid: 5441f7bda96807d409522dc8d0af4b33, type: 3}
+  isExport: 1
+  vox: {instanceID: 0}
+  assetPath: Assets/Data/Turrets/Basic Turret/Basic Turret Base.vox

@@ -1,0 +1,9 @@
+<ui:UXML xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements">
+    <ui:VisualElement name="Main" style="background-color: rgba(68, 75, 62, 255); flex-grow: 1;">
+        <Style src="MapMaker.uss" />
+        <ui:Label text="Map Maker" style="-unity-text-align: upper-center; font-size: 24px; color: rgb(0, 255, 147); -unity-font-style: bold; padding-left: 4px; padding-top: 4px; padding-bottom: 4px; padding-right: 4px; border-left-color: rgba(0, 244, 255, 255); border-right-color: rgba(0, 244, 255, 255); border-top-color: rgba(0, 244, 255, 255); border-bottom-color: rgba(0, 244, 255, 255); border-left-width: 2px; border-right-width: 2px; border-top-width: 2px; border-bottom-width: 2px; border-top-left-radius: 11px; border-bottom-left-radius: 11px; border-top-right-radius: 11px; border-bottom-right-radius: 11px; background-color: rgb(10, 48, 28); margin-left: 6px; margin-right: 6px; margin-top: 6px; margin-bottom: 6px;" />
+        <ui:VisualElement name="MapSelection" style="margin-left: 9px; margin-right: 9px; margin-top: 3px; margin-bottom: 3px;">
+            <ui:Button text="Button" name="MapSelectionPrefab" />
+        </ui:VisualElement>
+    </ui:VisualElement>
+</ui:UXML>

@@ -1,0 +1,11 @@
+<ui:UXML xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements">
+    <ui:VisualElement name="Main" style="padding-left: 80px; padding-right: 80px; padding-top: 80px; padding-bottom: 80px; justify-content: center; align-items: center;">
+        <Style src="OptionsScreen.uss" />
+        <ui:VisualElement style="background-color: rgb(59, 87, 87); border-left-width: 6px; border-right-width: 6px; border-top-width: 6px; border-bottom-width: 6px; border-left-color: rgb(61, 204, 207); border-right-color: rgb(61, 204, 207); border-top-color: rgb(61, 204, 207); border-bottom-color: rgb(61, 204, 207); border-top-left-radius: 32px; border-bottom-left-radius: 32px; border-top-right-radius: 32px; border-bottom-right-radius: 32px; width: 255px; height: 241px; justify-content: space-around; align-items: center;">
+            <ui:Label text="Options" name="header" style="-unity-text-align: upper-center; -unity-font: url('/Assets/Fonts/Pixels.ttf'); font-size: 22px; color: rgb(0, 255, 15); -unity-font-style: bold; justify-content: center; padding-left: 16px; padding-right: 16px; padding-top: 16px; padding-bottom: 16px;" />
+            <ui:Slider picking-mode="Ignore" label="Render Distance" value="6" high-value="16" low-value="3" name="RenderDistance" style="-unity-text-align: upper-center; flex-grow: 1; margin-left: 6px; margin-right: 6px; margin-top: 6px; margin-bottom: 6px; padding-left: 6px; padding-right: 6px; padding-top: 6px; padding-bottom: 6px;" />
+            <ui:Toggle label="Audio" name="AudioToggle" view-data-key="audiosetting" value="true" style="margin-left: 6px; margin-right: 6px; margin-top: 6px; margin-bottom: 6px; -unity-text-align: upper-center; flex-grow: 1; padding-left: 6px; padding-right: 6px; padding-top: 6px; padding-bottom: 6px;" />
+            <ui:Button text="Back" name="OptionsToMainScreen" focusable="true" />
+        </ui:VisualElement>
+    </ui:VisualElement>
+</ui:UXML>

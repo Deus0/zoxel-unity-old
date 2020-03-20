@@ -1,0 +1,51 @@
+.unity-button {
+    font-size: 22px;
+    color: rgb(14, 212, 0);
+    background-color: rgba(24, 26, 25, 0.12);
+    border-left-color: rgb(37, 51, 25);
+    border-right-color: rgb(37, 51, 25);
+    border-top-color: rgb(37, 51, 25);
+    border-bottom-color: rgb(37, 51, 25);
+    border-left-width: 4px;
+    border-right-width: 4px;
+    border-top-width: 4px;
+    border-bottom-width: 4px;
+    border-top-left-radius: 0;
+    border-bottom-left-radius: 0;
+    border-top-right-radius: 0;
+    border-bottom-right-radius: 0;
+    cursor: url('/Assets/Textures/Cursors/ActionCursor.png');
+    -unity-font: url('/Assets/Fonts/Pixels.ttf');
+    margin-left: 5px;
+    margin-right: 5px;
+    margin-top: 5px;
+    margin-bottom: 5px;
+    padding-left: 5px;
+    padding-right: 5px;
+    padding-top: 5px;
+    padding-bottom: 5px;
+    -unity-font-style: bold;
+}
+
+.unity-button:hover {
+    border-left-color: rgb(63, 99, 33);
+    border-right-color: rgb(63, 99, 33);
+    border-top-color: rgb(63, 99, 33);
+    border-bottom-color: rgb(63, 99, 33);
+    cursor: url('/Assets/Textures/Cursors/ActionCursor.png');
+}
+
+.unity-button:active {
+    border-left-color: rgb(78, 149, 16);
+    border-right-color: rgb(78, 149, 16);
+    border-top-color: rgb(78, 149, 16);
+    border-bottom-color: rgb(78, 149, 16);
+    cursor: url('/Assets/Textures/Cursors/ActionCursor.png');
+}
+
+.unity-button:focus {
+    border-left-color: rgb(233, 42, 6);
+    border-right-color: rgb(233, 42, 6);
+    border-top-color: rgb(233, 42, 6);
+    border-bottom-color: rgb(233, 42, 6);
+}

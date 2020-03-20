@@ -1,0 +1,20 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9741c63afef850c448e7e2b5f4530bd2, type: 3}
+  m_Name: Chest
+  m_EditorClassIdentifier: 
+  Value:
+    id: 1386621733
+    scale: 0.5
+  texture: {fileID: 11400000, guid: d9981c4120fafbd429784853cf46787a, type: 2}
+  model: {fileID: 923185112455563988, guid: 0fed995254afe134c88c249d0d98ddc9, type: 3}
+  pickedUp: {fileID: 0}

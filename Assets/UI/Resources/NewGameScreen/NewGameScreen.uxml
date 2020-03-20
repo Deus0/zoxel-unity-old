@@ -1,0 +1,73 @@
+<ui:UXML xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements">
+    <ui:VisualElement name="Main" style="flex-direction: row; flex-grow: 1; justify-content: space-between;">
+        <Style src="NewGameScreen.uss" />
+        <ui:VisualElement name="CharacterOptions" style="padding-left: 16px; padding-right: 16px; padding-top: 16px; padding-bottom: 16px; width: 300px; background-color: rgb(0, 0, 0); flex-grow: 0; flex-shrink: 0; border-left-color: rgb(0, 255, 250); border-right-color: rgb(0, 255, 250); border-top-color: rgb(0, 255, 250); border-bottom-color: rgb(0, 255, 250); border-left-width: 4px; border-right-width: 4px; border-top-width: 4px; border-bottom-width: 4px;">
+            <ui:Label text="Customization" style="-unity-font-style: bold; font-size: 18px; -unity-text-align: upper-center;" />
+            <ui:VisualElement name="NavigationButtons" style="flex-direction: row; justify-content: center; margin-left: 4px; margin-right: 4px; margin-top: 4px; margin-bottom: 4px; padding-left: 6px; padding-right: 6px; padding-top: 6px; padding-bottom: 6px;">
+                <ui:Button text="Back" name="CancelNewGame" focusable="true" style="-unity-font-style: bold;" />
+                <ui:Button text="Continue" name="ConfirmNewGame" focusable="true" style="-unity-font-style: bold;" />
+            </ui:VisualElement>
+            <ui:ScrollView style="flex-grow: 1;">
+                <ui:Foldout text="Name" value="true" name="NamesFoldout" focusable="true" style="-unity-font-style: bold; -unity-font: url('/Assets/Fonts/Pixels.ttf'); flex-shrink: 0;">
+                    <ui:VisualElement name="NamesButtons" focusable="false" style="flex-direction: column; justify-content: center; margin-left: 6px; margin-right: 6px; margin-top: 6px; margin-bottom: 6px; flex-grow: 1;">
+                        <ui:Button text="Joe Goliath" name="Joe Goliath" focusable="true" style="-unity-font-style: bold;" />
+                        <ui:Button text="Jonny Mcknee" name="Jonny Mcknee" focusable="true" style="-unity-font-style: bold;" />
+                        <ui:Button text="Zed El Graves" name="Zed El Graves" focusable="true" style="-unity-font-style: bold;" />
+                    </ui:VisualElement>
+                </ui:Foldout>
+                <ui:Foldout text="Class" value="true" name="ClassFoldout" focusable="true" style="-unity-font-style: bold; -unity-font: url('/Assets/Fonts/Pixels.ttf'); -unity-text-align: upper-center; flex-shrink: 0;">
+                    <ui:VisualElement name="ClassButtons" style="flex-direction: column; justify-content: center; margin-left: 6px; margin-right: 6px; margin-top: 6px; margin-bottom: 6px; flex-grow: 1;">
+                        <ui:Button text="Warrior" name="Warrior" focusable="true" style="-unity-font-style: bold;" />
+                        <ui:Button text="Rogue" name="Rogue" focusable="true" style="-unity-font-style: bold;" />
+                        <ui:Button text="Mage" name="Mage" focusable="true" style="-unity-font-style: bold;" />
+                        <ui:Button text="Warlock" name="Warlock" focusable="true" style="-unity-font-style: bold;" />
+                        <ui:Button text="Priest" name="Priest" focusable="true" style="-unity-font-style: bold;" />
+                        <ui:Button text="Monk" name="Monk" focusable="true" style="-unity-font-style: bold;" />
+                        <ui:Button text="Engineer" name="Engineer" focusable="true" style="-unity-font-style: bold;" />
+                    </ui:VisualElement>
+                </ui:Foldout>
+                <ui:Foldout text="Race" value="true" name="RaceFoldout" focusable="true" style="-unity-font-style: bold; -unity-font: url('/Assets/Fonts/Pixels.ttf'); flex-shrink: 0;">
+                    <ui:VisualElement name="RaceButtons" style="flex-direction: column; justify-content: center; margin-left: 6px; margin-right: 6px; margin-top: 6px; margin-bottom: 6px; flex-grow: 1;">
+                        <ui:Button text="Human" name="Human" focusable="true" style="-unity-font-style: bold;" />
+                        <ui:Button text="Orc" name="Orc" focusable="true" style="-unity-font-style: bold;" />
+                        <ui:Button text="Elf" name="Elf" focusable="true" style="-unity-font-style: bold;" />
+                    </ui:VisualElement>
+                </ui:Foldout>
+                <ui:Foldout text="Stats" value="true" name="StatsFoldout" focusable="true" style="-unity-font-style: bold; -unity-font: url('/Assets/Fonts/Pixels.ttf'); flex-shrink: 0;">
+                    <ui:VisualElement name="StatsButtons" style="flex-direction: column; justify-content: center; margin-left: 6px; margin-right: 6px; margin-top: 6px; margin-bottom: 6px; flex-grow: 1;">
+                        <ui:Button text="Strength" name="Strength" focusable="true" style="-unity-font-style: bold;" />
+                        <ui:Button text="Intelligence" name="Intelligence" focusable="true" style="-unity-font-style: bold;" />
+                        <ui:Button text="Agility" name="Agility" focusable="true" style="-unity-font-style: bold;" />
+                        <ui:Button text="Vitality" name="Vitality" focusable="true" style="-unity-font-style: bold;" />
+                        <ui:Button text="Wisdom" name="Wisdom" focusable="true" style="-unity-font-style: bold;" />
+                        <ui:Button text="Dexterity" name="Dexterity" focusable="true" style="-unity-font-style: bold;" />
+                    </ui:VisualElement>
+                </ui:Foldout>
+                <ui:Foldout text="Items" value="true" name="ItemsFoldout" focusable="true" style="-unity-font-style: bold; -unity-font: url('/Assets/Fonts/Pixels.ttf'); flex-shrink: 0;">
+                    <ui:VisualElement name="ItemsButton" style="flex-direction: column; justify-content: center; margin-left: 6px; margin-right: 6px; margin-top: 6px; margin-bottom: 6px; flex-grow: 1;">
+                        <ui:Button text="Bread" name="Bread" focusable="true" style="-unity-font-style: bold;" />
+                        <ui:Button text="Potato" name="Potato" focusable="true" style="-unity-font-style: bold;" />
+                        <ui:Button text="Onigiri" name="Onigiri" focusable="true" style="-unity-font-style: bold;" />
+                    </ui:VisualElement>
+                </ui:Foldout>
+                <ui:Foldout text="Job" value="true" name="JobsFoldout" focusable="true" style="-unity-font-style: bold; -unity-font: url('/Assets/Fonts/Pixels.ttf'); flex-shrink: 0;">
+                    <ui:VisualElement name="JobsButtons" style="flex-direction: column; justify-content: center; margin-left: 6px; margin-right: 6px; margin-top: 6px; margin-bottom: 6px; flex-grow: 1;">
+                        <ui:Button text="Farmer" name="Farmer" focusable="true" style="-unity-font-style: bold;" />
+                        <ui:Button text="Adventurer" name="Adventurer" focusable="true" style="-unity-font-style: bold;" />
+                        <ui:Button text="Merchant" name="Merchant" focusable="true" style="-unity-font-style: bold;" />
+                        <ui:Button text="Alchemist" name="Alchemist" focusable="true" style="-unity-font-style: bold;" />
+                        <ui:Button text="Engineer" name="Engineer" focusable="true" style="-unity-font-style: bold;" />
+                        <ui:Button text="Herbologist" name="Herbologist" focusable="true" style="-unity-font-style: bold;" />
+                    </ui:VisualElement>
+                </ui:Foldout>
+                <ui:Foldout text="Location" value="true" name="TownsFoldout" focusable="true" style="-unity-font-style: bold; -unity-font: url('/Assets/Fonts/Pixels.ttf'); flex-shrink: 0;">
+                    <ui:VisualElement name="TownsButtons" style="flex-direction: column; justify-content: center; margin-left: 6px; margin-right: 6px; margin-top: 6px; margin-bottom: 6px; flex-grow: 1;">
+                        <ui:Button text="Philsville" name="Philsville" focusable="true" style="-unity-font-style: bold;" />
+                        <ui:Button text="Stone Hill" name="Stone Hill" focusable="true" style="-unity-font-style: bold;" />
+                        <ui:Button text="Grimy Caves" name="Grimy Caves" focusable="true" style="-unity-font-style: bold;" />
+                    </ui:VisualElement>
+                </ui:Foldout>
+            </ui:ScrollView>
+        </ui:VisualElement>
+    </ui:VisualElement>
+</ui:UXML>

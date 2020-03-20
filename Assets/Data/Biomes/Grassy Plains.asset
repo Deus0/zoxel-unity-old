@@ -1,0 +1,41 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 33034b1e8e0400c4385f6f3cd70df7a2, type: 3}
+  m_Name: Grassy Plains
+  m_EditorClassIdentifier: 
+  Value:
+    id: 1900386785
+    landBase: 32
+    landAmplitude: 8
+    landScale: 0.002
+    dirtID: 1
+    grassID: 2
+    sandID: 4
+    stoneID: 3
+    waterID: 3
+    floorID: 0
+    wallID: 0
+    roofID: 0
+    grassChance: 70
+  dirt: {fileID: 11400000, guid: 54a913a0d5752a54eb45dd65ade6714c, type: 2}
+  grass: {fileID: 11400000, guid: 9b75f0ae4bef6c540833e7b880fbfee3, type: 2}
+  sand: {fileID: 11400000, guid: 0e9dee87d3a55c949a2f4e35030f1743, type: 2}
+  stone: {fileID: 11400000, guid: eeea187fa0c7e7c45b5e25a626a801e2, type: 2}
+  water: {fileID: 11400000, guid: eeea187fa0c7e7c45b5e25a626a801e2, type: 2}
+  floor: {fileID: 11400000, guid: eeea187fa0c7e7c45b5e25a626a801e2, type: 2}
+  wall: {fileID: 11400000, guid: 0e9dee87d3a55c949a2f4e35030f1743, type: 2}
+  roof: {fileID: 11400000, guid: eeea187fa0c7e7c45b5e25a626a801e2, type: 2}
+  monsterSpawnAmount: 4
+  monsterSpawnCooldown: 4
+  monsters:
+  - {fileID: 11400000, guid: 0baaf620c19ce454e924329e333ba095, type: 2}
+  - {fileID: 11400000, guid: 0baaf620c19ce454e924329e333ba095, type: 2}

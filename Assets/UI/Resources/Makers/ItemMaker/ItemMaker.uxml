@@ -1,0 +1,20 @@
+<ui:UXML xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements">
+    <ui:VisualElement style="flex-grow: 1; background-color: rgba(68, 75, 62, 255);">
+        <Style src="ItemMaker.uss" />
+        <ui:VisualElement name="Header" style="-unity-font-style: bold; padding-left: 4px; padding-right: 4px; padding-top: 4px; padding-bottom: 4px; font-size: 16px; background-color: rgba(33, 36, 29, 255);">
+            <ui:Label text="Pickaxe" name="NameLabel" style="font-size: 22px; padding-left: 4px; padding-right: 4px; padding-top: 4px; padding-bottom: 4px;" />
+        </ui:VisualElement>
+        <ui:VisualElement name="Panel" style="padding-left: 4px; padding-right: 4px; padding-top: 4px; padding-bottom: 4px; margin-left: 4px; margin-right: 4px; margin-top: 4px; margin-bottom: 4px;">
+            <ui:TextField picking-mode="Ignore" label="Name" value="filler text" text="Enter Name" name="NameInput" style="padding-left: 4px; padding-right: 4px; padding-top: 4px; padding-bottom: 4px;" />
+            <ui:TextField picking-mode="Ignore" label="Description" text="Enter Description" name="DescriptionInput" style="padding-left: 4px; padding-right: 4px; padding-top: 4px; padding-bottom: 4px;" />
+            <uie:ObjectField label="Icon" type="TextureDatam" name="TextureInput" style="opacity: 1; display: none;" />
+            <uie:ObjectField label="Mesh" type="TextureDatam" name="MeshInput" style="display: none;" />
+            <ui:Button text="Save" name="SaveButton" />
+        </ui:VisualElement>
+        <ui:VisualElement name="Footer" style="flex-direction: row; justify-content: center; padding-left: 4px; padding-right: 4px; padding-top: 4px; padding-bottom: 4px; background-color: rgba(33, 36, 29, 255);">
+            <ui:Button text="Back" name="PreviousItemButton" style="flex-grow: 1;" />
+            <ui:Label name="IndexLabel" text="One out of Ten" style="flex-grow: 1; margin-left: 8px; margin-right: 8px; margin-top: 8px; margin-bottom: 8px; padding-left: 2px; padding-top: 2px; padding-bottom: 2px; border-left-color: rgba(81, 255, 0, 255); border-right-color: rgba(81, 255, 0, 255); border-top-color: rgba(81, 255, 0, 255); border-bottom-color: rgba(81, 255, 0, 255); border-left-width: 2px; border-right-width: 2px; border-top-width: 2px; border-bottom-width: 2px; border-top-left-radius: 12px; border-bottom-left-radius: 12px; border-top-right-radius: 12px; border-bottom-right-radius: 12px;" />
+            <ui:Button text="Next" name="NextItemButton" style="flex-grow: 1;" />
+        </ui:VisualElement>
+    </ui:VisualElement>
+</ui:UXML>

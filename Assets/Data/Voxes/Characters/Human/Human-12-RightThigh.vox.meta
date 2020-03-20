@@ -1,0 +1,13 @@
+fileFormatVersion: 2
+guid: 016c68d801ba5e14f87c18fbc5f877e9
+ScriptedImporter:
+  internalIDToNameTable: []
+  externalObjects: {}
+  serializedVersion: 2
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+  script: {fileID: 11500000, guid: 5441f7bda96807d409522dc8d0af4b33, type: 3}
+  isExport: 0
+  vox: {instanceID: 0}
+  voxAssetPath: Assets/Models/Human/Human-12-RightThigh.vox

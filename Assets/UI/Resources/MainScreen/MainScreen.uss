@@ -1,0 +1,64 @@
+.unity-label {
+    cursor: url('/Assets/Textures/Cursors/NormalCursor.png');
+    -unity-font: url('/Assets/Fonts/Pixels.ttf');
+    color: rgb(0, 226, 104);
+    font-size: 16px;
+    margin-left: 6px;
+    margin-right: 6px;
+    margin-top: 6px;
+    margin-bottom: 6px;
+}
+
+.unity-button {
+    font-size: 32px;
+    color: rgb(14, 212, 0);
+    background-color: rgba(24, 26, 25, 0);
+    border-left-color: rgb(37, 51, 25);
+    border-right-color: rgb(37, 51, 25);
+    border-top-color: rgb(37, 51, 25);
+    border-bottom-color: rgb(37, 51, 25);
+    border-left-width: 4px;
+    border-right-width: 4px;
+    border-top-width: 4px;
+    border-bottom-width: 4px;
+    border-top-left-radius: 0;
+    border-bottom-left-radius: 0;
+    border-top-right-radius: 0;
+    border-bottom-right-radius: 0;
+    cursor: url('/Assets/Textures/Cursors/ActionCursor.png');
+    -unity-font: url('/Assets/Fonts/Pixels.ttf');
+    -unity-font-style: bold;
+    margin-left: 4px;
+    margin-right: 4px;
+    margin-top: 4px;
+    margin-bottom: 4px;
+    padding-left: 6px;
+    padding-right: 6px;
+    padding-top: 6px;
+    padding-bottom: 6px;
+}
+
+.unity-button:hover {
+    border-left-color: rgb(156, 161, 30);
+    border-right-color: rgb(156, 161, 30);
+    border-top-color: rgb(156, 161, 30);
+    border-bottom-color: rgb(156, 161, 30);
+    cursor: url('/Assets/Textures/Cursors/ActionCursor.png');
+    background-color: rgb(32, 38, 35);
+}
+
+.unity-button:active {
+    border-left-color: rgb(78, 149, 16);
+    border-right-color: rgb(78, 149, 16);
+    border-top-color: rgb(78, 149, 16);
+    border-bottom-color: rgb(78, 149, 16);
+    cursor: url('/Assets/Textures/Cursors/ActionCursor.png');
+    background-color: rgb(44, 58, 51);
+}
+
+.unity-button:focus {
+    border-left-color: rgb(207, 84, 28);
+    border-right-color: rgb(207, 84, 28);
+    border-top-color: rgb(207, 84, 28);
+    border-bottom-color: rgb(207, 84, 28);
+}

@@ -1,0 +1,8 @@
+<ui:UXML xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements">
+    <ui:VisualElement style="flex-grow: 1; justify-content: center; align-items: center; background-color: rgb(125, 0, 8);">
+        <Style src="EndOfGameUI.uss" />
+        <ui:Label text="You Died." name="EndOfGameLabel" style="-unity-text-align: upper-center; -unity-font: url('/Assets/Fonts/Pixels.ttf'); font-size: 22px; color: rgb(255, 54, 0); -unity-font-style: bold;" />
+        <ui:Button text="Respawn" name="RespawnButton" focusable="true" />
+        <ui:Button text="Exit" name="MainMenuButton" focusable="true" />
+    </ui:VisualElement>
+</ui:UXML>

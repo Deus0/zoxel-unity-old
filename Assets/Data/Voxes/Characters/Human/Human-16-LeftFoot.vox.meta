@@ -1,0 +1,13 @@
+fileFormatVersion: 2
+guid: 77b4962f86d274e46b8e65a2dbea713a
+ScriptedImporter:
+  internalIDToNameTable: []
+  externalObjects: {}
+  serializedVersion: 2
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+  script: {fileID: 11500000, guid: 5441f7bda96807d409522dc8d0af4b33, type: 3}
+  isExport: 0
+  vox: {instanceID: 0}
+  voxAssetPath: Assets/Models/Human/Human-16-LeftFoot.vox

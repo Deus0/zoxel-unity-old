@@ -1,0 +1,88 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2f2729f3ab54c0b4f8234e405454ac80, type: 3}
+  m_Name: Zoxel
+  m_EditorClassIdentifier: 
+  id: 0
+  mode: 1
+  uiData: {fileID: 11400000, guid: 5e5840ffbea0ead438296463a671835d, type: 2}
+  voxelColorMaterial: {fileID: 2100000, guid: 769fd02d106a07f4c9ce2e98bf5a9fe2, type: 2}
+  quadMaterial: {fileID: 2100000, guid: 17667d60b2d6c8346818d1535dd68e99, type: 2}
+  startingCharacter: {fileID: 11400000, guid: c25122595fc3fdb4687da4e856407486, type: 2}
+  startingDialogue: {fileID: 11400000, guid: cbde238e2f54bad44857b381b3fcb1e1, type: 2}
+  startingCamera: {fileID: 11400000, guid: f1ccb94fa7a23824daf0b749e86918bc, type: 2}
+  startingMap: {fileID: 11400000, guid: 133be033f27562c489cc6433c36f91fc, type: 2}
+  mainMenuMap: {fileID: 0}
+  maps:
+  - {fileID: 11400000, guid: fd89faf1ff39ddd498f0d4a02d034b22, type: 2}
+  cameras:
+  - {fileID: 11400000, guid: f1ccb94fa7a23824daf0b749e86918bc, type: 2}
+  waves: []
+  voxels:
+  - {fileID: 11400000, guid: 54a913a0d5752a54eb45dd65ade6714c, type: 2}
+  - {fileID: 11400000, guid: 9b75f0ae4bef6c540833e7b880fbfee3, type: 2}
+  - {fileID: 11400000, guid: eeea187fa0c7e7c45b5e25a626a801e2, type: 2}
+  - {fileID: 11400000, guid: 0e9dee87d3a55c949a2f4e35030f1743, type: 2}
+  - {fileID: 11400000, guid: 9b7f993ab68d5a3459dd3b450b75e726, type: 2}
+  characters:
+  - {fileID: 11400000, guid: c25122595fc3fdb4687da4e856407486, type: 2}
+  - {fileID: 11400000, guid: 0baaf620c19ce454e924329e333ba095, type: 2}
+  - {fileID: 11400000, guid: c1fe4bd5a1cc0c74588f65355fb3efa6, type: 2}
+  - {fileID: 11400000, guid: b079312cfab51ba49b70de4f797d47b9, type: 2}
+  - {fileID: 11400000, guid: 8d6aa7e5e6334ab48999310081e4e194, type: 2}
+  - {fileID: 11400000, guid: 5de665a7acdaae1438cf0b8bbfbeb067, type: 2}
+  classes:
+  - {fileID: 11400000, guid: 876a85c62efa22e4b9fe76ffc41ddee1, type: 2}
+  turrets:
+  - {fileID: 11400000, guid: 077b4406eee6a09488a6e4846161fbec, type: 2}
+  bullets:
+  - {fileID: 11400000, guid: d8d2cf63708aade40bbb24b34de60c3d, type: 2}
+  - {fileID: 11400000, guid: af4d06c05c97757499e63322e311a440, type: 2}
+  stats:
+  - {fileID: 11400000, guid: 0558a8dc5397c9449885d2ea270af37e, type: 2}
+  - {fileID: 11400000, guid: 92206f0ee34029542b049dc4da58fed3, type: 2}
+  - {fileID: 11400000, guid: 69a5a4998b332184a9c06604f58d3af3, type: 2}
+  - {fileID: 11400000, guid: 49c3290f6a4ce334d8199531b5f1a238, type: 2}
+  - {fileID: 11400000, guid: d4c146a2e10bde440b73d8e62134770a, type: 2}
+  - {fileID: 11400000, guid: 4feefc5217ee5a94c92be7ffdf8d8dd8, type: 2}
+  - {fileID: 11400000, guid: 6cc51f6a16334d34180767226f350df6, type: 2}
+  - {fileID: 11400000, guid: 27355eb11ad9eb74eb0a1b177cecbf36, type: 2}
+  - {fileID: 11400000, guid: 0f0c551b66dcf9f40bdda7c085b0f129, type: 2}
+  skills:
+  - {fileID: 11400000, guid: 3a6c572f2b5fb9740af55d3baf380888, type: 2}
+  - {fileID: 11400000, guid: e58dc70e2a302474eacc6ebc014e8ca9, type: 2}
+  - {fileID: 11400000, guid: cbc8da9d7a29dbf45b1d74f974c878da, type: 2}
+  - {fileID: 11400000, guid: 5bf65605dc69cce48bfd0de54871e2cf, type: 2}
+  - {fileID: 11400000, guid: 27cce0e4ed5eefe40aaf88de85d26c63, type: 2}
+  - {fileID: 11400000, guid: e8e495a302a594449bca7ea0277cf74a, type: 2}
+  - {fileID: 11400000, guid: b01a8b57128e1f149851a8408e8e1c10, type: 2}
+  items:
+  - {fileID: 11400000, guid: 67afe74fc4bdea349a52aa8294e43339, type: 2}
+  - {fileID: 11400000, guid: 1ff84cda5bb8a22419c93f10166083d3, type: 2}
+  - {fileID: 11400000, guid: aedf2b1accee01c43a6aa6643dae34dc, type: 2}
+  - {fileID: 11400000, guid: 1283bb233c0560e8b91630b2f6476bb6, type: 2}
+  - {fileID: 11400000, guid: 7d4f7bab528cbec7b98120a10758ed94, type: 2}
+  quests:
+  - {fileID: 11400000, guid: b37953f07708cbd499eea17d4cb50944, type: 2}
+  dialogues:
+  - {fileID: 11400000, guid: b1597fcc93272af4ca793b8c37186d12, type: 2}
+  models:
+  - {fileID: -1489477220015682899, guid: fd718eec929f2854bbdff8b3bd36be5f, type: 3}
+  - {fileID: -5866002656230999365, guid: 12ef1dd360d75c84baf8ba57ce4acec5, type: 3}
+  - {fileID: 7711590022165102801, guid: f29c13a359d136f4abe2d716b3d6a2c4, type: 3}
+  - {fileID: -8959535140834087255, guid: abc87e4ddd32ad34c85c353873bdcb4e, type: 3}
+  - {fileID: 3634737440447653224, guid: 2c4c1e6736cc12c4681e90eb5eaebc46, type: 3}
+  - {fileID: 8024851369888667917, guid: cab850db5b2b0f344a6a9d728558f550, type: 3}
+  - {fileID: -9140376625490768635, guid: 790f2c82114eb6b40b7272a2a9b54408, type: 3}
+  skeletons: []
+  musics: []
+  audios: []

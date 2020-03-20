@@ -1,0 +1,212 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: cc8c113eed7f63245b1c859d2d13be80, type: 3}
+  m_Name: Timmy Skeleton
+  m_EditorClassIdentifier: 
+  data:
+    id: 1067445032
+    datas:
+    - name: Hip
+      parentName: Root
+      id: -1145759386
+      parentID: 0
+      influence: 3
+      position:
+        x: 0
+        y: -0.16250002
+        z: 0
+      rotation:
+        value:
+          x: 0
+          y: 0
+          z: 0
+          w: 1
+    - name: Chest
+      parentName: Hip
+      id: -1412352002
+      parentID: -1145759386
+      influence: 0.3
+      position:
+        x: 0
+        y: 0.39999998
+        z: 0
+      rotation:
+        value:
+          x: 0
+          y: 0
+          z: 0
+          w: 1
+    - name: Head
+      parentName: Chest
+      id: -1518642190
+      parentID: -1412352002
+      influence: 0.34
+      position:
+        x: 0
+        y: 0.79999995
+        z: 0
+      rotation:
+        value:
+          x: 0
+          y: 0
+          z: 0
+          w: 1
+    - name: RightShoulder
+      parentName: Chest
+      id: -1560193999
+      parentID: -1412352002
+      influence: 0.16
+      position:
+        x: 0.25
+        y: 0.39999998
+        z: -0.099999994
+      rotation:
+        value:
+          x: 0
+          y: 0
+          z: 0
+          w: 1
+    - name: RightElbow
+      parentName: RightShoulder
+      id: -1174267472
+      parentID: -1560193999
+      influence: 0.2
+      position:
+        x: 0.325
+        y: 0.17499995
+        z: -0.099999994
+      rotation:
+        value:
+          x: 0
+          y: 0
+          z: 0
+          w: 1
+    - name: RightHand
+      parentName: RightElbow
+      id: 1752875245
+      parentID: -1174267472
+      influence: 0.15
+      position:
+        x: 0.325
+        y: 0
+        z: -0.099999994
+      rotation:
+        value:
+          x: 0
+          y: 0
+          z: 0
+          w: 1
+    - name: LeftShoulder
+      parentName: Chest
+      id: -2041984292
+      parentID: -1412352002
+      influence: 0.16
+      position:
+        x: -0.25
+        y: 0.39999998
+        z: -0.099999994
+      rotation:
+        value:
+          x: 0
+          y: 0
+          z: 0
+          w: 1
+    - name: LeftElbow
+      parentName: LeftShoulder
+      id: -2038888447
+      parentID: -2041984292
+      influence: 0.2
+      position:
+        x: -0.325
+        y: 0.17499995
+        z: -0.099999994
+      rotation:
+        value:
+          x: 0
+          y: 0
+          z: 0
+          w: 1
+    - name: LeftHand
+      parentName: LeftElbow
+      id: 1141128809
+      parentID: -2038888447
+      influence: 0.15
+      position:
+        x: -0.325
+        y: 0
+        z: -0.099999994
+      rotation:
+        value:
+          x: 0
+          y: 0
+          z: 0
+          w: 1
+    - name: LeftKnee
+      parentName: Hip
+      id: -1424661987
+      parentID: -1145759386
+      influence: 0.2
+      position:
+        x: -0.2
+        y: -0.575
+        z: -0.099999994
+      rotation:
+        value:
+          x: 0
+          y: 0
+          z: 0
+          w: 1
+    - name: LeftFoot
+      parentName: LeftKnee
+      id: 1658355865
+      parentID: -1424661987
+      influence: 0.3
+      position:
+        x: -0.2
+        y: -0.95
+        z: -0.20000002
+      rotation:
+        value:
+          x: 0
+          y: 0
+          z: 0
+          w: 1
+    - name: RightKnee
+      parentName: Hip
+      id: -1341753613
+      parentID: -1145759386
+      influence: 0.2
+      position:
+        x: 0.2
+        y: -0.575
+        z: -0.099999994
+      rotation:
+        value:
+          x: 0
+          y: 0
+          z: 0
+          w: 1
+    - name: RightFoot
+      parentName: RightKnee
+      id: -1052693121
+      parentID: -1341753613
+      influence: 0.3
+      position:
+        x: 0.2
+        y: -0.95
+        z: -0.20000002
+      rotation:
+        value:
+          x: 0
+          y: 0
+          z: 0
+          w: 1

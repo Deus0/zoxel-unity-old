@@ -1,0 +1,20 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4c34ac82d895eda43a5e3c3b0a0b1bf3, type: 3}
+  m_Name: Mana
+  m_EditorClassIdentifier: 
+  Value:
+    id: 1044131199
+  targetStatID: 0
+  type: 1
+  texture: {fileID: 11400000, guid: ef7370fe971968b47876339ee082e0eb, type: 2}
+  description: The blood of the dragons runs through you.

@@ -1,0 +1,16 @@
+<ui:UXML xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements">
+    <ui:Foldout text="[666] Health" name="StatID" value="false" style="background-color: rgba(60, 60, 60, 0.92); padding-left: 6px; padding-right: 6px; padding-top: 6px; padding-bottom: 6px; border-left-color: rgba(24, 164, 24, 0.87); border-right-color: rgba(24, 164, 24, 0.87); border-top-color: rgba(24, 164, 24, 0.87); border-bottom-color: rgba(24, 164, 24, 0.87); border-left-width: 1px; border-right-width: 1px; border-top-width: 1px; border-bottom-width: 1px; align-items: flex-start;">
+        <Style src="StatsEditor.uss" />
+        <ui:VisualElement name="TemplateStat">
+            <ui:Button text="Add Health" name="InitiateButton" />
+            <ui:VisualElement style="flex-direction: row; border-left-color: rgba(108, 108, 35, 255); border-right-color: rgba(108, 108, 35, 255); border-top-color: rgba(108, 108, 35, 255); border-bottom-color: rgba(108, 108, 35, 255); border-left-width: 2px; border-right-width: 2px; border-top-width: 2px; border-bottom-width: 2px; flex-wrap: wrap; height: 140px; margin-left: 6px; margin-right: 6px; margin-top: 6px; margin-bottom: 6px;">
+                <ui:Image name="IconImagePanel" style="background-image: url('/Assets/Textures/GameMenu/EmptySlot.png'); width: 50%; height: 96px; -unity-background-scale-mode: scale-to-fit; margin-top: 16px; margin-bottom: 16px; justify-content: center; align-items: center;">
+                    <ui:Image name="IconImage" style="-unity-background-scale-mode: scale-to-fit; width: 64px; height: 64px; justify-content: center; align-items: center;" />
+                </ui:Image>
+                <ui:Label text="A brief description about this stat. A briefly short sentence." name="StatDescription" style="flex-wrap: wrap; white-space: normal; width: 50%; height: 64%;" />
+            </ui:VisualElement>
+            <ui:TextField picking-mode="Ignore" label="Value" text="0" name="StatValue" style="visibility: visible; display: flex;" />
+            <ui:TextField picking-mode="Ignore" label="Max Value" text="0" name="StatMaxValue" />
+        </ui:VisualElement>
+    </ui:Foldout>
+</ui:UXML>

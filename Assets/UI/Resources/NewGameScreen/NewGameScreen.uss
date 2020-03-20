@@ -1,0 +1,143 @@
+.unity-button {
+    font-size: 24px;
+    color: rgb(14, 212, 0);
+    background-color: rgb(24, 26, 25);
+    border-left-color: rgb(37, 51, 25);
+    border-right-color: rgb(37, 51, 25);
+    border-top-color: rgb(37, 51, 25);
+    border-bottom-color: rgb(37, 51, 25);
+    border-left-width: 4px;
+    border-right-width: 4px;
+    border-top-width: 4px;
+    border-bottom-width: 4px;
+    border-top-left-radius: 0;
+    border-bottom-left-radius: 0;
+    border-top-right-radius: 0;
+    border-bottom-right-radius: 0;
+    cursor: url('/Assets/Textures/Cursors/ActionCursor.png');
+    -unity-font: url('/Assets/Fonts/Pixels.ttf');
+    margin-left: 2px;
+    margin-right: 2px;
+    margin-top: 2px;
+    margin-bottom: 2px;
+    padding-left: 6px;
+    padding-right: 6px;
+    padding-top: 6px;
+    padding-bottom: 6px;
+    -unity-font-style: normal;
+}
+
+.unity-button:hover {
+    border-left-color: rgb(156, 161, 30);
+    border-right-color: rgb(156, 161, 30);
+    border-top-color: rgb(156, 161, 30);
+    border-bottom-color: rgb(156, 161, 30);
+    cursor: url('/Assets/Textures/Cursors/ActionCursor.png');
+    background-color: rgb(32, 38, 35);
+}
+
+.unity-button:active {
+    border-left-color: rgb(78, 149, 16);
+    border-right-color: rgb(78, 149, 16);
+    border-top-color: rgb(78, 149, 16);
+    border-bottom-color: rgb(78, 149, 16);
+    cursor: url('/Assets/Textures/Cursors/ActionCursor.png');
+    background-color: rgb(44, 58, 51);
+}
+
+.unity-label {
+    cursor: url('/Assets/Textures/Cursors/NormalCursor.png');
+    -unity-font: url('/Assets/Fonts/Pixels.ttf');
+    color: rgb(0, 255, 255);
+    font-size: 16px;
+    -unity-font-style: bold;
+}
+
+.unity-button:focus {
+    border-left-color: rgb(207, 84, 28);
+    border-right-color: rgb(207, 84, 28);
+    border-top-color: rgb(207, 84, 28);
+    border-bottom-color: rgb(207, 84, 28);
+}
+
+#MainTab {
+    border-left-width: 4px;
+    border-right-width: 4px;
+    border-top-width: 4px;
+    border-bottom-width: 4px;
+    border-top-left-radius: 32px;
+    border-bottom-left-radius: 32px;
+    border-top-right-radius: 32px;
+    border-bottom-right-radius: 32px;
+    border-left-color: rgb(94, 146, 157);
+    border-right-color: rgb(94, 146, 157);
+    border-top-color: rgb(94, 146, 157);
+    border-bottom-color: rgb(94, 146, 157);
+    background-color: rgba(22, 61, 70, 0.72);
+}
+
+.unity-text-input:focus {
+}
+
+.unity-base-text-field {
+}
+
+.unity-text-input:focus {
+}
+
+.unity-internal-color-field:focus {
+}
+
+.unity-base-text-field:focus {
+}
+
+.unity-base-text-field:focus {
+}
+
+.unity-base-field__input:focus {
+}
+
+.unity-base-text-field__input {
+    border-left-color: rgb(255, 0, 0);
+    border-right-color: rgb(255, 0, 0);
+    border-top-color: rgb(255, 0, 0);
+    border-bottom-color: rgb(255, 0, 0);
+    border-left-width: 2px;
+    border-right-width: 2px;
+    border-top-width: 2px;
+    border-bottom-width: 2px;
+    border-top-left-radius: 8px;
+    border-bottom-left-radius: 8px;
+    border-top-right-radius: 8px;
+    border-bottom-right-radius: 8px;
+}
+
+.unity-base-text-field__input:focus {
+}
+
+#unity-checkmark {
+    background-color: rgb(0, 234, 255);
+}
+
+#unity-checkmark:focus {
+    background-color: rgb(255, 159, 0);
+}
+
+.unity-toggle__text {
+    background-color: rgb(19, 39, 46);
+    padding-left: 4px;
+    padding-right: 4px;
+    padding-top: 4px;
+    padding-bottom: 4px;
+}
+
+.unity-toggle__text:focus {
+    color: rgb(209, 125, 0);
+}
+
+.unity-foldout {
+}
+
+.unity-foldout:focus {
+    background-color: rgb(39, 43, 40);
+}

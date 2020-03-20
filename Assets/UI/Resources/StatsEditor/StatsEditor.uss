@@ -1,0 +1,66 @@
+.unity-label {
+    -unity-font-style: normal;
+    -unity-font: url('/Assets/UI/Fonts/Pixels.ttf');
+    color: rgb(0, 253, 15);
+    font-size: 18px;
+    padding-left: 6px;
+    padding-right: 6px;
+    padding-top: 6px;
+    padding-bottom: 6px;
+}
+
+.unity-base-text-field__input {
+    color: rgb(0, 243, 231);
+    font-size: 18px;
+    -unity-font-style: bold;
+    -unity-font: url('/Assets/UI/USS/Roboto-Regular.ttf');
+    background-color: rgb(39, 46, 25);
+    -unity-text-align: upper-center;
+    padding-left: 6px;
+    padding-right: 6px;
+    padding-top: 6px;
+    padding-bottom: 6px;
+}
+
+.unity-button {
+    color: rgb(48, 250, 0);
+    background-color: rgb(35, 36, 24);
+    -unity-font: url('/Assets/UI/USS/Roboto-Regular.ttf');
+    font-size: 16px;
+    -unity-font-style: bold;
+}
+
+.unity-button:hover {
+    border-left-color: rgb(255, 253, 0);
+    border-right-color: rgb(255, 253, 0);
+    border-top-color: rgb(255, 253, 0);
+    border-bottom-color: rgb(255, 253, 0);
+}
+
+.unity-button:active {
+    background-color: rgba(164, 30, 30, 0.92);
+}
+
+.unity-toggle {
+    color: rgb(164, 24, 24);
+}
+
+.unity-toggle__checkmark {
+    background-image: url('/Assets/Textures/GameMenu/EmptyOrb.png');
+    width: 32px;
+    height: 32px;
+    border-left-color: rgba(81, 188, 17, 255);
+    border-right-color: rgba(81, 188, 17, 255);
+    border-top-color: rgba(81, 188, 17, 255);
+    border-bottom-color: rgba(81, 188, 17, 255);
+    border-left-width: 1px;
+    border-right-width: 1px;
+    border-top-width: 1px;
+    border-bottom-width: 1px;
+    -unity-background-scale-mode: scale-to-fit;
+    -unity-slice-left: -1;
+    -unity-slice-top: -1;
+    -unity-slice-right: -1;
+    -unity-slice-bottom: -1;
+    margin-left: 16px;
+}

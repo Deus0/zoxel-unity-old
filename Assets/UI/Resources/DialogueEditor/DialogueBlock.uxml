@@ -1,0 +1,9 @@
+<ui:UXML xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements">
+    <ui:Foldout text="Branch [2345313B]" name="DialogueBlock" value="false" style="background-color: rgba(60, 60, 60, 0.92); padding-left: 6px; padding-right: 6px; padding-top: 6px; padding-bottom: 6px; border-left-color: rgba(24, 164, 24, 0.87); border-right-color: rgba(24, 164, 24, 0.87); border-top-color: rgba(24, 164, 24, 0.87); border-bottom-color: rgba(24, 164, 24, 0.87); border-left-width: 1px; border-right-width: 1px; border-top-width: 1px; border-bottom-width: 1px; align-items: flex-start;">
+        <Style src="DialogueStyle.uss" />
+        <ui:Button text="Delete" name="DeleteButton" />
+        <ui:Toggle name="IsPlayerToggle" text="Is Player" />
+        <ui:TextField picking-mode="Ignore" label="Dialogue" text="Good Day Sir. Good Day Sir. Good Day Sir. Good Day Sir. " name="DialogueInput" multiline="true" style="white-space: normal; -unity-text-align: upper-left;" />
+        <ui:Button text="New Link" name="AddLinkButton" />
+    </ui:Foldout>
+</ui:UXML>

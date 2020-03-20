@@ -1,0 +1,33 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2cd3ad17e7fbe5743a87eded33ff36dc, type: 3}
+  m_Name: Turret
+  m_EditorClassIdentifier: 
+  Value:
+    goldCost: 3
+    turnSpeed: 1.5
+    health: 8
+    healthRegen: 0.05
+    attackSpeed: 0.5
+    attackDamage: 0.5
+    attackForce: 1.2
+    seek:
+      attackRange: 6
+      maintainRange: 16
+      seekRange: 6
+      seekCooldown: 3
+  headVox: {fileID: 0}
+  baseVox: {fileID: 0}
+  bullet: {fileID: 11400000, guid: d8d2cf63708aade40bbb24b34de60c3d, type: 2}
+  headMesh: {fileID: 4300000, guid: 355f3dce202659045a2a24f570130342, type: 2}
+  baseMesh: {fileID: 4300000, guid: 69c71fe532884e845bac97755a11392b, type: 2}
+  material: {fileID: 2100000, guid: 769fd02d106a07f4c9ce2e98bf5a9fe2, type: 2}

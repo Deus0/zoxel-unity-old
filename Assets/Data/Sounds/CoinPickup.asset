@@ -1,0 +1,16 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: cd805a76c1252c149a5f76f759982fb5, type: 3}
+  m_Name: CoinPickup
+  m_EditorClassIdentifier: 
+  volume: 1
+  clip: {fileID: 8300000, guid: 3a72ffd681b86b941b65e056555a6bea, type: 3}

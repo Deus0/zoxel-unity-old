@@ -1,0 +1,212 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5c1f5eb1a37aaf04d8b4af6bbcf0bc11, type: 3}
+  m_Name: Humanoid
+  m_EditorClassIdentifier: 
+  data:
+    id: 1621231267
+    datas:
+    - name: Hip
+      parentName: Root
+      id: 1302843469
+      parentID: 0
+      influence: 0.4
+      position:
+        x: 0
+        y: -0.175
+        z: 0
+      rotation:
+        value:
+          x: 0
+          y: 0
+          z: 0
+          w: 0
+    - name: Chest
+      parentName: Hip
+      id: -1011553780
+      parentID: 1302843469
+      influence: 0.4
+      position:
+        x: 0
+        y: 0.4
+        z: -0.1
+      rotation:
+        value:
+          x: 0
+          y: 0
+          z: 0
+          w: 0
+    - name: Head
+      parentName: Chest
+      id: -213068110
+      parentID: -1011553780
+      influence: 0.3
+      position:
+        x: 0
+        y: 0.75
+        z: -0.1
+      rotation:
+        value:
+          x: 0
+          y: 0
+          z: 0
+          w: 0
+    - name: RightShoulder
+      parentName: Chest
+      id: 1975952120
+      parentID: -1011553780
+      influence: 0.19
+      position:
+        x: 0.22
+        y: 0.4
+        z: -0.1
+      rotation:
+        value:
+          x: 0
+          y: 0
+          z: 0
+          w: 0
+    - name: RightElbow
+      parentName: RightShoulder
+      id: -1694786895
+      parentID: 1975952120
+      influence: 0.16
+      position:
+        x: 0.325
+        y: 0.175
+        z: -0.1
+      rotation:
+        value:
+          x: 0
+          y: 0
+          z: 0
+          w: 0
+    - name: RightHand
+      parentName: RightElbow
+      id: 591149014
+      parentID: -1694786895
+      influence: 0.12
+      position:
+        x: 0.325
+        y: 0
+        z: -0.1
+      rotation:
+        value:
+          x: 0
+          y: 0
+          z: 0
+          w: 0
+    - name: LeftShoulder
+      parentName: Chest
+      id: 2109893026
+      parentID: -1011553780
+      influence: 0.19
+      position:
+        x: -0.22
+        y: 0.4
+        z: -0.1
+      rotation:
+        value:
+          x: 0
+          y: 0
+          z: 0
+          w: 0
+    - name: LeftElbow
+      parentName: LeftShoulder
+      id: 1794419092
+      parentID: 2109893026
+      influence: 0.16
+      position:
+        x: -0.325
+        y: 0.175
+        z: -0.1
+      rotation:
+        value:
+          x: 0
+          y: 0
+          z: 0
+          w: 0
+    - name: LeftHand
+      parentName: LeftElbow
+      id: 1572185684
+      parentID: 1794419092
+      influence: 0.12
+      position:
+        x: -0.325
+        y: 0
+        z: -0.1
+      rotation:
+        value:
+          x: 0
+          y: 0
+          z: 0
+          w: 0
+    - name: LeftKnee
+      parentName: Hip
+      id: -1474784729
+      parentID: 1302843469
+      influence: 0.44
+      position:
+        x: 0.2
+        y: -0.575
+        z: -0.1
+      rotation:
+        value:
+          x: 0
+          y: 0
+          z: 0
+          w: 0
+    - name: LeftFoot
+      parentName: LeftKnee
+      id: 187558148
+      parentID: -1474784729
+      influence: 0.5
+      position:
+        x: 0.2
+        y: -0.8
+        z: -0.1
+      rotation:
+        value:
+          x: 0
+          y: 0
+          z: 0
+          w: 0
+    - name: RightKnee
+      parentName: Hip
+      id: -927194737
+      parentID: 1302843469
+      influence: 0.44
+      position:
+        x: -0.2
+        y: -0.575
+        z: -0.1
+      rotation:
+        value:
+          x: 0
+          y: 0
+          z: 0
+          w: 0
+    - name: RightFoot
+      parentName: RightKnee
+      id: -494409598
+      parentID: -927194737
+      influence: 0.5
+      position:
+        x: -0.2
+        y: -0.8
+        z: -0.1
+      rotation:
+        value:
+          x: 0
+          y: 0
+          z: 0
+          w: 0

@@ -1,0 +1,55 @@
+.unity-button {
+    font-size: 16px;
+    color: rgb(0, 255, 236);
+    background-color: rgb(102, 130, 118);
+    border-left-color: rgb(108, 180, 42);
+    border-right-color: rgb(108, 180, 42);
+    border-top-color: rgb(108, 180, 42);
+    border-bottom-color: rgb(108, 180, 42);
+    border-left-width: 1px;
+    border-right-width: 1px;
+    border-top-width: 1px;
+    border-bottom-width: 1px;
+    border-top-left-radius: 16px;
+    border-bottom-left-radius: 16px;
+    border-top-right-radius: 16px;
+    border-bottom-right-radius: 16px;
+    -unity-font-style: bold;
+    -unity-font: url('/Assets/UI/Fonts/Pixels.ttf');
+    padding-left: 6px;
+    padding-right: 6px;
+    padding-top: 6px;
+    padding-bottom: 6px;
+}
+
+.unity-button:hover {
+    border-left-color: rgb(255, 255, 255);
+    border-right-color: rgb(255, 255, 255);
+    border-top-color: rgb(255, 255, 255);
+    border-bottom-color: rgb(255, 255, 255);
+}
+
+.unity-button:active {
+    border-left-color: rgb(207, 32, 32);
+    border-right-color: rgb(207, 32, 32);
+    border-top-color: rgb(207, 32, 32);
+    border-bottom-color: rgb(207, 32, 32);
+}
+
+#unity-text-input {
+    -unity-text-align: upper-center;
+    color: rgb(0, 255, 255);
+    background-color: rgb(50, 58, 49);
+    font-size: 16px;
+    -unity-font-style: bold;
+    -unity-font: url('/Assets/UI/Fonts/Pixels.ttf');
+}
+
+.unity-label {
+    color: rgb(0, 255, 252);
+    -unity-font-style: bold;
+    -unity-font: url('/Assets/UI/Fonts/Pixels.ttf');
+    -unity-text-align: upper-center;
+    font-size: 16px;
+    background-color: rgb(50, 58, 49);
+}

@@ -1,0 +1,7 @@
+<UXML xmlns="UnityEngine.UIElements">
+ <!-- Creates the button. -->
+  <Button class="testwindow-button">      
+    <!-- Adds a VisualElement child (corresponding to the button's icon). -->
+    <VisualElement class="testwindow-button-icon"/>   
+  </Button>
+</UXML>

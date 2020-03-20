@@ -1,0 +1,16 @@
+<linker>
+		<assembly fullname="Zoxel" preserve="all"/>
+		<assembly fullname="Unity.Mathematics" preserve="all"/>
+		<assembly fullname="Unity.Jobs" preserve="all"/>
+		<assembly fullname="Unity.Collections" preserve="all"/>
+		<assembly fullname="Unity.Burst" preserve="all"/>
+		<assembly fullname="Unity.Rendering" preserve="all"/>
+		<assembly fullname="Unity.Rendering.Hybrid" preserve="all"/>
+		<assembly fullname="Unity.Entities" preserve="all"/>
+		<assembly fullname="Unity.Entities.Hybrid" preserve="all"/>
+		<assembly fullname="Unity.Transforms" preserve="all"/>
+		<assembly fullname="Unity.Transforms.Hybrid" preserve="all"/>
+		<assembly fullname="UnityEngine.Experimental.LowLevel" preserve="all"/>
+		<assembly fullname="Unity.Collections.LowLevel.Unsafe" preserve="all"/>
+		<assembly fullname="Unity.Jobs.LowLevel.Unsafe" preserve="all"/>
+</linker>

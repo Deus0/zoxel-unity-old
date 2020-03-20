@@ -1,0 +1,14 @@
+<ui:UXML xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements">
+    <ui:VisualElement style="flex-direction: row; align-items: center; background-color: rgba(46, 32, 32, 255);">
+        <Style src="StatsHeader.uss" />
+        <ui:Button text="Clear" name="ClearButton" />
+        <ui:Button text="Base Stats" name="BaseStatsButton" />
+        <ui:Button text="States" name="StatesButton" />
+        <ui:Button text="Regens" name="RegensButton" />
+        <ui:Button text="Attributes" name="AttributesButton" />
+        <ui:Button text="Levels" name="LevelsButton" />
+    </ui:VisualElement>
+    <ui:VisualElement name="StatsHeader" style="flex-grow: 1;">
+        <Style src="StatsHeader.uss" />
+    </ui:VisualElement>
+</ui:UXML>

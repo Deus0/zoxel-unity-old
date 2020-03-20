@@ -1,0 +1,4 @@
+FILE_BROWSER- for fileBrowser (standaloneFileBrowserWindows) - also have to enable windows forms for this - only works in MONO builds - but if i use IL2CPP.. maybe just needs the link?
+- also have to enable Net 4.0 for this...
+
+AUTODESK - for auto desk - doesn't work in ILC2PP builds as well

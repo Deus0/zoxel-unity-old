@@ -1,0 +1,17 @@
+fileFormatVersion: 2
+guid: 2c4c1e6736cc12c4681e90eb5eaebc46
+ScriptedImporter:
+  internalIDToNameTable: []
+  externalObjects: {}
+  serializedVersion: 2
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+  script: {fileID: 11500000, guid: 5441f7bda96807d409522dc8d0af4b33, type: 3}
+  voxelMaterial: {fileID: 2100000, guid: 769fd02d106a07f4c9ce2e98bf5a9fe2, type: 2}
+  vox: {fileID: 3634737440447653224, guid: 2c4c1e6736cc12c4681e90eb5eaebc46, type: 3}
+  scale:
+    x: 1
+    y: 1
+    z: 1
+  voxAssetPath: Assets/Models/Characters/Chicken.vox

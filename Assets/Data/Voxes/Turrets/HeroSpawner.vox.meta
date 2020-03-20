@@ -1,0 +1,13 @@
+fileFormatVersion: 2
+guid: f29730310413db640a3ebee828eedcea
+ScriptedImporter:
+  internalIDToNameTable: []
+  externalObjects: {}
+  serializedVersion: 2
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+  script: {fileID: 11500000, guid: 5441f7bda96807d409522dc8d0af4b33, type: 3}
+  scale: 2
+  heightAddition: 0.5
+  isSkinnedMesh: 0

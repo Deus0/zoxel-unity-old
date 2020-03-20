@@ -1,0 +1,10 @@
+<ui:UXML xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements">
+    <ui:VisualElement name="Header" style="flex-direction: row; align-items: center; background-color: rgb(34, 34, 34); justify-content: space-around; margin-left: -15px; margin-right: -6px; margin-top: -6px; border-left-color: rgba(28, 58, 12, 255); border-right-color: rgba(28, 58, 12, 255); border-top-color: rgba(28, 58, 12, 255); border-bottom-color: rgba(28, 58, 12, 255); border-left-width: 2px; border-right-width: 2px; border-top-width: 2px; border-bottom-width: 2px;">
+        <Style src="DialogueStyle.uss" />
+        <ui:Label text="Dialogue Maker" />
+        <ui:Button text="New Branch" name="AddBranchButton" />
+    </ui:VisualElement>
+    <ui:VisualElement name="Content" style="flex-grow: 1; margin-left: -15px; margin-right: -6px;">
+        <Style src="DialogueStyle.uss" />
+    </ui:VisualElement>
+</ui:UXML>

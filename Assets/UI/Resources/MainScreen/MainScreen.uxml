@@ -1,0 +1,12 @@
+<ui:UXML xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements">
+    <ui:VisualElement style="flex-grow: 1; flex-direction: column; justify-content: center; align-items: center; cursor: url('/Assets/Textures/Cursors/NormalCursor.png'); -unity-font-style: bold; background-color: rgba(0, 0, 0, 0.25);">
+        <Style src="MainScreen.uss" />
+        <ui:VisualElement style="justify-content: center; align-items: center; cursor: url('/Assets/Textures/Cursors/NormalCursor.png'); min-width: 300px; min-height: 260px; -unity-text-align: upper-center; background-color: rgba(0, 0, 0, 0);">
+            <ui:Label text="Zoxel" name="GameLabel" style="font-size: 64px; color: rgb(0, 224, 226);" />
+            <ui:Button text="Continue" name="ContinueButton" focusable="true" style="-unity-font-style: bold;" />
+            <ui:Button text="New Game" name="NewGameButton" focusable="true" style="-unity-font-style: bold;" />
+            <ui:Button text="Options" name="OptionsButton" focusable="true" style="-unity-font-style: bold;" />
+            <ui:Button text="Exit" name="ExitButton" focusable="true" style="-unity-font-style: bold;" />
+        </ui:VisualElement>
+    </ui:VisualElement>
+</ui:UXML>

@@ -1,0 +1,6 @@
+<ui:UXML xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements">
+    <ui:VisualElement style="flex-grow: 1; justify-content: center; align-items: center; cursor: url('/Assets/Textures/Cursors/NormalCursor.png'); -unity-font-style: bold; background-color: rgb(22, 22, 22); flex-direction: row;">
+        <Style src="StartScreen.uss" />
+        <ui:Label text="Press any key to start" style="-unity-font-style: bold; font-size: 42px; -unity-font: url('/Assets/Fonts/Pixels.ttf'); color: rgb(60, 173, 43); -unity-text-align: upper-center; flex-grow: 1; align-items: center; justify-content: center;" />
+    </ui:VisualElement>
+</ui:UXML>

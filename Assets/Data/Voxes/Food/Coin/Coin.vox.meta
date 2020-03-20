@@ -1,0 +1,17 @@
+fileFormatVersion: 2
+guid: 790f2c82114eb6b40b7272a2a9b54408
+ScriptedImporter:
+  internalIDToNameTable: []
+  externalObjects: {}
+  serializedVersion: 2
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+  script: {fileID: 11500000, guid: 5441f7bda96807d409522dc8d0af4b33, type: 3}
+  voxelMaterial: {fileID: 2100000, guid: 769fd02d106a07f4c9ce2e98bf5a9fe2, type: 2}
+  vox: {fileID: -9140376625490768635, guid: 790f2c82114eb6b40b7272a2a9b54408, type: 3}
+  scale:
+    x: 1
+    y: 1
+    z: 1
+  voxAssetPath: Assets/Models/Food/Coin/Coin.vox

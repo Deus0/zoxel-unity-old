@@ -1,0 +1,13 @@
+fileFormatVersion: 2
+guid: 517c446ea8d8a9f4ba81ad3196e5a1e2
+ScriptedImporter:
+  internalIDToNameTable: []
+  externalObjects: {}
+  serializedVersion: 2
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+  script: {fileID: 11500000, guid: 5441f7bda96807d409522dc8d0af4b33, type: 3}
+  isExport: 1
+  vox: {fileID: 11400000, guid: f87c8cfad6eace04283122a203ea93cb, type: 2}
+  voxAssetPath: Assets/Models/Props/Grass.vox

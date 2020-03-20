@@ -1,0 +1,32 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: cd83f119e17348c47a729711ef7be414, type: 3}
+  m_Name: Firebolt
+  m_EditorClassIdentifier: 
+  Value:
+    id: -1376430810
+    lifetime: 1
+    speed: 16
+    damage:
+      x: 2
+      y: 6
+    betweenSpread: 0
+    spread:
+      x: 0
+      y: 0
+    scale: 0.5
+    particlesName: BulletsShot
+    deathParticlesName: BulletsExplode
+    deathParticleLife: 4
+  model: {fileID: 8024851369888667917, guid: cab850db5b2b0f344a6a9d728558f550, type: 3}
+  hitSound: {fileID: 11400000, guid: ab6a39e5d94cc914bbd9bd20b905b9c1, type: 2}
+  spawnSound: {fileID: 11400000, guid: dfc4c18e202770742a5c4ff545161b34, type: 2}

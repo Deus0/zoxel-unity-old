@@ -1,0 +1,43 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d9337b09cb5348849b7498b0a3ceccb1, type: 3}
+  m_Name: Tester
+  m_EditorClassIdentifier: 
+  Values:
+  - spawnedOne: {fileID: 11400000, guid: 18a073472e8337942b797036a609596c, type: 2}
+    spawnAmount: 1
+    spawnCooldown: 5
+    spawnPosition:
+      x: 8
+      y: 8
+      z: 15
+  - spawnedOne: {fileID: 11400000, guid: d19c2c77940f49845a2b2182d3dfcf3f, type: 2}
+    spawnAmount: 66
+    spawnCooldown: 15
+    spawnPosition:
+      x: 8
+      y: 8
+      z: -15
+  - spawnedOne: {fileID: 11400000, guid: d19c2c77940f49845a2b2182d3dfcf3f, type: 2}
+    spawnAmount: 250
+    spawnCooldown: 30
+    spawnPosition:
+      x: 8
+      y: 8
+      z: -15
+  - spawnedOne: {fileID: 11400000, guid: d19c2c77940f49845a2b2182d3dfcf3f, type: 2}
+    spawnAmount: 250
+    spawnCooldown: 30
+    spawnPosition:
+      x: 8
+      y: 8
+      z: -15

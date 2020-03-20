@@ -1,0 +1,26 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4ff16acf84db6244b86ddebe552e6e9a, type: 3}
+  m_Name: Shotgun
+  m_EditorClassIdentifier: 
+  Value:
+    id: 616766420
+    attackType: 0
+    attackDamage: 0.1
+    attackSpeed: 3
+    attackForce: 4
+    isSpawnHostile: 0
+  texture: {fileID: 11400000, guid: f7d00b20649891649831ad560a9301b8, type: 2}
+  turret: {fileID: 0}
+  monster: {fileID: 0}
+  bullet: {fileID: 11400000, guid: af4d06c05c97757499e63322e311a440, type: 2}
+  voxel: {fileID: 0}

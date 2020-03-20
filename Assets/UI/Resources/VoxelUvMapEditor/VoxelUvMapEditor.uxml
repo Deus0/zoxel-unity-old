@@ -1,0 +1,6 @@
+<ui:UXML xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements">
+    <ui:VisualElement>
+        <Style src="VoxelUvMapEditor.uss" />
+        <ui:Label text="Label" name="uvsLengthLabel" style="flex-grow: 1; -unity-text-align: upper-center; -unity-font: url('/Assets/Fonts/Pixels.ttf'); font-size: 32px; color: rgb(78, 255, 0); background-color: rgba(36, 26, 26, 255); border-left-color: rgba(29, 55, 24, 255); border-right-color: rgba(29, 55, 24, 255); border-top-color: rgba(29, 55, 24, 255); border-bottom-color: rgba(29, 55, 24, 255); border-left-width: 4px; border-right-width: 4px; border-top-width: 4px; border-bottom-width: 4px; border-top-left-radius: 32px; border-bottom-left-radius: 32px; border-top-right-radius: 32px; border-bottom-right-radius: 32px;" />
+    </ui:VisualElement>
+</ui:UXML>

@@ -1,0 +1,13 @@
+fileFormatVersion: 2
+guid: 73edf8be2a63dac4d93af3c429c8beef
+ScriptedImporter:
+  internalIDToNameTable: []
+  externalObjects: {}
+  serializedVersion: 2
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+  script: {fileID: 11500000, guid: 5441f7bda96807d409522dc8d0af4b33, type: 3}
+  isExport: 1
+  vox: {instanceID: 0}
+  voxAssetPath: Assets/Models/Food/Pie.vox

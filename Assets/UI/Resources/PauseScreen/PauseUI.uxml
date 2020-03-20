@@ -1,0 +1,12 @@
+<ui:UXML xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements">
+    <ui:VisualElement style="flex-grow: 1; flex-direction: column; justify-content: center; align-items: center; cursor: url('/Assets/Textures/Cursors/NormalCursor.png'); -unity-font-style: bold; background-color: rgba(0, 0, 0, 0.5);">
+        <Style src="PauseUI.uss" />
+        <ui:VisualElement style="justify-content: center; align-items: center; border-left-width: 6px; border-right-width: 6px; border-top-width: 6px; border-bottom-width: 6px; border-top-left-radius: 32px; border-bottom-left-radius: 32px; border-top-right-radius: 32px; border-bottom-right-radius: 32px; background-color: rgba(18, 51, 55, 0); cursor: url('/Assets/Textures/Cursors/NormalCursor.png'); min-width: 300px; min-height: 260px; -unity-text-align: upper-center;">
+            <ui:Label text="Paused" style="-unity-font: url('/Assets/Fonts/Pixels.ttf'); -unity-font-style: bold; font-size: 22px; color: rgb(26, 255, 0); -unity-text-align: upper-center;" />
+            <ui:Button text="Return" name="UnPauseButton" focusable="true" />
+            <ui:Button text="Save Game" name="SaveButton" focusable="true" />
+            <ui:Button text="Load Game" name="LoadButton" focusable="true" />
+            <ui:Button text="Exit" name="MainMenuButton" focusable="true" />
+        </ui:VisualElement>
+    </ui:VisualElement>
+</ui:UXML>

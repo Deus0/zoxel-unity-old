@@ -1,0 +1,40 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a2a58aa509ac97b45b1251e4b5d568c0, type: 3}
+  m_Name: NewMainMenu
+  m_EditorClassIdentifier: 
+  id: 0
+  newPlayerPosition:
+    x: 0
+    y: 0
+    z: 0
+  worldPosition:
+    x: 0
+    y: 128
+    z: 0
+  worldRotation:
+    x: 0
+    y: 0
+    z: 0
+  worldScale:
+    x: 1
+    y: 1
+    z: 1
+  voxelDimensions:
+    x: 16
+    y: 64
+    z: 16
+  biomes:
+  - {fileID: 11400000, guid: 8b96d509e7003944ea3e8e2be4d23dd2, type: 2}
+  - {fileID: 11400000, guid: b64f4253b4d93df45983d0fefdd3ede2, type: 2}
+  monsters: []
+  tilemap: {fileID: 11400000, guid: 135b530ed87f57e4ab9a5dd3c8c70dc8, type: 2}

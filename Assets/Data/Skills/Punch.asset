@@ -1,0 +1,27 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4ff16acf84db6244b86ddebe552e6e9a, type: 3}
+  m_Name: Punch
+  m_EditorClassIdentifier: 
+  Value:
+    id: -216095166
+    attackType: 1
+    attackDamage: 1
+    attackSpeed: 3
+    attackForce: 3
+    isSpawnHostile: 0
+  texture: {fileID: 11400000, guid: 2e863b7a711fd554c89fb2205856610e, type: 2}
+  audio: {fileID: 0}
+  turret: {fileID: 0}
+  monster: {fileID: 0}
+  bullet: {fileID: 0}
+  voxel: {fileID: 0}

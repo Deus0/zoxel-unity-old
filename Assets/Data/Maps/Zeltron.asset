@@ -1,0 +1,61 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a2a58aa509ac97b45b1251e4b5d568c0, type: 3}
+  m_Name: Zeltron
+  m_EditorClassIdentifier: 
+  id: -1972833523
+  newPlayerPosition:
+    x: 7
+    y: 55
+    z: 7
+  worldPosition:
+    x: 0
+    y: 0
+    z: 0
+  worldRotation:
+    x: 0
+    y: 0
+    z: 0
+  worldScale:
+    x: 1
+    y: 1
+    z: 1
+  voxelDimensions:
+    x: 16
+    y: 64
+    z: 16
+  biomes:
+  - {fileID: 11400000, guid: 8b96d509e7003944ea3e8e2be4d23dd2, type: 2}
+  - {fileID: 11400000, guid: b64f4253b4d93df45983d0fefdd3ede2, type: 2}
+  - {fileID: 11400000, guid: 8b96d509e7003944ea3e8e2be4d23dd2, type: 2}
+  monsters: []
+  towns:
+  - position:
+      x: 0
+      y: 0
+      z: 0
+    dimensions:
+      x: 40
+      y: 8
+      z: 40
+    wallThickness: 2
+  buildings:
+  - position:
+      x: 8
+      y: 0
+      z: 8
+    dimensions:
+      x: 4
+      y: 4
+      z: 4
+    characterID: -1750442390
+  tilemap: {fileID: 11400000, guid: 135b530ed87f57e4ab9a5dd3c8c70dc8, type: 2}

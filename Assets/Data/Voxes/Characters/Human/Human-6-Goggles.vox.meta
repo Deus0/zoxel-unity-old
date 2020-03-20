@@ -1,0 +1,13 @@
+fileFormatVersion: 2
+guid: b97aa1e699ebfdd4b9df3a2596bde630
+ScriptedImporter:
+  internalIDToNameTable: []
+  externalObjects: {}
+  serializedVersion: 2
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+  script: {fileID: 11500000, guid: 5441f7bda96807d409522dc8d0af4b33, type: 3}
+  isExport: 0
+  vox: {instanceID: 0}
+  voxAssetPath: Assets/Models/Human/Human-6-Goggles.vox

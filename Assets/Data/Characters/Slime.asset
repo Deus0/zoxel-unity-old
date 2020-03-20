@@ -1,0 +1,50 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7bae16be57b26a7459086deb4c46105f, type: 3}
+  m_Name: Slime
+  m_EditorClassIdentifier: 
+  Value:
+    id: -1799336667
+  movementSpeed: 1.5
+  turnSpeed: 2
+  maxVelocity: 4
+  behaviour: {fileID: 11400000, guid: 72bf2e87ae22b0049951529c9bf45d72, type: 2}
+  defaultClass: {fileID: 11400000, guid: 03a3297af740f404189a1d604402ebb9, type: 2}
+  quests: []
+  items: []
+  itemPickupRadius: 0
+  dropItems:
+  - item: {fileID: 11400000, guid: aedf2b1accee01c43a6aa6643dae34dc, type: 2}
+    quantity:
+      x: 1
+      y: 1
+  spawnSound: {fileID: 11400000, guid: dfc4c18e202770742a5c4ff545161b34, type: 2}
+  deathSound: {fileID: 11400000, guid: ab6a39e5d94cc914bbd9bd20b905b9c1, type: 2}
+  vox: {fileID: -5866002656230999365, guid: 12ef1dd360d75c84baf8ba57ce4acec5, type: 3}
+  stats:
+    willDie: 0
+    leveledUp: 0
+    leveledUpEffects: 0
+    attributesApplied: 0
+  statsClone:
+    stats: []
+    states:
+    - id: 1109488228
+      value: 18
+      maxValue: 18
+    regens: []
+    attributes: []
+    levels:
+    - id: -1151411696
+      value: 0
+      experienceGained: 0
+      experienceRequired: 10

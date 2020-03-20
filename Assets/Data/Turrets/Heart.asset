@@ -1,0 +1,31 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2cd3ad17e7fbe5743a87eded33ff36dc, type: 3}
+  m_Name: Heart
+  m_EditorClassIdentifier: 
+  Value:
+    goldCost: 50
+    turnSpeed: 1
+    health: 32
+    healthRegen: 1
+    attackSpeed: 1
+    attackDamage: 2
+    attackForce: 0.5
+    attackRange: 3
+  headVox: {fileID: 0}
+  baseVox: {fileID: 0}
+  bullet: {fileID: 11400000, guid: d8d2cf63708aade40bbb24b34de60c3d, type: 2}
+  headMesh: {fileID: 0}
+  baseMesh: {fileID: 6239646498721885852, guid: 5ffcb93b2e0cdfa4daf79981978c0b77,
+    type: 3}
+  material: {fileID: -6972661136630673302, guid: 5ffcb93b2e0cdfa4daf79981978c0b77,
+    type: 3}

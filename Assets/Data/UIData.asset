@@ -1,0 +1,81 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 567589acafa200b47873dc092114bacc, type: 3}
+  m_Name: UIData
+  m_EditorClassIdentifier: 
+  orbitLerpSpeed: 666
+  orbitDepth: 0.25
+  defaultIconSize:
+    x: 0.06
+    y: 0.06
+  defaultPlayerPanel: {fileID: 2100000, guid: 1202a0a7449c3584c92270b967249cd6, type: 2}
+  defaultPlayerIcon: {fileID: 2100000, guid: 6eeb0930157e1834eaa373b4a760225a, type: 2}
+  fontSize: 0.24
+  font: {fileID: 11400000, guid: f4e144d3d7f03b74985f27dd73a9d9da, type: 2}
+  menuButton: {fileID: 2100000, guid: aa774eda4f45614418d2ed7ad1b10ed1, type: 2}
+  buttonAnimationTime: 0.3
+  menuPadding:
+    x: 0
+    y: 0
+  menuMargins:
+    x: 0
+    y: 0
+  crosshairLerpSpeed: 666
+  crosshairSize: 0.1
+  crosshairPosition:
+    x: 0
+    y: 0
+    z: 0.6
+  crosshairMaterial: {fileID: 2100000, guid: 8cd3e30bb39835a498c813351352c0e0, type: 2}
+  questlogGridSize:
+    x: 3
+    y: 3
+  inventoryGridSize:
+    x: 3
+    y: 3
+  statsUIGridSize:
+    x: 3
+    y: 3
+  skillbarIconsCount: 5
+  actionbarPanel: {fileID: 2100000, guid: 8fdda3d8d12c72741b5d81eae6d2202a, type: 2}
+  actionbarIconSize:
+    x: 0.1
+    y: 0.1
+  actionbarPosition:
+    x: 0
+    y: -0.1
+    z: 0.5
+  skillbarMargins:
+    x: 0
+    y: 0
+  skillbarPadding: 0.002
+  defaultItemIcon: {fileID: 2800000, guid: 2c7e4a5554d0090439cd302a32cc55c0, type: 3}
+  mapPanel: {fileID: 2100000, guid: 1202a0a7449c3584c92270b967249cd6, type: 2}
+  mapIcon: {fileID: 2100000, guid: a48d813bab4a71640b8f1e4bef5ab99a, type: 2}
+  fadeIn: 0.6
+  fadeOut: 0.8
+  frontBarMaterial: {fileID: 2100000, guid: 2bcf989dcd967804794da40cb9a5d596, type: 2}
+  backBarMaterial: {fileID: 2100000, guid: a4d08b023b6ce3d49878c9454c55c68d, type: 2}
+  backbarColor: {r: 0, g: 0, b: 0, a: 1}
+  frontbarColor: {r: 0.735849, g: 0, b: 0, a: 1}
+  popupLifetime:
+    x: 4
+    y: 4.3
+  popupVariationX:
+    x: -0.1
+    y: 0.1
+  popupVariationY:
+    x: 4
+    y: 4.3
+  popupVariationZ:
+    x: -0.1
+    y: 0.1

@@ -1,0 +1,27 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4ff16acf84db6244b86ddebe552e6e9a, type: 3}
+  m_Name: Summon Turret
+  m_EditorClassIdentifier: 
+  Value:
+    id: 1118359246
+    cooldown: 8
+    casttime: 4
+    statCostName: Gold
+    statCostValue: 5
+    castedTime: 0
+    isRaycast: 1
+  texture: {fileID: 11400000, guid: 77d9c26f128bfad419967c31b29e7c33, type: 2}
+  turret: {fileID: 11400000, guid: 3e0403da6d431dc40836eb110c482b0d, type: 2}
+  monster: {fileID: 0}
+  bullet: {fileID: 0}
+  voxel: {fileID: 0}

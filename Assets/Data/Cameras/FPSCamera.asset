@@ -1,0 +1,55 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d9bd8d751aa207c4193d059ff7faf597, type: 3}
+  m_Name: FPSCamera
+  m_EditorClassIdentifier: 
+  gameCameraPrefab: {fileID: 2322263184676251808, guid: 4fcd38bc81b6362459dc5dc17c9ce6c5,
+    type: 3}
+  Value:
+    id: 1625867116
+    cameraType: 0
+    firstPersonCamera:
+      sensitivity:
+        x: 8
+        y: 8
+      rotationBoundsX:
+        x: -89
+        y: 89
+      lerpRotationSpeed: 10
+      cameraAddition:
+        x: 0
+        y: 0.8
+        z: 0.22
+    followCameraData:
+      lerpSpeed:
+        x: 0
+        y: 0
+      cameraAddition:
+        x: 0
+        y: 0.8
+        z: 0
+      cameraRotation:
+        x: 0
+        y: 0
+        z: 0
+      targetPosition:
+        x: 0
+        y: 0
+        z: 0
+      targetRotation:
+        value:
+          x: 0
+          y: 0
+          z: 0
+          w: 0
+    isRenderTexture: 0
+    textureDivision: 1

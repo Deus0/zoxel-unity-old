@@ -1,0 +1,16 @@
+fileFormatVersion: 2
+guid: aaee562ab0341454aa94c2ed9cbe16c5
+ScriptedImporter:
+  internalIDToNameTable: []
+  externalObjects: {}
+  serializedVersion: 2
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+  script: {fileID: 11500000, guid: 5441f7bda96807d409522dc8d0af4b33, type: 3}
+  vox: {fileID: 2991841060916208556, guid: aaee562ab0341454aa94c2ed9cbe16c5, type: 3}
+  scale:
+    x: 0.5
+    y: 0.5
+    z: 0.5
+  voxAssetPath: Assets/Models/Characters/Human/Human-24-Head.vox

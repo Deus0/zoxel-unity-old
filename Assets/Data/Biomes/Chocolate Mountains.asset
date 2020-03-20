@@ -1,0 +1,36 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 33034b1e8e0400c4385f6f3cd70df7a2, type: 3}
+  m_Name: Chocolate Mountains
+  m_EditorClassIdentifier: 
+  Value:
+    id: 659966507
+    landBase: 24
+    landAmplitude: 8
+    landScale: 0.0005
+    dirtID: 1
+    grassID: 1
+    sandID: 1
+    stoneID: 1
+    waterID: 1
+    grassChance: 0
+  dirt: {fileID: 11400000, guid: 54a913a0d5752a54eb45dd65ade6714c, type: 2}
+  grass: {fileID: 11400000, guid: 54a913a0d5752a54eb45dd65ade6714c, type: 2}
+  sand: {fileID: 11400000, guid: 54a913a0d5752a54eb45dd65ade6714c, type: 2}
+  stone: {fileID: 11400000, guid: 54a913a0d5752a54eb45dd65ade6714c, type: 2}
+  water: {fileID: 11400000, guid: 54a913a0d5752a54eb45dd65ade6714c, type: 2}
+  monsterSpawnAmount: 2
+  monsterSpawnCooldown: 10
+  monsters:
+  - {fileID: 11400000, guid: b079312cfab51ba49b70de4f797d47b9, type: 2}
+  - {fileID: 11400000, guid: 8d6aa7e5e6334ab48999310081e4e194, type: 2}
+  - {fileID: 11400000, guid: 8d6aa7e5e6334ab48999310081e4e194, type: 2}

@@ -1,0 +1,33 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 33034b1e8e0400c4385f6f3cd70df7a2, type: 3}
+  m_Name: Dessert 1
+  m_EditorClassIdentifier: 
+  Value:
+    id: 1314548443
+    landBase: 32
+    landAmplitude: 12
+    landScale: 0.0003
+    dirtID: 4
+    grassID: 4
+    sandID: 4
+    stoneID: 3
+    waterID: 3
+    grassChance: 22
+  dirt: {fileID: 11400000, guid: 54a913a0d5752a54eb45dd65ade6714c, type: 2}
+  grass: {fileID: 11400000, guid: 54a913a0d5752a54eb45dd65ade6714c, type: 2}
+  sand: {fileID: 11400000, guid: 54a913a0d5752a54eb45dd65ade6714c, type: 2}
+  stone: {fileID: 11400000, guid: 54a913a0d5752a54eb45dd65ade6714c, type: 2}
+  water: {fileID: 11400000, guid: 54a913a0d5752a54eb45dd65ade6714c, type: 2}
+  monsterSpawnAmount: 0
+  monsterSpawnCooldown: 0
+  monsters: []
