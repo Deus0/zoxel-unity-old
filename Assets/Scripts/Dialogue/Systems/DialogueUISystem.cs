@@ -57,7 +57,7 @@ namespace Zoxel
         }
         #endregion
 
-        public override void OnClickedButton(Entity player, Entity ui, int arrayIndex)
+        public override void OnClickedButton(Entity player, Entity ui, int arrayIndex, ButtonType buttonType)
         {
             DialogueUI dialogueUI = World.EntityManager.GetComponentData<DialogueUI>(ui);
             dialogueUI.confirmedChoice = (byte)(arrayIndex + 1); // 0 is unselected
@@ -74,9 +74,9 @@ namespace Zoxel
             RenderText renderText = new RenderText
             {
                 fontSize = fontSize,
-                offsetX = ((-branch.speech.Length - 1f) / 2f) * fontSize,
-                colorB = 255
+                offsetX = ((-branch.speech.Length - 1f) / 2f) * fontSize
             };
+            renderText.SetColor(Color.blue);
             DialogueUI dialogueUI = new DialogueUI
             {
                 treeID = dialogueTree.id,
@@ -94,36 +94,13 @@ namespace Zoxel
                 id = uiIndex,
                 characterID = World.EntityManager.GetComponentData<ZoxID>(character).id,
                 size = new float2((branch.speech.Length) * (fontSize * 1.1f), fontSize),
-                updated = 1,
+                dirty = 1,
                 orbitDepth = uiDatam.orbitDepth,
-                anchor = (byte)UIAnchoredPosition.Middle//,
-                //navigationDirty = 1
+                anchor = (byte)UIAnchoredPosition.Middle
             });
-            //RefreshPanelSize(World.EntityManager, panelUI, renderText.fontSize, dialogueTree.data[0].speech.Length);
-            //RenderTextSystem.SetLetterColor(World.EntityManager, panelUI, UnityEngine.Color.green);
             Childrens children = new Childrens { };
             World.EntityManager.AddComponentData(panelUI, children);
-            // Note: Add Horizontal grid here, with padding of font size
-            /*Childrens children = new Childrens { };
-            children.children = new BlitableArray<Entity>(1, Unity.Collections.Allocator.Persistent);
-            float buttonFontSize = 0.01f;
-            float3 buttonPosition = new float3(0, (-fontSize / 2f - buttonFontSize / 2f), 0);
-            string dialogueOptionA = "Next";
-            children.children[0] = UIUtilities.SpawnButtonWithText(World.EntityManager, panelUI, buttonPosition, buttonFontSize, dialogueOptionA, uiDatam.menuButton);
-            //float3 buttonPosition2 = buttonPosition + new float3((dialogueOptionA.Length * buttonFontSize) / 2f + ("spit on".Length * buttonFontSize) / 2f + buttonFontSize, 0, 0);
-            //children.children[1] = UIUtilities.SpawnButtonWithText(World.EntityManager, panelUI, buttonPosition2, buttonFontSize, "spit on", uiDatam.menuButton);
-            World.EntityManager.AddComponentData(panelUI, children);*/
 
-        }
-
-        public static void RefreshPanelSize(EntityManager entityManager, Entity panelUI, float fontSize, int textLength)
-        {
-            float2 panelSize = new float2(textLength * fontSize, fontSize);
-            //UnityEngine.Debug.LogError("Resized dialogue panel to: " + panelSize);
-            Unity.Rendering.RenderMesh renderMesh =
-                entityManager.GetSharedComponentData<Unity.Rendering.RenderMesh>(panelUI);
-            renderMesh.mesh = MeshUtilities.CreateQuadMesh(panelSize);
-            entityManager.SetSharedComponentData(panelUI, renderMesh);
         }
     }
 }

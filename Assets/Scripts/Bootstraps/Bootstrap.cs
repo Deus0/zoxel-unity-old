@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using Unity.Entities;
 using Unity.Mathematics;
+using Zoxel.Voxels;
 
 namespace Zoxel
 {
@@ -70,6 +71,49 @@ namespace Zoxel
         {
             instance = this;
             Debug.Log("Awakening the Booty.");
+            LoadGameData();
+        }
+
+        private void LoadGameData()
+        {
+            #if UNITY_EDITOR
+            data.characters = LoadFolder<CharacterDatam>(Application.dataPath + "/Data/Characters/", "Characters");
+            data.quests = LoadFolder<QuestDatam>(Application.dataPath + "/Data/Quests/", "Quests");
+            data.dialogues = LoadFolder<DialogueDatam>(Application.dataPath + "/Data/Dialogues/", "Dialogues");
+            data.stats = LoadFolder<StatDatam>(Application.dataPath + "/Data/Stats/", "Stats");
+            data.items = LoadFolder<ItemDatam>(Application.dataPath + "/Data/Items/", "Items");
+            data.items.AddRange(LoadFolder<ItemDatam>(Application.dataPath + "/Data/Voxes/", "Voxes"));
+            data.skills = LoadFolder<SkillDatam>(Application.dataPath + "/Data/Skills/", "Skills");
+            data.voxels = LoadFolder<VoxelDatam>(Application.dataPath + "/Data/Voxels/", "Voxels");
+            data.models = LoadFolder<VoxDatam>(Application.dataPath + "/Data/Voxes/", "Voxes");
+            data.bullets = LoadFolder<BulletDatam>(Application.dataPath + "/Data/Bullets/", "Bullets");
+            #endif
+        }
+
+        public static List<T> LoadFolder<T>(string folderPath, string folderName) where T : ScriptableObject
+        {
+            List<T> datams = new List<T>();
+            #if UNITY_EDITOR
+            var files = System.IO.Directory.GetFiles(folderPath);
+            foreach (var filepath in files)
+            {
+                if (filepath.Contains(".meta") == false)
+                {
+                    string newPath = filepath.Substring(filepath.IndexOf("Assets/Data/" + folderName + "/"));
+                    var statA = UnityEditor.AssetDatabase.LoadAssetAtPath<T>(newPath);
+                    if (statA != null)
+                    {
+                        datams.Add(statA);
+                    }
+                }
+            }
+            var folders = System.IO.Directory.GetDirectories(folderPath);
+            foreach (var folder in folders)
+            {
+                datams.AddRange(LoadFolder<T>(folder, folderName));
+            }
+            #endif
+            return datams;
         }
 
         public bool Initialize(string systems)
@@ -78,16 +122,17 @@ namespace Zoxel
             return true;
         }
 
+        public Color titleColor = Color.cyan;
+        public Color subTitleColor = Color.red;
+
         public void Start()
         {
             sys = new SystemsManager(data, "ZoxelGame");
             sys.voxelSystemGroup.voxelPreviewSystem.Test();
             gameText = UIUtilities.SpawnText(EntityManager, new Entity(), "Zoxel", 
-                new float3(0, 1f, 0.3f), 
-                0, 255, 255, 0.07f);
+                new float3(0, 1f, 0.3f), titleColor, 0.07f);
             startText = UIUtilities.SpawnText(EntityManager, new Entity(), "Press Any Key to Start",
-                new float3(0, 0.85f, 0.3f),
-                255, 0, 0, 0.022f);
+                new float3(0, 0.85f, 0.3f), subTitleColor, 0.022f);
             game = sys.gameSystemGroup.gameStartSystem.CreateGame(data);
             sys.gameSystemGroup.gameStartSystem.OnStarted += () =>
             {

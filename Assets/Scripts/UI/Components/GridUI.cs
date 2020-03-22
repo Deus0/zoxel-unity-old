@@ -8,7 +8,7 @@ namespace Zoxel
     /// </summary>
     public struct GridUI : IComponentData
     {
-        public byte updated;
+        public byte dirty;
 
         // grid
         public float2 gridSize; // 3 x 3

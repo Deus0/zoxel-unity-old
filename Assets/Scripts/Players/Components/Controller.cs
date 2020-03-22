@@ -22,6 +22,8 @@ namespace Zoxel
         public byte selectButton;
         public byte buttonA;
         public byte buttonB;
+        public byte buttonX;
+        public byte buttonY;
         public byte buttonLB;
         public byte buttonRB;
         public byte buttonLT;

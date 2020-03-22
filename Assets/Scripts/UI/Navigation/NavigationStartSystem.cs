@@ -22,13 +22,16 @@ namespace Zoxel
                     Entity[] entities = childrens.GetButtons(World.EntityManager);
                     if (panelUI.id == (byte)(PlayerUIType.Menu))
                     {
-                        AddNavigation(e, entities, Color.gray, Color.cyan);
+                        AddNavigation(e, entities, uiDatam.defaultMenuColor, uiDatam.selectedMenuColor);
+                    }
+                    else if (panelUI.id == (byte)(PlayerUIType.DialogueUI))
+                    {
+                        AddNavigation(e, entities, uiDatam.defaultMenuColor, uiDatam.selectedMenuColor);
                     }
                     else
                     {
                         AddNavigation(e, entities, Color.gray, Color.white);
                     }
-
                 }
             });
         }

@@ -232,8 +232,7 @@ namespace Zoxel
                 return;
             }
             Translation translation = World.EntityManager.GetComponentData<Translation>(character);
-            Entity backbar = UIUtilities.SpawnCharacterUI(
-                World.EntityManager, character, orbitPosition, panelSize, uiData.backBarMaterial);
+            Entity backbar = UIUtilities.SpawnPanel(World.EntityManager,character, uiData.backBarMaterial, null, panelSize);
             Entity frontbar = CreateBarUI(frontbarArchtype, translation.Value, uiData.frontBarMaterial, healthbarMesh);
             frontBars.Add(zoxID.id, frontbar);
             backBars.Add(zoxID.id, backbar);
@@ -241,8 +240,8 @@ namespace Zoxel
             World.EntityManager.AddComponentData(backbar, zoxID);
             World.EntityManager.SetComponentData(frontbar, new Parent { Value = backbar });
             World.EntityManager.SetComponentData(frontbar, new StatBarUI { width = panelSize.x });
-            World.EntityManager.SetComponentData(frontbar, zoxID);  // need to add this
-                                                                    // Bootstrap.instance.debugMaterial = World.EntityManager.GetSharedComponentData<RenderMesh>(backbar).material;
+            World.EntityManager.SetComponentData(frontbar, zoxID);
+            UIUtilities.UpdateOrbiter(World.EntityManager, backbar, orbitPosition, uiData.crosshairLerpSpeed);
         }
     }
 }

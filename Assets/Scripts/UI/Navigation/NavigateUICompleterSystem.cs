@@ -10,6 +10,17 @@ using UnityEngine;
 namespace Zoxel
 {
 
+    public enum ButtonType
+    {
+        None,
+        StartButton,
+        SelectButton,
+        ButtonA,
+        ButtonB,
+        ButtonX,
+        ButtonY
+    }
+
     [DisableAutoCreation]
     public class NavigateUICompleterSystem : ComponentSystem
     {
@@ -29,7 +40,7 @@ namespace Zoxel
             // draw debug lines between UIs
             // Draw debug lines between navigational elements
             //, ref Parent parent, Parent
-            Entities.WithAll<NavigateUI>().ForEach((Entity e, ref NavigateUI navigate) =>
+            Entities.WithAll<NavigateUI, Controller>().ForEach((Entity e, ref NavigateUI navigate, ref Controller controller) =>
             {
                 if (navigate.selectedIndex < 0)
                 {
@@ -45,17 +56,27 @@ namespace Zoxel
                     }
                     return;
                 }
-                if (navigate.clicked == 1)
+                ButtonType buttonType = ButtonType.None;
+                if (controller.Value.buttonA == 1)
                 {
-                    navigate.clicked = 0;
-                    // buttonClicked
+                    buttonType = ButtonType.ButtonA;
+                }
+                if (controller.Value.startButton == 1)
+                {
+                    buttonType = ButtonType.StartButton;
+                }
+                if (controller.Value.buttonX == 1)
+                {
+                    buttonType = ButtonType.ButtonX;
+                }
+                if (buttonType != ButtonType.None)
+                {
                     int clickedIndex = navigate.selectedIndex;
                     NavigateUIElement navigateUIElement = navigate.navigationElements[clickedIndex];
                     clickedIndex = navigateUIElement.targetIndex;
-                    //Debug.LogError("NavigateUICompleterSystem Entities.WithAll - navigate.selectedIndex: " + navigate.selectedIndex
-                    //     + ", navigateUIElement.targetIndex: " + navigateUIElement.targetIndex);
-                    OnButtonClicked(navigate.character, navigateUIElement.ui, clickedIndex);
+                    OnButtonClicked(navigate.character, navigateUIElement.ui, clickedIndex, buttonType);
                 }
+                // when selection updates
                 if (navigate.updated == 1)
                 {
                     navigate.updated = 0;
@@ -66,47 +87,43 @@ namespace Zoxel
                     navigate.SetSelected(World.EntityManager, navigateUIElement.entity);
                     //OnSelected(navigate.characterID, navigateUIElement.uiIndex, clickedIndex);
                 }
-                /*byte uiIndex = navigate.navigationElements[navigate.selectedIndex].uiIndex;
-                if (navigate.lastUIIndex != uiIndex)
-                {
-                    navigate.lastUIIndex = uiIndex;
-                }*/
             });
         }
 
-        private void OnButtonClicked(Entity player, Entity ui, int arrayIndex)
+        // what is the best way to handle button clicks
+        //  maybe a generic one? after the inventory button is clicked i add the component of clicked onto the ui
+        //      inside the inventorySystem i lookout for that component, as well as PanelUI, then i handle event there
+        //      This removes any links
+        private void OnButtonClicked(Entity player, Entity ui, int arrayIndex, ButtonType buttonType)
         {
             if (World.EntityManager.Exists(ui) == false)
             {
                 return;
             }
-            //Debug.LogError("NavigationUICompleter - OnButtonClicked: " + (PlayerUIType)(uiIndex) + ":" + arrayIndex);
-            //NavigateUIElement navigate = navigation.navigationElements[navigation.navigationIndex];
             byte uiIndex = World.EntityManager.GetComponentData<PanelUI>(ui).id;
             if (uiIndex == ((byte)PlayerUIType.InventoryUI))
             {
-                // Debug.LogError("Item Clicked: " + navigate.arrayIndex);
-                inventoryUISpawnSystem.OnClickedButton(player, ui, arrayIndex);
+                inventoryUISpawnSystem.OnClickedButton(player, ui, arrayIndex, buttonType);
             }
             else if (uiIndex == ((byte)PlayerUIType.StatsUI))
             {
-               statsUISpawnSystem.OnClickedButton(player, ui, arrayIndex);
+               statsUISpawnSystem.OnClickedButton(player, ui, arrayIndex, buttonType);
             }
             else if (uiIndex == ((byte)PlayerUIType.QuestlogUI))
             {
-               questLogUISpawnSystem.OnClickedButton(player, ui, arrayIndex);
+               questLogUISpawnSystem.OnClickedButton(player, ui, arrayIndex, buttonType);
             }
             else if (uiIndex == ((byte)PlayerUIType.SkillbookUI))
             {
-                skillbookUISpawnSystem.OnClickedButton(player, ui, arrayIndex);
+                skillbookUISpawnSystem.OnClickedButton(player, ui, arrayIndex, buttonType);
             }
             else if (uiIndex == ((byte)PlayerUIType.Menu))
             {
-                menuSpawnSystem.OnClickedButton(player, ui, arrayIndex);
+                menuSpawnSystem.OnClickedButton(player, ui, arrayIndex, buttonType);
             }
             else if (uiIndex == ((byte)PlayerUIType.DialogueUI))
             {
-                dialogueUISpawnSystem.OnClickedButton(player, ui, arrayIndex);
+                dialogueUISpawnSystem.OnClickedButton(player, ui, arrayIndex, buttonType);
             }
             else { 
                 Debug.LogError("ClickedButton Event not implemented.");

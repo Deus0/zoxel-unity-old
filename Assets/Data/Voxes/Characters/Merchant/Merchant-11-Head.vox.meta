@@ -1,0 +1,18 @@
+fileFormatVersion: 2
+guid: dd6a207c4b41340559ae82070eebf29a
+ScriptedImporter:
+  internalIDToNameTable: []
+  externalObjects: {}
+  serializedVersion: 2
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+  script: {fileID: 11500000, guid: 5441f7bda96807d409522dc8d0af4b33, type: 3}
+  scale:
+    x: 0.5
+    y: 0.5
+    z: 0.5
+  isItem: 1
+  itemTexture: {fileID: 11400000, guid: fb335ccc41b838548bfe1748f670f352, type: 2}
+  vox: {fileID: -3473471599655774380, guid: dd6a207c4b41340559ae82070eebf29a, type: 3}
+  item: {instanceID: 0}

@@ -17,7 +17,7 @@ namespace Zoxel
     {
         public SaveSystem saveSystem; // save system later on
 
-        public override void OnClickedButton(Entity player, Entity ui, int arrayIndex)
+        public override void OnClickedButton(Entity player, Entity ui, int arrayIndex, ButtonType buttonType)
         {
             /*if (uis.ContainsKey(characterID) == false)
             {
@@ -61,7 +61,7 @@ namespace Zoxel
             }
             else if (menuType == 3)
             {
-                OnClickedLoadCharacterButton(player, arrayIndex);
+                OnClickedLoadCharacterButton(player, ui, arrayIndex, buttonType);
             }
             else if (menuType == 4)
             {
@@ -89,109 +89,34 @@ namespace Zoxel
             if (spawnMenuData.spawnType == 2)
             {
                 var saveSlots = saveSystem.GetSaveSlots();
-                buttons.Add(SpawnMenuButton(panelUI, "back"));
                 foreach (var saveSlot in saveSlots)
                 {
                     buttons.Add(SpawnMenuButton(panelUI, saveSlot));
                 }
                 buttons.Add(SpawnMenuButton(panelUI, "new game"));
+                buttons.Add(SpawnMenuButton(panelUI, "back"));
             }
             // load characters
             if (spawnMenuData.spawnType == 3)
             {
                 var saveSlots = saveSystem.GetPlayerSlots();
-                buttons.Add(SpawnMenuButton(panelUI, "back"));
                 foreach (var saveSlot in saveSlots)
                 {
                     buttons.Add(SpawnMenuButton(panelUI, saveSlot));
                 }
                 buttons.Add(SpawnMenuButton(panelUI, "new character"));
+                buttons.Add(SpawnMenuButton(panelUI, "back"));
             }
             // class choices
             if (spawnMenuData.spawnType == 4)
             {
                 List<ClassDatam> classes = Bootstrap.instance.data.classes;
-                buttons.Add(SpawnMenuButton(panelUI, "back"));
                 foreach (var classer in classes)
                 {
                     buttons.Add(SpawnMenuButton(panelUI, classer.name.ToLower()));
                 }
+                buttons.Add(SpawnMenuButton(panelUI, "back"));
             }
-            /*for (int i = 0; i < spawnMenuData.rowsCount; i++)
-            {
-                string text = "";
-                if (spawnMenuData.spawnType == 0)
-                {
-                    if (i == 0)
-                    {
-                        text = "play";
-                    }
-                    else
-                    {
-                        text = "exit";
-                    }
-                }
-                else if (spawnMenuData.spawnType == 1)
-                {
-                    if (i == 0)
-                    {
-                        text = "return";
-                    }
-                    else
-                    {
-                        text = "exit";
-                    }
-                }
-                else if (spawnMenuData.spawnType == 2)
-                {
-                    var saveSlots = saveSystem.GetSaveSlots();
-                    if (i == 0)
-                    {
-                        text = "back";
-                    }
-                    else if (i < saveSlots.Length + 1)
-                    {
-                        text = saveSlots[i - 1];
-                    }
-                    else
-                    {
-                        text = "new game";
-                    }
-                }
-                else if (spawnMenuData.spawnType == 3)
-                {
-                    var saveSlots = saveSystem.GetPlayerSlots();
-                    if (i == 0)
-                    {
-                        text = "back";
-                    }
-                    else if (i < saveSlots.Length + 1)
-                    {
-                        text = saveSlots[i - 1];
-                    }
-                    else
-                    {
-                        text = "new";
-                    }
-                }
-                // classes
-                else if (spawnMenuData.spawnType == 4)
-                {
-                    List<ClassDatam> classes = Bootstrap.instance.data.classes;
-                    if (i == 0)
-                    {
-                        text = "back";
-                    }
-                    else if (i < classes.Count + 1)
-                    {
-                        text = classes[i - 1].name;
-                    }
-                }
-                // first spawn subpanel
-                ///float3 position = GetVerticalListPosition(i, spawnMenuData.rowsCount);
-                //demButtons.entities[i] = subpanel;
-                buttons.Add(SpawnMenuButton(text));
-            }*/
             //icons.Add(zoxID.id, demButtons);
             Childrens children = new Childrens { };
             children.children = new BlitableArray<Entity>(buttons.Count, Allocator.Persistent);
@@ -203,7 +128,7 @@ namespace Zoxel
             float2 buttonSize = new float2(0.06f * 7, 0.06f);
             World.EntityManager.AddComponentData(panelUI, new GridUI
             {
-                updated = 1,
+                dirty = 1,
                 gridSize = new float2(1, buttons.Count),
                 iconSize = buttonSize,
                 margins = new float2(0.01f, 0.03f),
@@ -233,108 +158,38 @@ namespace Zoxel
                     new float3(0,0,-0.01f),
                     new float2(iconSize.x * text.Length * 0.6f, iconSize.y),
                     null, uiDatam.menuButton);
+            UIUtilities.SetEntityColor(EntityManager, button, uiDatam.defaultMenuColor);
             RenderText renderText = new RenderText { };
             renderText.fontSize = 0.03f;
+            renderText.SetColor(uiDatam.menuTextColor);
             renderText.SetText(text);
             World.EntityManager.AddComponentData(button, renderText);
-            RenderTextSystem.SetLetterColor(World.EntityManager, button, Color.green);
+            //RenderTextSystem.SetLetterColor(World.EntityManager, button, uiDatam.menuTextColor);
             return button;
         }
-
-        public override void OnSelectedButton(int characterID, int uiIndex, int arrayIndex)
-        {
-            //PlayerUIType uiType = (PlayerUIType)uiIndex;
-            //Entity character = Bootstrap.instance.systemsManager.characterSpawnSystem.characters[characterID];
-            // kinda want to know what UI is open?
-            /*if (uiType == PlayerUIType.MainMenu)
-            {
-                if (arrayIndex == 0)
-                {
-                    //SetTooltipText(characterID, "enter the world");
-                }
-                else
-                {
-                    //SetTooltipText(characterID, "leave zoxel");
-                }
-            }
-            else if (uiType == PlayerUIType.PauseMenu)
-            {
-                if (arrayIndex == 0)
-                {
-                    //SetTooltipText(characterID, "keep playing");
-                }
-                else
-                {
-                    //SetTooltipText(characterID, "quit playing");
-                }
-            }
-            else if (uiType == PlayerUIType.LoadGameMenu)
-            {
-                if (arrayIndex == 0)
-                {
-                    //SetTooltipText(characterID, "return to last menu");
-                }
-                else if (saveSystem.GetSaveSlots().Length + 1 == arrayIndex)
-                {
-                    //SetTooltipText(characterID, "start a new game");
-                }
-                else
-                {
-                    //SetTooltipText(characterID, "play this game");
-                }
-            }
-            else if (uiType == PlayerUIType.LoadPlayerMenu)
-            {
-                if (arrayIndex == 0)
-                {
-                   // //SetTooltipText(characterID, "return to last menu");
-                }
-                else if (saveSystem.GetPlayerSlots().Length + 1 == arrayIndex)
-                {
-                    ////SetTooltipText(characterID, "create a new character");
-                }
-                else
-                {
-                  ///  //SetTooltipText(characterID, "play as this character");
-                }
-            }
-            else if (uiType == PlayerUIType.ClassChoiceMenu)
-            {
-                if (arrayIndex == 0)
-                {
-                   // //SetTooltipText(characterID, "return to last menu");
-                }
-                else
-                {
-                    //ClassDatam classer = Bootstrap.instance.data.classes[arrayIndex - 1];
-                    ////SetTooltipText(characterID, classer.description);
-                }
-            }*/
-        }
-
 
         #region Spawning-Removing
         public static void SpawnUI(EntityManager EntityManager, Entity character, string spawnType) //, int rowsCount)
         {
             if (spawnType == "MainMenu")
             {
-                SpawnUI(EntityManager, character, 0);//, 2);
+                SpawnUI(EntityManager, character, 0);
             }
             else if (spawnType == "PauseMenu")
             {
-                SpawnUI(EntityManager, character, 1);//, 2);
+                SpawnUI(EntityManager, character, 1);
             }
             else if (spawnType == "LoadGame")
             {
-                SpawnUI(EntityManager, character, 2);//, Mathf.Min(4, saveSystem.GetSaveSlots().Length + 2));
+                SpawnUI(EntityManager, character, 2);
             }
             else if (spawnType == "LoadCharacter")
             {
-                SpawnUI(EntityManager, character, 3);//, Mathf.Min(4, saveSystem.GetPlayerSlots().Length + 2));
+                SpawnUI(EntityManager, character, 3);
             }
             else if (spawnType == "ClassChoice")
             {
-                SpawnUI(EntityManager, character, 4);//, Bootstrap.instance.data.classes.Count + 1);
+                SpawnUI(EntityManager, character, 4);
             }
         }
 
@@ -384,30 +239,12 @@ namespace Zoxel
         }
         #endregion
 
-        #region FromBooty
-        public List<ClassDatam> classes;
-        public Voxels.WorldSpawnSystem worldSpawnSystem;
-        public Voxels.ChunkSpawnSystem chunkSpawnSystem;
-        public MapDatam startingMap;
-        public CharacterDatam startingCharacter;
-        public PlayerSpawnSystem playerSpawnSystem;
-        public CameraSystem cameraSystem;
-        public Entity game;
-
+        #region OnClicked
         public void OnClickedLoadGameButton(int arrayIndex)
         {
-            if (arrayIndex == 0)
+            if (arrayIndex < saveSystem.GetSaveSlots().Length)
             {
-                //Debug.LogError("Returning to main menu.");
-                Clear();
-                foreach (Entity entity in playerSpawnSystem.controllers.Values)
-                {
-                    SpawnUI(EntityManager, entity, "MainMenu");
-                }
-            }
-            else if (arrayIndex < saveSystem.GetSaveSlots().Length + 1)
-            {
-                string loadName = saveSystem.GetSaveSlots()[arrayIndex - 1];
+                string loadName = saveSystem.GetSaveSlots()[arrayIndex];
                 //Debug.LogError("Loading Game: " + loadName);
                 // clear menu
                 // open player menu
@@ -418,12 +255,18 @@ namespace Zoxel
                     SpawnUI(EntityManager, entity, "LoadCharacter");
                 }
             }
-            else if (saveSystem.GetSaveSlots().Length + 1 == arrayIndex)
+            else if (arrayIndex == saveSystem.GetSaveSlots().Length)
             {
-                // start new game
-                ///Debug.LogError("Starting New Game.");
-                // gamestartsystem
                 NewGame();
+            }
+            else if (arrayIndex == saveSystem.GetSaveSlots().Length + 1)
+            {
+                //Debug.LogError("Returning to main menu.");
+                Clear();
+                foreach (Entity entity in playerSpawnSystem.controllers.Values)
+                {
+                    SpawnUI(EntityManager, entity, "MainMenu");
+                }
             }
             else {
                 Debug.LogError("ArrayIndex Clicked: " + arrayIndex);
@@ -431,19 +274,37 @@ namespace Zoxel
         }
 
         // should take in playerID as well so only player spawns a character
-        public void OnClickedLoadCharacterButton(Entity camera, int arrayIndex)
+        public void OnClickedLoadCharacterButton(Entity player, Entity ui, int arrayIndex, ButtonType buttonType)
         {
-            if (arrayIndex == 0)
+            var playerSlots = saveSystem.GetPlayerSlots(); 
+            if (arrayIndex < playerSlots.Length)
             {
-                //Debug.LogError("Returning to LoadGame.");
-                Clear();
-                foreach (Entity entity in playerSpawnSystem.controllers.Values)
+                var playerToLoad = int.Parse(playerSlots[arrayIndex]);
+                //Debug.LogError("Clicked Character ID:[" + playerToLoad + "]:: with button " + buttonType + " with slots " + playerSlots.Length);
+                // clear menu
+                // open player menu
+                if (buttonType == ButtonType.ButtonA)
                 {
-                    SpawnUI(EntityManager, entity, "LoadGame");
+                    Clear();
+                    LoadPlayer(player, playerToLoad, 0);
+                }
+                // todo: add a confirm ui
+                else if (buttonType == ButtonType.ButtonX)
+                { 
+                    //Debug.LogError("X BUTTON PRESSED2");
+                    Childrens children = World.EntityManager.GetComponentData<Childrens>(ui);
+                    children.DestroyEntity(World.EntityManager, arrayIndex);
+                    World.EntityManager.SetComponentData(ui, children);
+                    saveSystem.DeletePlayer(playerToLoad);
+                    var panelUI = World.EntityManager.GetComponentData<GridUI>(ui);
+                    panelUI.dirty = 1;
+                    World.EntityManager.SetComponentData(ui, panelUI);
                 }
             }
-            else if (saveSystem.GetPlayerSlots().Length + 1 == arrayIndex)
+            // new
+            else if (arrayIndex == playerSlots.Length)
             {
+                //Debug.LogError("Spawning new Character.");
                 // start new game
                 //string characterName = saveManager.GetPlayerSlots()[arrayIndex - 1];
                 //Debug.LogError("Starting New Character!");
@@ -457,30 +318,25 @@ namespace Zoxel
                     SpawnUI(EntityManager, entity, "ClassChoice");
                 }
             }
-            else if (arrayIndex < saveSystem.GetSaveSlots().Length + 1)
+            else if (arrayIndex == playerSlots.Length + 1)
             {
-                var playerToLoad = int.Parse(saveSystem.GetPlayerSlots()[arrayIndex - 1]);
-                //Debug.LogError("Loading Character: " + playerToLoad);
-                // clear menu
-                // open player menu
+                //Debug.LogError("Returning to prior menu.");
+                //Debug.LogError("Returning to LoadGame.");
                 Clear();
-                // game start
-                LoadPlayer(camera, playerToLoad, 0);
+                foreach (Entity entity in playerSpawnSystem.controllers.Values)
+                {
+                    SpawnUI(EntityManager, entity, "LoadGame");
+                }
+            }
+            // load character
+            else {
+                Debug.LogError("RANDOM ERROR?A>SDAWAW? " + playerSlots.Length);
             }
         }
 
         public void OnClickedClassChoiceButton(Entity camera, int arrayIndex)
         {
-            if (arrayIndex == 0)
-            {
-                //Debug.LogError("Returning to LoadGame.");
-                Clear();
-                foreach (Entity entity in playerSpawnSystem.controllers.Values)
-                {
-                    MenuSpawnSystem.SpawnUI(EntityManager, entity, "LoadCharacter");
-                }
-            }
-            else if (arrayIndex < classes.Count + 1)
+            if (arrayIndex < classes.Count)
             {
                 Clear();
                 //Debug.LogError("Loading Class [" + data.classes[arrayIndex - 1].name + "].");
@@ -489,7 +345,16 @@ namespace Zoxel
                 //systemsManager.gameStartSystem.newCharacterClass = data.classes[arrayIndex - 1];
                 //SetGameState(GameState.LoadNewWorld);
                 //int cameraID = characterID; // World.EntityManager.GetComponentData<ZoxID>(CameraSystem.cameras[characterID]).id;
-                LoadPlayer(camera, 0, classes[arrayIndex - 1].Value.id);
+                LoadPlayer(camera, 0, classes[arrayIndex].Value.id);
+            }
+            else
+            {
+                //Debug.LogError("Returning to LoadGame.");
+                Clear();
+                foreach (Entity entity in playerSpawnSystem.controllers.Values)
+                {
+                    MenuSpawnSystem.SpawnUI(EntityManager, entity, "LoadCharacter");
+                }
             }
         }
 
@@ -499,10 +364,12 @@ namespace Zoxel
             Clear();
             SetGameState(GameState.ClearingGame);
         }
+
         public void OnClickedResumeGameButton()
         {
             SetGameState(GameState.InGame);
         }
+
         public void OnClickedPlayButton()
         {
             Debug.Log("Loading Game.");
@@ -518,7 +385,17 @@ namespace Zoxel
             Debug.Log("Exiting Game.");
             Application.Quit();
         }
+        #endregion
 
+        #region FromBooty
+        public List<ClassDatam> classes;
+        public Voxels.WorldSpawnSystem worldSpawnSystem;
+        public Voxels.ChunkSpawnSystem chunkSpawnSystem;
+        public MapDatam startingMap;
+        public CharacterDatam startingCharacter;
+        public PlayerSpawnSystem playerSpawnSystem;
+        public CameraSystem cameraSystem;
+        public Entity game;
 
         private void NewGame()
         {
@@ -540,7 +417,7 @@ namespace Zoxel
         private void LoadPlayer(Entity camera, int characterID, int classID)
         {
             Game gameComponent = EntityManager.GetComponentData<Game>(game);
-            worldSpawnSystem.RemoveWorld(gameComponent.mapID);
+            worldSpawnSystem.DestroyWorld(gameComponent.mapID);
             LightManager.instance.SetLight("GameSun");
             gameComponent.mapID = worldSpawnSystem.SpawnMap(startingMap);
             EntityManager.SetComponentData(game, gameComponent);
@@ -560,43 +437,6 @@ namespace Zoxel
                 gameComponent.id, playerID, camera, gameComponent.mapID,
                 startingCharacter.Value.id, classID, characterID, newPosition.ToFloat3());
         }
-
-        //Bootstrap.instance.playerClanID,
-        //yield return new WaitForSeconds(1f);
-        //gameComponent.timeChanged = UnityEngine.Time.time;
-        // load player character
-        // spawn character
-        // load manager - load the character with ID
-        //int characterID2 = int.Parse(characterID);
-        /*gameComponent.spawnedPlayerIDs = new BlitableArray<int>(1, Unity.Collections.Allocator.Persistent);
-        if (isLoad)
-        {
-            gameComponent.spawnedPlayerIDs[0] = characterID;
-        }
-        else
-        {
-            gameComponent.spawnedPlayerIDs[0] = characterID;
-        }*/
-
-        //private void SpawnPlayerCharacter(int gameID, int controllerIndex, int cameraID, int metaID, int characterID, int worldID, int classID, bool isLoad)
-        //{
-        //CameraData cameraData = data.startingCamera.Value;
-        /*if (characterID == 0)
-        {
-            characterID = Bootstrap.GenerateUniqueID();
-        }*/
-        // find chunk position 000
-        //SetGameState(GameState.LoadCharacter);
-        //SetGameState(GameState.InGame);
-        //}/
-        /*cameraSystem.ConnectCameraToCharacter(cameraID, characterID);
-        Entity characterEntity = characterSpawnSystem.characters[characterID];
-        playerSpawnSystem.SetControllerCharacter(characterEntity, controllerIndex);
-        if (isLoad)
-        {
-            saveSystem.LoadPlayer(characterEntity);
-        }
-        worldSpawnSystem.OnAddedStreamer(characterEntity, worldID);*/
 
         private int3 FindNewPosition(Voxels.Chunk chunk)
         {

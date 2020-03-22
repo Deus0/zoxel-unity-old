@@ -7,7 +7,8 @@ namespace Zoxel
     {
         public byte id;
         public int characterID;
-        public byte updated;
+        public byte dirty;
+        public byte outlineDirty;
         public byte navigationDirty;
         public float2 size;
         public float orbitDepth;

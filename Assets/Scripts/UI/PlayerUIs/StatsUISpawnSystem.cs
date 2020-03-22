@@ -48,7 +48,7 @@ namespace Zoxel
         }
 
         // this should be in a StatUISystem -> with selection and other events handled..?
-        public override void OnClickedButton(Entity player, Entity ui, int arrayIndex)
+        public override void OnClickedButton(Entity player, Entity ui, int arrayIndex, ButtonType buttonType)
         {
             if (World.EntityManager.HasComponent<Inventory>(player) == false) {
                 Debug.LogError("Character " + player.Index + " does not have stats component.");
@@ -233,7 +233,7 @@ namespace Zoxel
             //float2 iconSize = new float2(uiDatam.skillbarIconSize, uiDatam.skillbarIconSize);
             World.EntityManager.AddComponentData(panelUI, new GridUI
             {
-                updated = 1,
+                dirty = 1,
                 gridSize = uiDatam.statsUIGridSize,
                 iconSize = iconSize,
                 margins = new float2(0.003f, 0.003f),

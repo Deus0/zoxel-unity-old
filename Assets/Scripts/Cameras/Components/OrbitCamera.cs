@@ -30,7 +30,7 @@ namespace Zoxel
             {
                 delta = 1;
             }
-            sinPosition += delta * 0.1f;
+            sinPosition += delta * 0.05f;
             translation.Value = math.lerp(translation.Value,
                 GetTranslatedPosition(cameraPosition, cameraRotation),
                 delta);

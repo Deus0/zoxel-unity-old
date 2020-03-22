@@ -31,6 +31,8 @@ namespace Zoxel
         public Entity ui;
     }
 
+    // atachedto player entity
+    // used to navigate the ui
     [System.Serializable]
     public struct NavigateUI : IComponentData
     {
@@ -38,16 +40,12 @@ namespace Zoxel
         public Entity selected;
         public int selectedIndex;
         public float3 position;
+        public float lastMoved;
+        public byte updated;
 
         // meta
         public Entity character;
         public BlitableArray<NavigateUIElement> navigationElements;
-
-        // state / actions
-        //public byte lastUIIndex;
-        public float lastMoved;
-        public byte clicked;
-        public byte updated;
 
         public void Initialize(List<Entity> entities, List<float3> positions, List<Entity> newParents)
         {

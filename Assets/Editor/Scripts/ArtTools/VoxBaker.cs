@@ -259,7 +259,7 @@ namespace Zoxel
             VoxelSystemGroup voxelSystemGroup = space.GetOrCreateSystem<VoxelSystemGroup>();
             if (worldID != 0)
             {
-                voxelSystemGroup.worldSpawnSystem.RemoveWorld(worldID);
+                voxelSystemGroup.worldSpawnSystem.DestroyWorld(worldID);
             }
             //voxDatam.bakedMaterial = voxMaterial;
             worldID = voxelSystemGroup.worldSpawnSystem.SpawnModel(float3.zero, voxDatam);

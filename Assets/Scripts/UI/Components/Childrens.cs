@@ -1,6 +1,7 @@
 ﻿using Unity.Entities;
 using System.Collections.Generic;
 using Zoxel.UI;
+using Unity.Collections;
 
 namespace Zoxel
 {
@@ -60,6 +61,39 @@ namespace Zoxel
             if (children.Length > 0)
             {
                 children.Dispose();
+            }
+        }
+
+        private void DestroChildAtIndex(EntityManager EntityManager, int index)
+        {
+            if (EntityManager.Exists(children[index]))
+            {
+                if (EntityManager.HasComponent<Childrens>(children[index]))
+                {
+                    Childrens childrensChildren = EntityManager.GetComponentData<Childrens>(children[index]);
+                    childrensChildren.DestroyEntities(EntityManager);
+                }
+                if (EntityManager.HasComponent<RenderText>(children[index]))
+                {
+                    RenderText text = EntityManager.GetComponentData<RenderText>(children[index]);
+                    text.DestroyLetters(EntityManager);
+                }
+                EntityManager.DestroyEntity(children[index]);
+            }
+        }
+
+        public void DestroyEntity(EntityManager EntityManager, int index)
+        {
+            DestroChildAtIndex(EntityManager,index);
+            var children_ = children.ToArray();
+            children = new BlitableArray<Entity>(children.Length - 1, Allocator.Persistent);
+            for (int i = 0; i < children.Length; i++) {
+                if (i < index) {
+                    children[i] = children_[i];
+                }
+                else {
+                    children[i] = children_[i + 1];
+                }
             }
         }
     }

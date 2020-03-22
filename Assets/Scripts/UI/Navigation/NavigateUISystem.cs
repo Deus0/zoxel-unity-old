@@ -22,11 +22,6 @@ namespace Zoxel
 
             public void Execute(ref NavigateUI navigate, ref Controller controller) // ref Translation position, 
             {
-                if (controller.Value.buttonA == 1 || controller.Value.startButton == 1)
-                {
-                    navigate.clicked = 1;
-                    return;
-                }
                 if (navigate.navigationElements.Length == 0)
                 {
                     return;

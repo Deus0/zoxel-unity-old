@@ -19,10 +19,16 @@ MonoBehaviour:
     y: 0.06
   defaultPlayerPanel: {fileID: 2100000, guid: 1202a0a7449c3584c92270b967249cd6, type: 2}
   defaultPlayerIcon: {fileID: 2100000, guid: 6eeb0930157e1834eaa373b4a760225a, type: 2}
+  defaultPlayerOutline: {fileID: 2100000, guid: 042e4d3eb5a5712d38853a5d0bca15ba,
+    type: 2}
+  selectedMenuColor: {r: 0.4716981, g: 0.11792453, b: 0.3027316, a: 1}
+  defaultMenuColor: {r: 0.2251691, g: 0.27527946, b: 0.4339623, a: 1}
+  overlayTextColor: {r: 1, g: 0, b: 0, a: 1}
+  menuTextColor: {r: 1, g: 0.92589796, b: 0, a: 0.77254903}
   fontSize: 0.24
   font: {fileID: 11400000, guid: f4e144d3d7f03b74985f27dd73a9d9da, type: 2}
   menuButton: {fileID: 2100000, guid: aa774eda4f45614418d2ed7ad1b10ed1, type: 2}
-  buttonAnimationTime: 0.3
+  buttonAnimationTime: 0.5
   menuPadding:
     x: 0
     y: 0
@@ -46,7 +52,7 @@ MonoBehaviour:
     x: 3
     y: 3
   skillbarIconsCount: 5
-  actionbarPanel: {fileID: 2100000, guid: 8fdda3d8d12c72741b5d81eae6d2202a, type: 2}
+  actionbarPanel: {fileID: 2100000, guid: 1202a0a7449c3584c92270b967249cd6, type: 2}
   actionbarIconSize:
     x: 0.1
     y: 0.1

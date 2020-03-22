@@ -27,9 +27,9 @@ namespace Zoxel
             Entities.WithAll<PanelUI, GridUI, Childrens>().ForEach((Entity e, 
                 ref PanelUI panelUI, ref GridUI gridUI, ref Childrens childrens) =>
             {
-                if (gridUI.updated == 1)
+                if (gridUI.dirty == 1)
                 {
-                    gridUI.updated = 0;
+                    gridUI.dirty = 0;
                     panelUI.size = gridUI.GetSize();
                     // set panel first
                     // set children positions
@@ -39,7 +39,8 @@ namespace Zoxel
                         float3 elementPosition = GetGridPosition(i, gridUI.gridSize, gridUI.iconSize, gridUI.margins, gridUI.padding);
                         World.EntityManager.SetComponentData(childrens.children[i], new Translation { Value = elementPosition });
                     }
-                    panelUI.updated = 1;
+                    // should be if has panel set to dirty to resize it
+                    panelUI.dirty = 1;
                     panelUI.navigationDirty = 1;
                 }
             });

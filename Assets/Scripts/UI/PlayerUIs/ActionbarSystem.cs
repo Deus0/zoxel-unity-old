@@ -70,7 +70,7 @@ namespace Zoxel
             //Debug.LogError("Adding GridUI to new Inventory.");
             World.EntityManager.AddComponentData(panelUI, new GridUI
             {
-                updated = 1,
+                dirty = 1,
                 gridSize = new float2(5, 1),
                 iconSize = iconSize,
                 margins = new float2(0.003f, 0.003f),

@@ -1,0 +1,16 @@
+fileFormatVersion: 2
+guid: 22fd41d7ece550882876b83691fd8e71
+ScriptedImporter:
+  internalIDToNameTable: []
+  externalObjects: {}
+  serializedVersion: 2
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+  script: {fileID: 11500000, guid: 5441f7bda96807d409522dc8d0af4b33, type: 3}
+  vox: {instanceID: 0}
+  scale:
+    x: 1
+    y: 1
+    z: 1
+  voxAssetPath: Assets/Data/Voxs/Characters/Merchant/Merchant-16.vox

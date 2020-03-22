@@ -254,7 +254,7 @@ namespace Zoxel
         {
             UnityEngine.Time.timeScale = 1;
             //systemsManager.ClearGame();
-            worldSpawnSystem.RemoveWorld(mapID);
+            worldSpawnSystem.DestroyWorld(mapID);
             //worldSpawnSystem.Clear();       // should clear chunks of the spawned units
             characterSpawnSystem.Clear();   // just need to clear player characters though
             cameraSystem.Clear();      // need to remove all cameras from game

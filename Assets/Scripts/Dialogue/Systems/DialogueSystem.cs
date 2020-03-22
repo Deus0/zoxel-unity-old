@@ -29,6 +29,7 @@ namespace Zoxel
                         if (dialogue.hasSpawnedButtons == 0)
                         {
                             dialogue.hasSpawnedButtons = 1;
+                            Color textColor = Color.blue; //  uiDatam.menuTextColor
                             DialogueDatam dialogueTree = meta[dialogue.treeID];
                             var currentBranch = dialogueTree.dialogueTree.branches[dialogue.branchID];
                             Childrens children = new Childrens { };
@@ -39,7 +40,8 @@ namespace Zoxel
                                 float3 buttonPosition = new float3(0, (-renderText.fontSize / 2f - buttonFontSize / 2f), 0);
                                 string dialogueOptionA = "Next";
                                 children.children[0] = UIUtilities.SpawnButtonWithText(World.EntityManager, e, 
-                                    buttonPosition, buttonFontSize, dialogueOptionA, uiDatam.menuButton);
+                                    buttonPosition, buttonFontSize, dialogueOptionA, 
+                                    uiDatam.menuButton, uiDatam.defaultMenuColor, textColor);
                             }
                             else
                             {
@@ -54,7 +56,8 @@ namespace Zoxel
                                     buttonPosition += offset;
                                     offset = buttonPosition;
                                     string dialogueOptionA = "Leave";
-                                    for (int j = 0; j < dialogueDatam.dialogueTree.branches.Length; j++) {
+                                    for (int j = 0; j < dialogueDatam.dialogueTree.branches.Length; j++)
+                                    {
                                         var otherBranch = dialogueDatam.dialogueTree.branches[j];
                                         if (otherBranch.id == currentBranch.links[i])
                                         {
@@ -63,7 +66,8 @@ namespace Zoxel
                                         }
                                     }
                                     children.children[i] = UIUtilities.SpawnButtonWithText(World.EntityManager, e, 
-                                        buttonPosition, buttonFontSize, dialogueOptionA, uiDatam.menuButton);
+                                        buttonPosition, buttonFontSize, dialogueOptionA, 
+                                            uiDatam.menuButton, uiDatam.defaultMenuColor,  textColor);
                                 }
                             }
                             World.EntityManager.SetComponentData(e, children);
@@ -153,8 +157,7 @@ namespace Zoxel
             var branch = dialogueTree.dialogueTree.branches[dialogue.branchID];
             dialogue.SetText(branch.speech, ref renderText);
             renderText.offsetX = ((-branch.speech.Length - 1f) / 2f) * renderText.fontSize;
-            DialogueUISpawnSystem.RefreshPanelSize(World.EntityManager, e,
-                renderText.fontSize, branch.speech.Length);
+            RefreshPanelSize(World.EntityManager, e, renderText.fontSize, branch.speech.Length);
         }
 
         private void IncrementLetters(ref DialogueUI dialogue, ref RenderText renderText)
@@ -162,6 +165,20 @@ namespace Zoxel
             dialogue.RandomizeCooldown();
             dialogue.IncreaseIndex(ref renderText);
             //RefreshPanelSize(e, newText);
+        }
+
+        private static void RefreshPanelSize(EntityManager entityManager, Entity panelUI, float fontSize, int textLength)
+        {
+            float2 panelSize = new float2(textLength * fontSize, fontSize);
+            //UnityEngine.Debug.LogError("Resized dialogue panel to: " + panelSize);
+            Unity.Rendering.RenderMesh renderMesh =
+                entityManager.GetSharedComponentData<Unity.Rendering.RenderMesh>(panelUI);
+            renderMesh.mesh = MeshUtilities.CreateQuadMesh(panelSize);
+            entityManager.SetSharedComponentData(panelUI, renderMesh);
+            var panel = entityManager.GetComponentData<PanelUI>(panelUI);
+            panel.size = panelSize;
+            panel.outlineDirty = 1;
+            entityManager.SetComponentData(panelUI, panel);
         }
     }
 

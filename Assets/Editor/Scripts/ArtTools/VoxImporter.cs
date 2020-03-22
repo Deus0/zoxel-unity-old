@@ -16,18 +16,36 @@ namespace Zoxel.Voxels
         public static string defaultShaderName = "Universal Render Pipeline/Lit";
         //public bool isExport;
         //public Material voxelMaterial;
-        public VoxDatam vox;
         public float3 scale = new float3(1,1,1);
-        [SerializeField, HideInInspector]
+        public bool isItem;
+        public TextureDatam itemTexture;
+        [SerializeField]
+        private VoxDatam vox;
+        [SerializeField]
+        private ItemDatam item;
+        //[HideInInspector, SerializeField]
         private string voxAssetPath;
+        string filename;
 
         public override void OnImportAsset(AssetImportContext ctx)
         {
             voxAssetPath = ctx.assetPath;
-            //if (isExport)
+            SaveVox(ctx);
+            if (isItem)
             {
-            //    isExport = false;
-                SaveVox(ctx);
+                if (item == null)
+                {
+                    item = ScriptableObject.CreateInstance<ItemDatam>();
+                    item.name = filename + " Item";
+                }
+                if (item.Value.id == 0)
+                {
+                    item.Value.id = Bootstrap.GenerateUniqueID();
+                }
+                item.model = vox;
+                item.Value.scale = 0.5f;
+                item.texture = itemTexture;
+                ctx.AddObjectToAsset(item.name, item);
             }
         }
 
@@ -35,44 +53,31 @@ namespace Zoxel.Voxels
         {
             bool isPreExisting = vox != null;
             vox = ProcessVoxFile(vox);
-            vox.data.scale = scale;
-            //vox.bakedMaterial = voxelMaterial;
             string startFolder = System.IO.Path.GetDirectoryName(voxAssetPath); //FileUtil.GetProjectRelativePath(voxAssetPath);
-            //string path = EditorUtility.SaveFilePanel("Save Animation Asset", startFolder, vox.name, "asset");
-            //if (string.IsNullOrEmpty(path)) return;
-            //path = FileUtil.GetProjectRelativePath(path);
-            /*string path = startFolder + "\\" + vox.name + ".asset";
-            Debug.Log("Saving vox to file: " + path);
-            if (isPreExisting)
-            {
-                EditorUtility.SetDirty(vox);
-            }
-            else
-            {
-                AssetDatabase.CreateAsset(vox, path);
-            }*/
             ctx.AddObjectToAsset(vox.name, vox);
             ctx.SetMainObject(vox);
-            //AssetDatabase.SaveAssets();
         }
 
         private VoxDatam ProcessVoxFile(VoxDatam model)
         {
             var voxel = VoxImport.VoxImportMethods.Load(voxAssetPath);
-            string filename = Path.GetFileNameWithoutExtension(voxAssetPath);
+            filename = Path.GetFileNameWithoutExtension(voxAssetPath);
             if (model == null)
             {
                 model = ScriptableObject.CreateInstance<VoxDatam>();
-                model.name = filename + " Vox";
+            }
+            model.name = filename + " Vox";
+            var priorID = model.data.id;
+            if (priorID == 0)
+            {
+                priorID = Bootstrap.GenerateUniqueID();
             }
             model.data = new VoxData { 
-                id = Bootstrap.GenerateUniqueID()
+                id = priorID
             };
             uint[] pallete = voxel.palette.values;  
             Color32[] colors = VoxImport.VoxImportMethods.CreateColor32FromPelatte(pallete);
-            model.data.InitializeColors(colors.Length); //colorsR = new byte[colors.Length];
-            //map.data.colorsG = new byte[colors.Length];
-            //map.data.colorsB = new byte[colors.Length];
+            model.data.InitializeColors(colors.Length);
             for (int i = 0; i < colors.Length; i++)
             {
                 model.data.colorsR[i] = colors[i].r;
@@ -82,16 +87,7 @@ namespace Zoxel.Voxels
             var voxData = voxel.chunkChild[0].xyzi.voxels;
             byte voxelValue;
             model.data.size = new int3(voxData.x, voxData.y, voxData.z);
-            //float min = math.min(math.min(voxData.x, voxData.y), voxData.z);
-            //map.data.size = new Unity.Mathematics.float3(min, min, min);
             model.data.InitializeData();
-           /* for (int i = 0; i < map.data.size.x; i++)
-            {
-                for (int j = 0; j < map.data.size.y; j++)
-                {
-                    for (int k = 0; k < map.data.size.z; k++)
-                    {*/
-                    
             int3 localPosition;
             for (localPosition.x = 0; localPosition.x < model.data.size.x; localPosition.x++)
             {
@@ -100,9 +96,7 @@ namespace Zoxel.Voxels
                     for (localPosition.z = 0; localPosition.z < model.data.size.z; localPosition.z++)
                     {
                         int modelVoxelIndex = VoxelRaycastSystem.GetVoxelArrayIndex(localPosition, model.data.size);
-                        //int a = Mathf.FloorToInt(i * map.data.size.y * map.data.size.z + j * map.data.size.z + k);
                         voxelValue = (byte)voxData.voxels[(int)localPosition.x, (int)localPosition.y, (int)localPosition.z];
-                        //Debug.Log("voxelValue: " + voxelValue);
                         if (voxelValue != 255)
                         {
                             model.data.data[modelVoxelIndex] = (byte)(voxelValue + 1);
@@ -114,11 +108,13 @@ namespace Zoxel.Voxels
                     }
                 }
             }
+            model.data.scale = scale;
             return model;
         }
 
     }
 }
+
 namespace VoxImport
 {
 

@@ -195,17 +195,25 @@ namespace Zoxel.Voxels
                 voxData.id = id;
                 voxData.scale = scale;
                 voxData.size = size;
-                voxData.InitializeData(); // data.Length
-                for (int i = 0; i < data.Length; i++)
-                {
-                    voxData.data[i] = data[i];
-                }
                 voxData.InitializeColors(colorsR.Length);
+                if (voxData.colorsR.Length != colorsR.Length)
+                {
+                    return voxData;
+                }
                 for (int i = 0; i < colorsR.Length; i++)
                 {
                     voxData.colorsR[i] = colorsR[i];
                     voxData.colorsG[i] = colorsG[i];
                     voxData.colorsB[i] = colorsB[i];
+                }
+                voxData.InitializeData(); // data.Length
+                if (voxData.data.Length != data.Length)
+                {
+                    return voxData;
+                }
+                for (int i = 0; i < data.Length; i++)
+                {
+                    voxData.data[i] = data[i];
                 }
                 return voxData;
             }

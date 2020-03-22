@@ -50,13 +50,12 @@ namespace Zoxel
         public List<MapDatam> maps;     // may contain infinite map, and generation details here!
         public List<CameraDatam> cameras;
         public List<WaveDatam> waves;
-        public List<VoxelDatam> voxels;
 
         [Header("Combat")]
         public List<CharacterDatam> characters;
-        public List<ClassDatam> classes;
         // generate from skills
         public List<TurretDatam> turrets;
+        public List<ClassDatam> classes;
         public List<BulletDatam> bullets;
 
         [Header("Story")]
@@ -67,6 +66,7 @@ namespace Zoxel
         public List<DialogueDatam> dialogues;
 
         [Header("Art")]
+        public List<VoxelDatam> voxels;
         public List<VoxDatam> models;
         public List<SkeletonDatam> skeletons;
         public List<MusicDatam> musics;

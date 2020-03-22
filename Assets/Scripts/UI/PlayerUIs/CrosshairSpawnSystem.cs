@@ -55,10 +55,12 @@ namespace Zoxel
 
         private Entity SpawnUI(Entity character)
         {
-            Entity crosshair = UIUtilities.SpawnCharacterUI(World.EntityManager,
-                character, uiData.crosshairPosition,
-                new float2(uiData.crosshairSize, uiData.crosshairSize),
-                uiData.crosshairMaterial);
+            Entity crosshair = UIUtilities.SpawnPanel(World.EntityManager,
+                character, 
+                uiData.crosshairMaterial,
+                null,
+                //uiData.crosshairPosition,
+                new float2(uiData.crosshairSize, uiData.crosshairSize));
             UIUtilities.UpdateOrbiter(World.EntityManager, crosshair, new float3(0, 0, 0.5f), uiData.crosshairLerpSpeed);
             /*OrbitCamera orbit = World.EntityManager.GetComponentData<OrbitCamera>(crosshair);
             orbit.lerpSpeed = uiData.crosshairLerpSpeed;

@@ -1,27 +1,6 @@
 %YAML 1.1
 %TAG !u! tag:unity3d.com,2011:
---- !u!114 &11400000
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: bd0aee5efdd626c419b5cc3617826976, type: 3}
-  m_Name: GameMap
-  m_EditorClassIdentifier: 
-  voxels:
-  - {fileID: 11400000, guid: 54a913a0d5752a54eb45dd65ade6714c, type: 2}
-  - {fileID: 11400000, guid: 9b75f0ae4bef6c540833e7b880fbfee3, type: 2}
-  - {fileID: 11400000, guid: eeea187fa0c7e7c45b5e25a626a801e2, type: 2}
-  - {fileID: 11400000, guid: 0e9dee87d3a55c949a2f4e35030f1743, type: 2}
-  tilemaps:
-  - {fileID: 7722956514034197701}
-  materials:
-  - {fileID: 2100000, guid: 4ebd7c6c92de1704db70f64cda336c4e, type: 2}
---- !u!28 &7722956514034197701
+--- !u!28 &-4527411625947475590
 Texture2D:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -62,3 +41,24 @@ Texture2D:
     offset: 0
     size: 0
     path: 
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: bd0aee5efdd626c419b5cc3617826976, type: 3}
+  m_Name: GameMap
+  m_EditorClassIdentifier: 
+  voxels:
+  - {fileID: 11400000, guid: 54a913a0d5752a54eb45dd65ade6714c, type: 2}
+  - {fileID: 11400000, guid: 9b75f0ae4bef6c540833e7b880fbfee3, type: 2}
+  - {fileID: 11400000, guid: eeea187fa0c7e7c45b5e25a626a801e2, type: 2}
+  - {fileID: 11400000, guid: 0e9dee87d3a55c949a2f4e35030f1743, type: 2}
+  tilemaps:
+  - {fileID: -4527411625947475590}
+  materials:
+  - {fileID: 2100000, guid: 4ebd7c6c92de1704db70f64cda336c4e, type: 2}

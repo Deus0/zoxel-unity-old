@@ -17,6 +17,11 @@ namespace Zoxel
 
         protected override void OnUpdate() { }
 
+        protected virtual void OnSpawnedPanel(Entity character, Entity panelUI, object spawnData) { }
+        public virtual void OnClickedButton(Entity player, Entity ui, int arrayIndex, ButtonType buttonType) { }
+        public virtual void OnSelectedButton(int characterID, int arrayIndex) { }
+        public virtual void OnSelectedButton(int characterID, int uiIndex, int arrayIndex) { }
+
         public virtual void Clear()
         {
             foreach (int key in uis.Keys)
@@ -46,6 +51,11 @@ namespace Zoxel
                 {
                     RenderText text = World.EntityManager.GetComponentData<RenderText>(e);
                     text.DestroyLetters(World.EntityManager);
+                }
+                if (World.EntityManager.HasComponent<OutlineLink>(e))
+                {
+                    var outline = World.EntityManager.GetComponentData<OutlineLink>(e);
+                    World.EntityManager.DestroyEntity(outline.outline);
                 }
                 World.EntityManager.DestroyEntity(e);
                 if (isRemove)
@@ -78,10 +88,11 @@ namespace Zoxel
             {
                 panelMaterial = overrideMaterial;
             }
-            Entity panelUI = UIUtilities.SpawnCharacterUI(
+            Entity panelUI = UIUtilities.SpawnPanel(
                 World.EntityManager,
                 parent,
-                panelMaterial);
+                panelMaterial,
+                uiDatam.defaultPlayerOutline);
             //World.EntityManager.AddComponentData(panelUI, new ZoxID { id = zoxID });
             uis.Add(zoxID, panelUI);
             OnSpawnedPanel(parent, panelUI, spawnData);
@@ -153,13 +164,5 @@ namespace Zoxel
                 World.EntityManager.SetComponentData(textEntity, renderText);
             }
         }*/
-
-        protected virtual void OnSpawnedPanel(Entity character, Entity panelUI, object spawnData) { }
-       // public virtual void OnClickedButton(int characterID, int arrayIndex) { }
-
-        public virtual void OnClickedButton(Entity player, Entity ui, int arrayIndex) { }
-
-        public virtual void OnSelectedButton(int characterID, int arrayIndex) { }
-        public virtual void OnSelectedButton(int characterID, int uiIndex, int arrayIndex) { }
     }
 }

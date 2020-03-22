@@ -113,8 +113,7 @@ namespace Zoxel
                         World.EntityManager.GetSharedComponentData<Unity.Rendering.RenderMesh>(renderText.letters[i]);
                     render.material.SetTexture("_BaseMap", uiData.font.textures[(int)renderText.fontIndexes[i]]);
                     World.EntityManager.SetSharedComponentData(renderText.letters[i], render);
-                    SetLetterColor(World.EntityManager, renderText.letters[i],
-                        new UnityEngine.Color(renderText.colorR, renderText.colorG, renderText.colorB));
+                    SetLetterColor(World.EntityManager, renderText.letters[i], renderText.GetColor());
                 }
                 else
                 {

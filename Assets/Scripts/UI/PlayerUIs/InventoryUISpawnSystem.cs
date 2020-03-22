@@ -27,41 +27,77 @@ namespace Zoxel
         bool isFirst = true;
         int firstSelected;
 
-        public override void OnClickedButton(Entity player, Entity ui, int arrayIndex)
+        public override void OnClickedButton(Entity player, Entity ui, int arrayIndex, ButtonType buttonType)
         {
-            if (World.EntityManager.HasComponent<Inventory>(player) == false) {
+            if (buttonType != ButtonType.ButtonA && buttonType != ButtonType.ButtonX)
+            {
+                return;
+            }
+            if (World.EntityManager.HasComponent<Inventory>(player) == false)
+            {
                 Debug.LogError("Character " + player.Index + " does not have inventory component.");
                 return;
             }
             Inventory inventory = World.EntityManager.GetComponentData<Inventory>(player);
             InventoryItem item2 = inventory.items[arrayIndex];
-            if (isFirst)
+            // button x is equip
+            if (buttonType == ButtonType.ButtonX)
             {
                 if (item2.metaID != 0)
                 {
-                    isFirst = !isFirst;
-                    firstSelected = arrayIndex;
-                    // change selected icon
-                    ///ChangeSelectedIcon(characterID, uiDatam.selectedActioning);
+                    if (World.EntityManager.HasComponent<Equipment>(player) == false)
+                    {
+                        Debug.LogError("Character " + player.Index + " does not have equipment component.");
+                        return;
+                    }
+                    int characterID = World.EntityManager.GetComponentData<ZoxID>(player).id;
+                    var equipment = World.EntityManager.GetComponentData<Equipment>(player);
+                    var bodyPart = equipment.body[0];
+                    //Debug.LogError("Equiping item: " + item2.metaID + " over item " + bodyPart.metaID);
+                    int bodyID = bodyPart.metaID;
+                    bodyPart.metaID = item2.metaID;
+                    equipment.body[0] = bodyPart;
+                    equipment.dirty = 1;
+                    World.EntityManager.SetComponentData(player, equipment);
+                    item2.metaID = bodyID;
+                    inventory.items[arrayIndex] = item2;
+                    World.EntityManager.SetComponentData(player, inventory);
+                    RefreshUI(characterID, arrayIndex);
+                    UpdateIconText(characterID, arrayIndex);
                 }
+                return;
             }
             else
             {
-                isFirst = !isFirst;
-                // switch items
-                InventoryItem item1 = inventory.items[firstSelected];
-                inventory.items[firstSelected] = item2;
-                inventory.items[arrayIndex] = item1;
+                // button a is item pickup / swap
+                /*if (isFirst)
+                {
+                    if (item2.metaID != 0)
+                    {
+                        isFirst = !isFirst;
+                        firstSelected = arrayIndex;
+                        // change selected icon
+                        ///ChangeSelectedIcon(characterID, uiDatam.selectedActioning);
+                    }
+                }
+                else
+                {
+                    isFirst = !isFirst;
+                    // switch items
+                    InventoryItem item1 = inventory.items[firstSelected];
+                    inventory.items[firstSelected] = item2;
+                    inventory.items[arrayIndex] = item1;
 
-                World.EntityManager.SetComponentData(player, inventory);
-                // update those items/quantities and tooltip
-                int characterID = World.EntityManager.GetComponentData<ZoxID>(player).id;
-                RefreshUI(characterID, firstSelected);
-                UpdateIconText(characterID, firstSelected);
-                RefreshUI(characterID, arrayIndex);
-                UpdateIconText(characterID, arrayIndex);
-                OnSelectedButton(characterID, arrayIndex);
-                //ChangeSelectedIcon(characterID, uiDatam.selectedDefault);
+                    World.EntityManager.SetComponentData(player, inventory);
+                    // update those items/quantities and tooltip
+                    int characterID = World.EntityManager.GetComponentData<ZoxID>(player).id;
+                    RefreshUI(characterID, firstSelected);
+                    UpdateIconText(characterID, firstSelected);
+                    RefreshUI(characterID, arrayIndex);
+                    UpdateIconText(characterID, arrayIndex);
+                    OnSelectedButton(characterID, arrayIndex);
+                    //ChangeSelectedIcon(characterID, uiDatam.selectedDefault);
+                }*/
             }
         }
 
@@ -107,7 +143,7 @@ namespace Zoxel
                 Entity character = characterSpawnSystem.characters[characterID];
                 Inventory inventory = World.EntityManager.GetComponentData<Inventory>(character);
                 string numberString = inventory.items[arrayIndex].quantity.ToString();
-                if (numberString == "0")
+                if (numberString == "0" || numberString == "1")
                 {
                     numberString = "";
                 }
@@ -116,7 +152,7 @@ namespace Zoxel
                 Entity textGrandChild = World.EntityManager.GetComponentData<Childrens>(childrens.children[arrayIndex]).children[0];
 
                 RenderText text = World.EntityManager.GetComponentData<RenderText>(textGrandChild);
-                if (numberString == "0")
+                if (numberString == "0" || numberString == "1")
                 {
                     numberString = "";
                 }
@@ -222,11 +258,12 @@ namespace Zoxel
                 statIcons.Add(icon);
                 Childrens textLink = new Childrens { children = new BlitableArray<Entity>(1, Unity.Collections.Allocator.Persistent) };
                 string numberString = ((int)inventory.items[i].quantity).ToString();
-                if (numberString == "0")
+                if (numberString == "0" || numberString == "1")
                 {
                     numberString = "";
                 }
-                textLink.children[0] = UIUtilities.SpawnText(World.EntityManager, icon, numberString);//, iconSize);
+                textLink.children[0] = UIUtilities.SpawnText(World.EntityManager, icon, numberString, float3.zero, uiDatam.overlayTextColor);
+                //    (byte)(uiDatam.overlayTextColor.r * 255), (byte)(uiDatam.overlayTextColor.g * 255), (byte)(uiDatam.overlayTextColor.b * 255));//, iconSize);
                 World.EntityManager.AddComponentData(icon, textLink);
             }
             Childrens children = new Childrens { };
@@ -239,7 +276,7 @@ namespace Zoxel
             //Debug.LogError("Adding GridUI to new Inventory.");
             World.EntityManager.AddComponentData(panelUI, new GridUI
             {
-                updated = 1,
+                dirty = 1,
                 gridSize = uiDatam.inventoryGridSize,
                 iconSize = iconSize,
                 margins = new float2(0.003f, 0.003f),

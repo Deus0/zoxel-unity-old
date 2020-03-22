@@ -44,9 +44,18 @@ namespace Zoxel
         {
             return false;
         }
+
+        private string GetPlayerPath()
+        {
+            return Application.persistentDataPath + "/" + saveGameName + "/Players/";
+        } 
+        private string[] GetPlayerPaths()
+        {
+            return System.IO.Directory.GetDirectories(GetPlayerPath());
+        } 
         public string[] GetPlayerSlots()
         {
-            var folders = System.IO.Directory.GetDirectories(Application.persistentDataPath + "/" + saveGameName + "/Players/");
+            var folders = GetPlayerPaths();
             string[] names = new string[folders.Length];
             for (int i = 0; i < folders.Length; i++)
             {
@@ -98,6 +107,16 @@ namespace Zoxel
                 SavePlayer(character);
             }
         }
+
+         public void DeletePlayer(int id)
+         {
+            var folders = GetPlayerPath() + id.ToString();
+            if (System.IO.Directory.Exists(folders))
+            {
+                Debug.Log("Deleting Player save folder path: " + folders);
+                System.IO.Directory.Delete(folders, true);
+            }
+         }
 
         private void SavePlayer(Entity character)
         {

@@ -8,27 +8,11 @@ using Unity.Mathematics;
 
 namespace Zoxel
 {
-    public struct EntityBunch
+
+    public struct OutlineLink : IComponentData
     {
-        public Entity[] entities;
-
-        public void Clear(EntityManager entityManager)
-        {
-            foreach (Entity e in entities)
-            {
-                if (entityManager.HasComponent<RenderText>(e))
-                {
-                    entityManager.GetComponentData<RenderText>(e).DestroyLetters(entityManager);
-                }
-                if (entityManager.Exists(e))
-                {
-                    entityManager.DestroyEntity(e);
-                }
-            }
-        }
+        public Entity outline;
     }
-
-    // first make skillbarUI use this system
     public static class UIUtilities
     {
         private static EntityArchetype panelArchtype;
@@ -36,19 +20,17 @@ namespace Zoxel
 
         public static Entity SpawnText(EntityManager EntityManager, Entity parent, string text) //, float2 iconSize)
         {
-            return SpawnText(EntityManager, parent, text, float3.zero); //  iconSize, 
+            return SpawnText(EntityManager, parent, text, float3.zero, Color.cyan); //  iconSize, 
         }
 
         public static Entity SpawnText(EntityManager EntityManager, Entity parent, string text,
-            float3 positionOffset, byte ColorR = 0, byte ColorG = 255, byte ColorB = 0, float fontSizer = 0.014f) // float2 iconSize, 
+            float3 positionOffset, Color color, float fontSizer = 0.014f) // float2 iconSize, 
         {
             float2 fontSize = new float2(fontSizer, fontSizer);
             RenderText renderText = new RenderText();
             //renderText.alignment = 1;
             renderText.fontSize = fontSize.x;
-            renderText.colorR = ColorR;
-            renderText.colorG = ColorG;
-            renderText.colorB = ColorB;
+            renderText.SetColor(color);
             renderText.SetText(text);
             float2 panelSize = renderText.GetPanelSize();
             Entity textEntity = SpawnVisualElement(
@@ -112,15 +94,13 @@ namespace Zoxel
             return orbitPosition;
         }
 
-        public static Entity SpawnCharacterUI(EntityManager EntityManager, 
-            Entity parent, 
-            Material baseMaterial)
+        public static Entity SpawnPanel(EntityManager EntityManager, Entity character, Material baseMaterial, Material outlineMaterial)
         {
-            return SpawnCharacterUI(EntityManager, parent,  float3.zero, float2.zero, baseMaterial);
+            return SpawnPanel(EntityManager, character, baseMaterial, outlineMaterial, float2.zero);
         }
-
-        public static Entity SpawnCharacterUI(EntityManager EntityManager, Entity character, float3 orbitPosition, float2 quadSize, Material baseMaterial)
+        public static Entity SpawnPanel(EntityManager EntityManager, Entity character, Material baseMaterial, Material outlineMaterial, float2 panelSize)
         {
+            //float3 orbitPosition = float3.zero;
             if (panelArchtype.Valid == false)
             {
                 panelArchtype = EntityManager.CreateArchetype(
@@ -139,12 +119,12 @@ namespace Zoxel
             //float3 spawnPosition = EntityManager.GetComponentData<Translation>(character).Value;
             Material materialInstance = new Material(baseMaterial);
             //materialInstance.SetFloat("_QueueOffset", 100);
-            Mesh panelMesh = MeshUtilities.CreateQuadMesh(quadSize);
+            Mesh panelMesh = MeshUtilities.CreateQuadMesh(panelSize);
             Entity characterUI = EntityManager.CreateEntity(panelArchtype);
             // fix bounds flickers mesh
             RenderBounds b = new RenderBounds { 
                 Value =  new AABB { 
-                    Extents =   new float3 (quadSize.x, quadSize.y, 0.5f)
+                    Extents =   new float3 (panelSize.x, panelSize.y, 0.5f)
                 } 
             };
             EntityManager.SetComponentData(characterUI, b);
@@ -187,6 +167,12 @@ namespace Zoxel
             {
                 Debug.LogError("No Camera link assigned on character..");
             }
+            if (outlineMaterial)
+            {
+               // Debug.LogError("Spawning Outline Renderer.");
+                var outline = SpawnVisualElement(EntityManager, characterUI, float3.zero, float2.zero, null, outlineMaterial);
+                EntityManager.AddComponentData(characterUI, new OutlineLink { outline = outline });
+            }
             return characterUI;
         }
 
@@ -212,36 +198,45 @@ namespace Zoxel
             }
         }
 
-        public static Entity SpawnButtonWithText(EntityManager EntityManager, Entity panelUI, float3 position, float buttonFontSize, string text, Material baseIconMaterial)
+        public static Entity SpawnButtonWithText(EntityManager EntityManager, Entity panelUI, float3 position, float buttonFontSize, string text, 
+            Material buttonMaterial, Color buttonColor, Color textColor)
         {
-            Childrens children = new Childrens { };
-            children.children = new BlitableArray<Entity>(1, Unity.Collections.Allocator.Persistent);
+            //Childrens children = new Childrens { };
+            //children.children = new BlitableArray<Entity>(1, Unity.Collections.Allocator.Persistent);
             //float buttonFontSize = 0.01f;
+            //RenderTextSystem.SetLetterColor(EntityManager, button, Color.green);
+            //children.children[0] = button;
+            //EntityManager.AddComponentData(panelUI, children);
             Entity button = SpawnButton(
                         EntityManager,
                         panelUI,
                         position,
                         (new float2(buttonFontSize * text.Length * 1f, buttonFontSize)),
                         null, 
-                        baseIconMaterial);
+                        buttonMaterial);
+            SetEntityColor(EntityManager, button, buttonColor);
             RenderText buttonText = new RenderText { };
             buttonText.fontSize = buttonFontSize;
             buttonText.SetText(text);
+            buttonText.SetColor(textColor);
             EntityManager.AddComponentData(button, buttonText);
-            RenderTextSystem.SetLetterColor(EntityManager, button, Color.green);
-            children.children[0] = button;
-            EntityManager.AddComponentData(panelUI, children);
             return button;
         }
+        public static void SetEntityColor(EntityManager EntityManager, Entity entity, Color color)
+        {
+            RenderMesh render = EntityManager.GetSharedComponentData<RenderMesh>(entity);
+            render.material.SetColor("_BaseColor", color);
+            EntityManager.SetSharedComponentData(entity, render);
+        }
 
-        public static Entity SpawnButton(EntityManager EntityManager, Entity parent, Vector3 localPosition, float2 iconSize, Texture2D iconTexture, Material baseIconMaterial)
+        public static Entity SpawnButton(EntityManager EntityManager, Entity parent, float3 localPosition, float2 iconSize, Texture2D iconTexture, Material baseIconMaterial)
         {
             Entity e = SpawnVisualElement(EntityManager, parent, localPosition, iconSize, iconTexture, baseIconMaterial);
             EntityManager.AddComponentData(e, new Zoxel.UI.Button { });
             return e;
         }
             
-        public static Entity SpawnVisualElement(EntityManager EntityManager, Entity parent, Vector3 localPosition, float2 iconSize, Texture2D iconTexture, Material baseIconMaterial, int queuePriority = 5000)
+        public static Entity SpawnVisualElement(EntityManager EntityManager, Entity parent, float3 localPosition, float2 iconSize, Texture2D iconTexture, Material baseIconMaterial, int queuePriority = 5000)
         {
             if (iconArchtype.Valid == false)
             {
@@ -249,7 +244,7 @@ namespace Zoxel
                     typeof(Parent),
                     typeof(LocalToParent),
                     typeof(LocalToWorld),
-                    // transform
+                    //transform
                     typeof(Translation),
                     typeof(Rotation),
                     typeof(NonUniformScale),

@@ -22,7 +22,8 @@ MonoBehaviour:
   skills: []
   quests: []
   questsToGive: []
-  items: []
+  items:
+  - {fileID: 11400000, guid: 1283bb233c0560e8b91630b2f6476bb6, type: 2}
   itemPickupRadius: 5
   dropItems: []
   vox: {fileID: -8959535140834087255, guid: abc87e4ddd32ad34c85c353873bdcb4e, type: 3}

@@ -2,6 +2,7 @@ using Unity.Entities;
 using System.Collections.Generic;
 using Unity.Mathematics;
 using Zoxel.Voxels;
+using UnityEngine;
 
 namespace Zoxel
 {
@@ -50,7 +51,6 @@ namespace Zoxel
                             gearPart.dirty = 0;
                             equipment.gear[i] = gearPart;
                             // merge gear over the top - in locations of the head
-
                         }
                     }
                     // updates body model using this new vox data
@@ -62,6 +62,7 @@ namespace Zoxel
                     World.EntityManager.SetComponentData(e, worldBound);
                     // this can be done in equip system
                     int id = World.EntityManager.GetComponentData<ZoxID>(e).id;
+                    //Debug.LogError("Equipment Mesh updated for: " + id);
                     WorldSpawnSystem.QueueUpdateModel(World.EntityManager, e, id, model);
                 }
             });

@@ -63,6 +63,14 @@ namespace Zoxel
             {
                 newClone.buttonB = 1;
             }
+            if (pad.xButton.wasPressedThisFrame)
+            {
+                newClone.buttonX = 1;
+            }
+            if (pad.yButton.wasPressedThisFrame)
+            {
+                newClone.buttonY = 1;
+            }
             if (pad.startButton.isPressed && pad.startButton.wasPressedThisFrame)
             {
                 newClone.startButton = 1;

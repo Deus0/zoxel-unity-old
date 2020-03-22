@@ -73,7 +73,7 @@ namespace Zoxel
             World.EntityManager.AddComponentData(panelUI, children);
             World.EntityManager.AddComponentData(panelUI, new GridUI
             {
-                updated = 1,
+                dirty = 1,
                 gridSize = uiDatam.inventoryGridSize,
                 iconSize = iconSize,
                 margins = new float2(0.003f, 0.003f),

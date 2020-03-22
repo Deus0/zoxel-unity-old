@@ -1,6 +1,8 @@
 ﻿using Unity.Entities;
 using Unity.Mathematics;
 using UnityEngine;
+using Unity.Rendering;
+using Unity.Transforms;
 
 namespace Zoxel
 {
@@ -14,9 +16,9 @@ namespace Zoxel
         {
             Entities.WithAll<PanelUI>().ForEach((Entity e, ref PanelUI panelUI) =>
             {
-                if (panelUI.updated == 1)
+                if (panelUI.dirty == 1)
                 {
-                    panelUI.updated = 0;
+                    panelUI.dirty = 0;
                     // , ref GridUI gridUI
                     // resize panel
                     float2 panelSize = panelUI.size; // etGridPanelSize(gridUI.gridSize, gridUI.iconSize, gridUI.margins, gridUI.padding);
@@ -28,6 +30,40 @@ namespace Zoxel
                     var renderMesh = World.EntityManager.GetSharedComponentData<Unity.Rendering.RenderMesh>(e);
                     renderMesh.mesh = mesh;
                     World.EntityManager.SetSharedComponentData(e, renderMesh);
+                    RenderBounds b = new RenderBounds
+                    {
+                        Value = new AABB
+                        {
+                            Extents = new float3(panelSize.x, panelSize.y, 0.5f)
+                        }
+                    };
+                    EntityManager.SetComponentData(e, b);
+                    panelUI.outlineDirty = 1;
+                }
+                
+                if (panelUI.outlineDirty == 1)
+                {
+                    panelUI.outlineDirty = 0;
+                    if (World.EntityManager.HasComponent<OutlineLink>(e))
+                    {
+                        float2 panelSize = panelUI.size;
+                        RenderBounds b = new RenderBounds
+                        {
+                            Value = new AABB
+                            {
+                                Extents = new float3(panelSize.x, panelSize.y, 0.5f)
+                            }
+                        };
+                        //Debug.LogError("Updating Outline Render Mesh.");
+                        var outlineLink = World.EntityManager.GetComponentData<OutlineLink>(e);
+                        var outline = outlineLink.outline;
+                        var outlineRenderMesh = World.EntityManager.GetSharedComponentData<Unity.Rendering.RenderMesh>(outline);
+                        Mesh mesh2 = MeshUtilities.CreateReverseQuadMesh(panelSize, 0.004f);
+                        outlineRenderMesh.mesh = mesh2;
+                        outlineRenderMesh.material = uiData.defaultPlayerOutline;
+                        World.EntityManager.SetSharedComponentData(outline, outlineRenderMesh);
+                        World.EntityManager.SetComponentData(outline, b);
+                    }
                 }
             });
         }

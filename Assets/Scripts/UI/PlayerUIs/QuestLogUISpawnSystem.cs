@@ -33,8 +33,8 @@ namespace Zoxel
             int zoxID = World.EntityManager.GetComponentData<ZoxID>(character).id;
             QuestLog questlog = World.EntityManager.GetComponentData<QuestLog>(character);
 
-            EntityBunch iconGroup = new EntityBunch();
-            EntityBunch textGroup = new EntityBunch();
+            //EntityBunch iconGroup = new EntityBunch();
+            //EntityBunch textGroup = new EntityBunch();
             List<Entity> statIcons = new List<Entity>();
             List<Entity> statTexts = new List<Entity>();
             float2 iconSize = uiDatam.defaultIconSize;
@@ -61,8 +61,8 @@ namespace Zoxel
                 statIcons.Add(icon);
                 statTexts.Add(text);
             }
-            iconGroup.entities = statIcons.ToArray(); // new Entity[stats.stats.Length];
-            textGroup.entities = statTexts.ToArray(); // new Entity[stats.stats.Length];
+            //iconGroup.entities = statIcons.ToArray(); // new Entity[stats.stats.Length];
+            //textGroup.entities = statTexts.ToArray(); // new Entity[stats.stats.Length];
 
             Childrens children = new Childrens { };
             children.children = new BlitableArray<Entity>(statIcons.Count, Unity.Collections.Allocator.Persistent);
@@ -73,7 +73,7 @@ namespace Zoxel
             World.EntityManager.AddComponentData(panelUI, children);
             World.EntityManager.AddComponentData(panelUI, new GridUI
             {
-                updated = 1,
+                dirty = 1,
                 gridSize = uiDatam.questlogGridSize,
                 iconSize = iconSize,
                 margins = new float2(0.003f, 0.003f),

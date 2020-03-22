@@ -16,6 +16,11 @@ namespace Zoxel
         public float2 defaultIconSize;  // 0.06
         public Material defaultPlayerPanel;
         public Material defaultPlayerIcon;
+        public Material defaultPlayerOutline;
+        public Color selectedMenuColor;
+        public Color defaultMenuColor;
+        public Color overlayTextColor;
+        public Color menuTextColor;
 
         [Header("Font")]
         public float fontSize;          // 0.24

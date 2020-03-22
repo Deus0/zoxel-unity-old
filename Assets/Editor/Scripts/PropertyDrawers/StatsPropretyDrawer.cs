@@ -18,7 +18,7 @@ namespace Zoxel
 
         public override void OnGUI(Rect position, SerializedProperty property, GUIContent label) { }
 
-        private List<StatDatam> LoadFolder(string folderPath)
+        /*private List<StatDatam> LoadFolder(string folderPath)
         {
             List<StatDatam> statDatams = new List<StatDatam>();
             var files = System.IO.Directory.GetFiles(folderPath);
@@ -32,8 +32,7 @@ namespace Zoxel
                 }
             }
             return statDatams;
-        }
-
+        }*/
 
         public override VisualElement CreatePropertyGUI(SerializedProperty property)
         {
@@ -118,14 +117,15 @@ namespace Zoxel
 
         void LoadStatMeta()
         {
-            statDatams = new List<StatDatam>();
+            statDatams = Bootstrap.LoadFolder<StatDatam>(Application.dataPath + "/Data/Stats/", "Stats");
+            /*statDatams = new List<StatDatam>();
             statDatams.AddRange(LoadFolder(Application.dataPath + "/Data/Stats/"));
             var subDirectories = System.IO.Directory.GetDirectories(Application.dataPath + "/Data/Stats/");
             foreach (string subDirectory in subDirectories)
             {
                 //Debug.LogError("Loading SubDirectory: " + subDirectory);
                 statDatams.AddRange(LoadFolder(subDirectory));
-            }
+            }*/
         }
 
         void AddStatUI(StatDatam statDatam)

@@ -1,6 +1,7 @@
 ﻿using Unity.Entities;
 using System.Collections.Generic;
 using Unity.Mathematics;
+using UnityEngine;
 
 namespace Zoxel
 {
@@ -16,6 +17,7 @@ namespace Zoxel
         public byte colorR;
         public byte colorG;
         public byte colorB;
+        public byte colorA;
         public byte alignment;
 
         public float2 GetPanelSize()
@@ -37,6 +39,23 @@ namespace Zoxel
                 }
                 letters.Dispose();
             }
+        }
+
+        public Color GetColor()
+        {
+            return new UnityEngine.Color(
+                ((int)colorR) / 255f, 
+                ((int)colorG) / 255f, 
+                ((int)colorB) / 255f, 
+                ((int)colorA) / 255f);
+        }
+
+        public void SetColor(Color color)
+        {
+            colorR = (byte)(((int)(color.r * 255)));
+            colorG = (byte)(((int)(color.g * 255)));
+            colorB = (byte)(((int)(color.b * 255)));
+            colorA = (byte)(((int)(color.a * 255)));
         }
 
         /// <summary>
