@@ -15,4 +15,12 @@ ScriptedImporter:
   isItem: 1
   itemTexture: {fileID: 11400000, guid: fb335ccc41b838548bfe1748f670f352, type: 2}
   vox: {fileID: -3473471599655774380, guid: dd6a207c4b41340559ae82070eebf29a, type: 3}
-  item: {instanceID: 0}
+  item: {fileID: -7585642854945373242, guid: dd6a207c4b41340559ae82070eebf29a, type: 3}
+  maleSlots:
+  - name: head
+    axis: 2
+    offset:
+      x: 0
+      y: 0
+      z: -2
+  femaleSlots: []

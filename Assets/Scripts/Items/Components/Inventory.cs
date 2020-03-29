@@ -9,13 +9,17 @@ namespace Zoxel
     {
         public int metaID;
         public int quantity;
+        public byte dirty;
+        public byte dirtyQuantity;
     }
 
     [System.Serializable]
     public struct Inventory : IComponentData
     {
-        public byte updated;
+        public byte dirty;
         public BlitableArray<InventoryItem> items;
+        public byte selected;
+        public Entity selectedButton;
 
         public void InitializeItems(int count, List<ItemDatam> meta = null)
         {

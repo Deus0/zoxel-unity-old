@@ -4,12 +4,15 @@ using System.Collections.Generic;
 
 namespace Zoxel
 {
+    // rewrite this later and call them equipment parts - for body and gear, just using layers
 
     [System.Serializable]
     public struct InventoryBody
     {
         public int metaID;
         public byte dirty;
+        public int bodyIndex; // 0 if is core
+        public int slotIndex; // 0, to 4, 0 is head, 1,2 shoulder, 3 is hips etc
     }
 
     [System.Serializable]
@@ -27,6 +30,7 @@ namespace Zoxel
         public BlitableArray<InventoryBody> body;
         public BlitableArray<InventoryEquipment> gear;
 
+        // this should use the methods in ItemUISystem when trying to equip a new itemMeta onto the body
         public void EquipBody(List<ItemDatam> body_)
         {
             if (body_.Count > 0) 
@@ -39,6 +43,9 @@ namespace Zoxel
                 }
             }
         }
+
+
+
         public void EquipGear(List<ItemDatam> body_)
         {
             gear = new BlitableArray<InventoryEquipment>(body_.Count, Allocator.Persistent);

@@ -8,6 +8,31 @@ ScriptedImporter:
   assetBundleName: 
   assetBundleVariant: 
   script: {fileID: 11500000, guid: 5441f7bda96807d409522dc8d0af4b33, type: 3}
-  isExport: 0
-  vox: {instanceID: 0}
-  voxAssetPath: Assets/Models/Human/Human-19-Hips.vox
+  scale:
+    x: 0.5
+    y: 0.5
+    z: 0.5
+  isItem: 1
+  itemTexture: {fileID: 11400000, guid: 7ae386f2f84c7897cae10a0db70f4f88, type: 2}
+  vox: {fileID: -6164944639862124728, guid: 9ee76a94f508deb4980d1e6e476a4818, type: 3}
+  item: {instanceID: 0}
+  maleSlots:
+  - name: hips
+    axis: 1
+    offset:
+      x: 0
+      y: 0
+      z: 0
+  femaleSlots:
+  - name: thigh
+    axis: 2
+    offset:
+      x: -6
+      y: 0
+      z: 0
+  - name: thigh
+    axis: 2
+    offset:
+      x: 6
+      y: 0
+      z: 0

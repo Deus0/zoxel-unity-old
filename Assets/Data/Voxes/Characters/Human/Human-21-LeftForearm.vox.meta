@@ -8,6 +8,25 @@ ScriptedImporter:
   assetBundleName: 
   assetBundleVariant: 
   script: {fileID: 11500000, guid: 5441f7bda96807d409522dc8d0af4b33, type: 3}
-  isExport: 0
-  vox: {instanceID: 0}
-  voxAssetPath: Assets/Models/Human/Human-21-LeftForearm.vox
+  scale:
+    x: 0.5
+    y: 0.5
+    z: 0.5
+  isItem: 1
+  itemTexture: {fileID: 11400000, guid: 9437b77c9aefb134c931b0decce9ae3a, type: 2}
+  vox: {fileID: -5095108356925501527, guid: 9a8052e2fae6d82428890f189e25cc9c, type: 3}
+  item: {instanceID: 0}
+  maleSlots:
+  - name: forearm
+    axis: 1
+    offset:
+      x: 0
+      y: 0
+      z: 0
+  femaleSlots:
+  - name: hand
+    axis: 2
+    offset:
+      x: 0
+      y: 0
+      z: 0

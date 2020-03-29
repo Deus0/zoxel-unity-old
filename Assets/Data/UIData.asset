@@ -68,7 +68,7 @@ MonoBehaviour:
   mapPanel: {fileID: 2100000, guid: 1202a0a7449c3584c92270b967249cd6, type: 2}
   mapIcon: {fileID: 2100000, guid: a48d813bab4a71640b8f1e4bef5ab99a, type: 2}
   fadeIn: 0.6
-  fadeOut: 0.8
+  fadeOut: 0.6
   frontBarMaterial: {fileID: 2100000, guid: 2bcf989dcd967804794da40cb9a5d596, type: 2}
   backBarMaterial: {fileID: 2100000, guid: a4d08b023b6ce3d49878c9454c55c68d, type: 2}
   backbarColor: {r: 0, g: 0, b: 0, a: 1}

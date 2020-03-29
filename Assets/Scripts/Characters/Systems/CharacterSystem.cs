@@ -6,6 +6,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using Unity.Collections;
 using Zoxel.Voxels;
+using Zoxel.UI;
 
 namespace Zoxel
 {
@@ -51,6 +52,7 @@ namespace Zoxel
             playerArchtype = World.EntityManager.CreateArchetype(
                 // tags
                 typeof(ZoxID),
+                typeof(Traveler),
                 typeof(Character),
                 typeof(NearbyCharacters),
                 typeof(Equipment),
@@ -85,6 +87,7 @@ namespace Zoxel
             npcArchtype = World.EntityManager.CreateArchetype(
                 // tags
                 typeof(ZoxID),
+                //typeof(Traveler),
                 typeof(Character),
                 typeof(NearbyCharacters),
                 typeof(Equipment),

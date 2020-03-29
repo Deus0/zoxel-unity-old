@@ -5,7 +5,7 @@ using Unity.Rendering;
 using UnityEngine;
 using System.Collections.Generic;
 
-namespace Zoxel
+namespace Zoxel.UI
 {
     /// <summary>
     /// Todo

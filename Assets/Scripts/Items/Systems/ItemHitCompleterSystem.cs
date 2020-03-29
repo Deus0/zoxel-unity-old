@@ -51,8 +51,10 @@ namespace Zoxel
                         InventoryItem item = characterInventory.items[i];
                         Debug.Log("At " + i + " - Stacking item: " + metaID + " to " + item.quantity + " with added quantity of: " + worldItem.quantity);
                         item.quantity += worldItem.quantity;
+                        item.dirtyQuantity = 1;
                         // check max quantity in meta item data
                         characterInventory.items[i] = item;
+                        characterInventory.dirty = 1;
                         World.EntityManager.SetComponentData(character, characterInventory);
                         wasPickedUp = true;
                         updatedItemIndex = i;
@@ -64,7 +66,9 @@ namespace Zoxel
                         InventoryItem item = characterInventory.items[i];
                         item.metaID = metaID;
                         item.quantity = worldItem.quantity;
+                        item.dirty = 1;
                         characterInventory.items[i] = item;
+                        characterInventory.dirty = 1;
                         World.EntityManager.SetComponentData(character, characterInventory);
                         wasPickedUp = true;
                         updatedItemIndex = i;
@@ -89,8 +93,8 @@ namespace Zoxel
                     return;
                 }
                 // get inventory Ui
-                ZoxID zoxID = World.EntityManager.GetComponentData<ZoxID>(character);
-                inventoryUISpawnSystem.UpdateIconText(zoxID.id, updatedItemIndex);
+                //ZoxID zoxID = World.EntityManager.GetComponentData<ZoxID>(character);
+                //inventoryUISpawnSystem.UpdateIconText(zoxID.id, updatedItemIndex);
                 /*if (inventoryUISpawnSystem.uis.ContainsKey(zoxID.id) && updatedItemIndex != -1)
                 {
                     Debug.Log("Updating Item at number [" + updatedItemIndex + "] to quantity x" + updatedItemValue);

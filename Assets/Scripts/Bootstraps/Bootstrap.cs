@@ -58,6 +58,7 @@ namespace Zoxel
             // could be new Material if need fading!
             return Bootstrap.instance.voxelMaterial;
         }
+
         public EntityManager EntityManager
         {
             get { 
@@ -67,13 +68,17 @@ namespace Zoxel
                 return sys.space.EntityManager; 
             }
         }
+
         public void Awake()
         {
             instance = this;
             Debug.Log("Awakening the Booty.");
+            #if UNITY_EDITOR
             LoadGameData();
+            #endif
         }
 
+        [ContextMenu("Load Game Data")]
         private void LoadGameData()
         {
             #if UNITY_EDITOR
@@ -145,9 +150,13 @@ namespace Zoxel
 
         public void LateUpdate()
         {
-            //sys.UpdateUnitySystems();
-            if (sys != null && sys.cameraSystemGroup != null) {
+            if (sys != null && sys.cameraSystemGroup != null)
+            {
+                var entityManager = EntityManager;
+                var portalSystem = sys.space.GetOrCreateSystem<PortalSystem>();
+                //sys.portalSystemGroup.portalSystem.Update();
                 sys.cameraSystemGroup.cameraSystem.SynchCameras();
+                portalSystem.ManualUpdate();
             }
         }
 

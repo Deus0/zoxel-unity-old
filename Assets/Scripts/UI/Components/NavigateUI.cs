@@ -82,35 +82,6 @@ namespace Zoxel
                     newNavigationElements = AddNavigationUI(entities, newParents, newNavigationElements, positions,
                         positions[i], i, 0, 10000);
                 }
-
-                /*for (int i = 0; i < newNavigationElements.Count; i++)
-                {
-                    float3 nextPosition = newNavigationElements[i].nextPosition;
-                    bool hasNextNode = false;
-                    for (int j = 0; j < newNavigationElements.Count; j++)
-                    {
-                        if (nextPosition.x == newNavigationElements[j].position.x
-                        && nextPosition.y == newNavigationElements[j].position.y
-                        && nextPosition.z == newNavigationElements[j].position.z)
-                        {
-                            hasNextNode = true;
-                            break;
-                        }
-                    }
-                    if (!hasNextNode)
-                    {
-                        Debug.LogError("Node: " + newNavigationElements[i].position + " has no next node.");
-                        // add node with next position
-                        NavigateUIElement element = new NavigateUIElement();
-                        element.thisPositionIndex = newNavigationElements[i].nextPositionIndex;
-                        element.position = newNavigationElements[i].nextPosition;
-                        element.uiIndex = newNavigationElements[i].uiIndex;
-                        //element.nextPosition = positions[closestIndex];
-                        element.nextPositionIndex = -1;
-                        newNavigationElements.Add(element);
-                        //element.direction = newDirection;
-                    }
-                }*/
             }
             NavigateUIElement[] originalNavigationElements = navigationElements.ToArray();
             navigationElements = new BlitableArray<NavigateUIElement>(originalNavigationElements.Length + newNavigationElements.Count, Unity.Collections.Allocator.Persistent);

@@ -204,6 +204,9 @@ namespace Zoxel
             Dictionary<int, ItemDatam> itemsMeta = new Dictionary<int, ItemDatam>();
             foreach (ItemDatam item in items)
             {
+                if (item == null) {
+                    continue;
+                }
                 if (item.Value.id == 0)
                 {
                     //item.Value.id = Bootstrap.GenerateUniqueID();

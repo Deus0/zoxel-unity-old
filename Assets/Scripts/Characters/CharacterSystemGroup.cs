@@ -1,4 +1,5 @@
 ﻿using Unity.Entities;
+using Zoxel.UI;
 
 namespace Zoxel
 {

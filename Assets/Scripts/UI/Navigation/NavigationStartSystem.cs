@@ -4,7 +4,7 @@ using Unity.Transforms;
 using UnityEngine;
 using System.Collections.Generic;
 
-namespace Zoxel
+namespace Zoxel.UI
 {
     [DisableAutoCreation]
     public class NavigateStartSystem : ComponentSystem

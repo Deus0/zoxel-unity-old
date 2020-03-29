@@ -25,12 +25,17 @@ MonoBehaviour:
   items:
   - {fileID: -7624148026613651591, guid: c38e455ed460d5ae48594bb951c80dd5, type: 3}
   - {fileID: -7585642854945373242, guid: dd6a207c4b41340559ae82070eebf29a, type: 3}
+  - {fileID: 8656580892511070285, guid: aaee562ab0341454aa94c2ed9cbe16c5, type: 3}
+  - {fileID: 1727586372709570010, guid: 9ee76a94f508deb4980d1e6e476a4818, type: 3}
+  - {fileID: -7383457661861002791, guid: f739a158088009741bdcb6370a880aed, type: 3}
+  - {fileID: -6202362112819762984, guid: 3676bb4ddd9bae24d9172ac2c8937585, type: 3}
+  - {fileID: -3671951570112999228, guid: 9a8052e2fae6d82428890f189e25cc9c, type: 3}
+  - {fileID: 7677429994997403465, guid: 2ca334fd7f161224e972bbd666a96040, type: 3}
   itemPickupRadius: 1
   dropItems: []
   vox: {fileID: 0}
   body:
   - {fileID: 3024427368519179297, guid: 0fed995254afe134c88c249d0d98ddc9, type: 3}
-  - {fileID: 8656580892511070285, guid: aaee562ab0341454aa94c2ed9cbe16c5, type: 3}
   equipment: []
   animator: {fileID: 11400000, guid: da6b3154b6d8d7543a9c7619dd204e6a, type: 2}
   skeleton: {fileID: 11400000, guid: d7cb6ee014710eb84a5ac9d3f67b812c, type: 2}

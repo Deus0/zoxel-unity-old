@@ -3,16 +3,7 @@ using System.Collections.Generic;
 using Unity.Collections;
 using Zoxel.Voxels;
 using UnityEngine;
-
-        // Select Maps
-
-        // New Map
-        /*NewGameScreen,
-        LoadNewWorld,
-        LoadingNewWorld,
-        SpawnNewCharacters,
-
-        SpawningCharacters,*/
+using Zoxel.UI;
 
 namespace Zoxel
 {

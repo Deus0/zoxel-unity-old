@@ -72,8 +72,10 @@ namespace Zoxel.Voxels
                 mesh.vertices = mesh.vertices;
                 mesh.RecalculateTangents();
             }
+            else {
+			    mesh.RecalculateBounds();
+            }
             mesh.RecalculateNormals();
-			mesh.RecalculateBounds();
             if (mesh.vertexCount != mesh.colors.Length || mesh.vertexCount != mesh.uv.Length)
 			{
 				Debug.LogError("ChunkMesh has inconsistent data: " + mesh.vertexCount + ":" + mesh.uv.Length + ":" + mesh.colors.Length);

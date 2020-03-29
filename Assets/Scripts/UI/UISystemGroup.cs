@@ -1,7 +1,7 @@
 ﻿using Unity.Entities;
 
 
-namespace Zoxel
+namespace Zoxel.UI
 {
 
     public class UISystemGroup : ComponentSystemGroup
@@ -142,10 +142,10 @@ namespace Zoxel
 
         public void CombineWithCharacters(CharacterSystemGroup characterSystemGroup)
         {
-            trailerStarterSystem.characterSpawnSystem = characterSystemGroup.characterSpawnSystem;
-            statbarUpdateSystem.characterSpawnSystem = characterSystemGroup.characterSpawnSystem;
+            //trailerStarterSystem.characterSpawnSystem = characterSystemGroup.characterSpawnSystem;
+            //statbarUpdateSystem.characterSpawnSystem = characterSystemGroup.characterSpawnSystem;
             inventoryUISpawnSystem.characterSpawnSystem = characterSystemGroup.characterSpawnSystem;
-            statsUISpawnSystem.characterSpawnSystem = characterSystemGroup.characterSpawnSystem;
+            statsUISpawnSystem.characterSpawnSystem = characterSystemGroup.characterSpawnSystem ;
             questLogUISpawnSystem.characterSpawnSystem = characterSystemGroup.characterSpawnSystem;
             menuSpawnSystem.characterSpawnSystem = characterSystemGroup.characterSpawnSystem;
             mapUISpawnSystem.characterSpawnSystem = characterSystemGroup.characterSpawnSystem;

@@ -16,7 +16,7 @@ MonoBehaviour:
     id: 236248972
     landBase: 30
     landAmplitude: 30
-    landScale: 0.0004
+    landScale: 0.0001
     dirtID: 1
     grassID: 2
     sandID: 4
@@ -31,9 +31,9 @@ MonoBehaviour:
   sand: {fileID: 11400000, guid: 0e9dee87d3a55c949a2f4e35030f1743, type: 2}
   stone: {fileID: 11400000, guid: eeea187fa0c7e7c45b5e25a626a801e2, type: 2}
   water: {fileID: 11400000, guid: eeea187fa0c7e7c45b5e25a626a801e2, type: 2}
-  floor: {fileID: 0}
-  wall: {fileID: 0}
-  roof: {fileID: 0}
+  floor: {fileID: 11400000, guid: 54a913a0d5752a54eb45dd65ade6714c, type: 2}
+  wall: {fileID: 11400000, guid: 54a913a0d5752a54eb45dd65ade6714c, type: 2}
+  roof: {fileID: 11400000, guid: eeea187fa0c7e7c45b5e25a626a801e2, type: 2}
   monsterSpawnAmount: 5
   monsterSpawnCooldown: 6
   monsters:

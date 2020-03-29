@@ -3,7 +3,7 @@ using UnityEngine;
 using Unity.Entities;
 using Zoxel.Voxels;
 
-namespace Zoxel
+namespace Zoxel.UI
 {
     /// <summary>
     /// Base class for player UIs

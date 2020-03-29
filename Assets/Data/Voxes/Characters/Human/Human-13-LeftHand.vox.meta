@@ -8,6 +8,19 @@ ScriptedImporter:
   assetBundleName: 
   assetBundleVariant: 
   script: {fileID: 11500000, guid: 5441f7bda96807d409522dc8d0af4b33, type: 3}
-  isExport: 0
-  vox: {instanceID: 0}
-  voxAssetPath: Assets/Models/Human/Human-13-LeftHand.vox
+  scale:
+    x: 0.5
+    y: 0.5
+    z: 0.5
+  isItem: 1
+  itemTexture: {fileID: 11400000, guid: 291f435d4e86fa940b9a671b4e7a34fb, type: 2}
+  vox: {fileID: 3131311238648216601, guid: 2ca334fd7f161224e972bbd666a96040, type: 3}
+  item: {instanceID: 0}
+  maleSlots:
+  - name: hand
+    axis: 1
+    offset:
+      x: 0
+      y: 0
+      z: 0
+  femaleSlots: []

@@ -12,7 +12,6 @@ namespace Zoxel
     /// 
     /// Run after ForceSystem
     /// </summary>
-    //[DisableAutoCreation]
     [DisableAutoCreation, UpdateBefore(typeof(CameraSynchSystem))]
     public class CameraFirstPersonSystem : JobComponentSystem
     {

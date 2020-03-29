@@ -26,6 +26,8 @@ namespace Zoxel.Voxels
         //[HideInInspector, SerializeField]
         private string voxAssetPath;
         string filename;
+        public List<MaleSlot> maleSlots;
+        public List<FemaleSlot> femaleSlots;
 
         public override void OnImportAsset(AssetImportContext ctx)
         {
@@ -45,6 +47,8 @@ namespace Zoxel.Voxels
                 item.model = vox;
                 item.Value.scale = 0.5f;
                 item.texture = itemTexture;
+                item.maleSlots = maleSlots;
+                item.femaleSlots = femaleSlots;
                 ctx.AddObjectToAsset(item.name, item);
             }
         }

@@ -8,6 +8,7 @@ using Zoxel.Animations;
 using Zoxel.Voxels;
 using Zoxel.WorldGeneration;
 using Unity.Rendering;
+using Zoxel.UI;
 
 namespace Zoxel
 {

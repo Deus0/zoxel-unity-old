@@ -5,6 +5,7 @@ using Unity.Entities;
 using Unity.Mathematics;
 using Unity.Transforms;
 using Zoxel.Voxels;
+using Zoxel.UI;
 
 namespace Zoxel
 {

@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2f2729f3ab54c0b4f8234e405454ac80, type: 3}
   m_Name: Zoxel
   m_EditorClassIdentifier: 
-  id: 0
+  id: 745477887
   mode: 1
   uiData: {fileID: 11400000, guid: 5e5840ffbea0ead438296463a671835d, type: 2}
   voxelColorMaterial: {fileID: 2100000, guid: 769fd02d106a07f4c9ce2e98bf5a9fe2, type: 2}
@@ -29,9 +29,9 @@ MonoBehaviour:
   waves: []
   characters:
   - {fileID: 11400000, guid: 8d6aa7e5e6334ab48999310081e4e194, type: 2}
+  - {fileID: 11400000, guid: c25122595fc3fdb4687da4e856407486, type: 2}
   - {fileID: 11400000, guid: c1fe4bd5a1cc0c74588f65355fb3efa6, type: 2}
   - {fileID: 11400000, guid: 0baaf620c19ce454e924329e333ba095, type: 2}
-  - {fileID: 11400000, guid: c25122595fc3fdb4687da4e856407486, type: 2}
   - {fileID: 11400000, guid: b079312cfab51ba49b70de4f797d47b9, type: 2}
   - {fileID: 11400000, guid: 5de665a7acdaae1438cf0b8bbfbeb067, type: 2}
   turrets:
@@ -78,8 +78,14 @@ MonoBehaviour:
   - {fileID: 11400000, guid: 1ff84cda5bb8a22419c93f10166083d3, type: 2}
   - {fileID: 11400000, guid: aedf2b1accee01c43a6aa6643dae34dc, type: 2}
   - {fileID: 11400000, guid: 67afe74fc4bdea349a52aa8294e43339, type: 2}
-  - {fileID: 0}
+  - {fileID: 7677429994997403465, guid: 2ca334fd7f161224e972bbd666a96040, type: 3}
+  - {fileID: 1727586372709570010, guid: 9ee76a94f508deb4980d1e6e476a4818, type: 3}
+  - {fileID: -3671951570112999228, guid: 9a8052e2fae6d82428890f189e25cc9c, type: 3}
+  - {fileID: -6202362112819762984, guid: 3676bb4ddd9bae24d9172ac2c8937585, type: 3}
+  - {fileID: -7383457661861002791, guid: f739a158088009741bdcb6370a880aed, type: 3}
   - {fileID: 8656580892511070285, guid: aaee562ab0341454aa94c2ed9cbe16c5, type: 3}
+  - {fileID: 3024427368519179297, guid: 0fed995254afe134c88c249d0d98ddc9, type: 3}
+  - {fileID: -7585642854945373242, guid: dd6a207c4b41340559ae82070eebf29a, type: 3}
   - {fileID: -7624148026613651591, guid: c38e455ed460d5ae48594bb951c80dd5, type: 3}
   quests:
   - {fileID: 11400000, guid: b37953f07708cbd499eea17d4cb50944, type: 2}
@@ -87,14 +93,14 @@ MonoBehaviour:
   - {fileID: 11400000, guid: b1597fcc93272af4ca793b8c37186d12, type: 2}
   - {fileID: 11400000, guid: cbde238e2f54bad44857b381b3fcb1e1, type: 2}
   voxels:
-  - {fileID: 11400000, guid: 3304fd092e41f37439893b84ecc6c89c, type: 2}
-  - {fileID: 11400000, guid: c2f2e3654d0087d47b58cfea77b6d009, type: 2}
   - {fileID: 11400000, guid: 54a913a0d5752a54eb45dd65ade6714c, type: 2}
   - {fileID: 11400000, guid: 9b75f0ae4bef6c540833e7b880fbfee3, type: 2}
-  - {fileID: 11400000, guid: 54f48bde7afc3d24a97a0bf2b17b668a, type: 2}
-  - {fileID: 11400000, guid: 35d98d1f20956ad43b633912b2e2bb39, type: 2}
   - {fileID: 11400000, guid: 0e9dee87d3a55c949a2f4e35030f1743, type: 2}
   - {fileID: 11400000, guid: eeea187fa0c7e7c45b5e25a626a801e2, type: 2}
+  - {fileID: 11400000, guid: 3304fd092e41f37439893b84ecc6c89c, type: 2}
+  - {fileID: 11400000, guid: c2f2e3654d0087d47b58cfea77b6d009, type: 2}
+  - {fileID: 11400000, guid: 54f48bde7afc3d24a97a0bf2b17b668a, type: 2}
+  - {fileID: 11400000, guid: 35d98d1f20956ad43b633912b2e2bb39, type: 2}
   - {fileID: 11400000, guid: 9b7f993ab68d5a3459dd3b450b75e726, type: 2}
   - {fileID: 11400000, guid: b9591145f215b0c49bf12d2eafc78c06, type: 2}
   models:

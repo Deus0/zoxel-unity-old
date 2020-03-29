@@ -94,7 +94,7 @@ namespace Zoxel
             World.EntityManager.SetComponentData(entity, new Translation {
                 Value = command.spawnPosition
             });
-            World.EntityManager.SetComponentData(entity, new Scale { Value = itemDatam.Value.scale });
+            World.EntityManager.SetComponentData(entity, new Scale { Value = itemDatam.Value.scale * 0.5f });
             World.EntityManager.SetComponentData(entity, new Rotation { Value = Quaternion.Euler(0, UnityEngine.Random.Range(-180, 180), 0) });
 
             RenderMesh newRenderer = new RenderMesh();

@@ -1,4 +1,5 @@
 ﻿using Unity.Entities;
+using Zoxel.UI;
 
 namespace Zoxel
 {
@@ -9,6 +10,7 @@ namespace Zoxel
         private ItemHitCompleterSystem itemHitCompleterSystem;
         private ItemBobSystem itemBobSystem;
         private EquipmentSystem equipmentSystem;
+        private ItemUISystem itemUISystem;
 
         public void Initialize(Unity.Entities.World space)
         {
@@ -23,6 +25,10 @@ namespace Zoxel
             AddSystemToUpdateList(itemBobSystem);
             equipmentSystem = space.GetOrCreateSystem<EquipmentSystem>();
             AddSystemToUpdateList(equipmentSystem);
+
+            itemUISystem = space.GetOrCreateSystem<ItemUISystem>();
+            AddSystemToUpdateList(itemUISystem);
+
             SetLinks();
         }
 
@@ -40,6 +46,8 @@ namespace Zoxel
         {
             itemSpawnSystem.meta = data.GetItems();
             equipmentSystem.meta = itemSpawnSystem.meta;
+            itemUISystem.meta = itemSpawnSystem.meta;
+            itemUISystem.defaultIconTexture = data.uiData.defaultItemIcon;
         }
         public void CombineWithUI(UISystemGroup uiSystemGroup)
         {

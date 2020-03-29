@@ -8,6 +8,25 @@ ScriptedImporter:
   assetBundleName: 
   assetBundleVariant: 
   script: {fileID: 11500000, guid: 5441f7bda96807d409522dc8d0af4b33, type: 3}
-  isExport: 0
-  vox: {instanceID: 0}
-  voxAssetPath: Assets/Models/Human/Human-23-LeftShoulder.vox
+  scale:
+    x: 0.5
+    y: 0.5
+    z: 0.5
+  isItem: 1
+  itemTexture: {fileID: 11400000, guid: 489e47b9f8e4db94f88cac46645a0f1a, type: 2}
+  vox: {fileID: -291885523155821436, guid: f739a158088009741bdcb6370a880aed, type: 3}
+  item: {fileID: -7383457661861002791, guid: f739a158088009741bdcb6370a880aed, type: 3}
+  maleSlots:
+  - name: shoulder
+    axis: 3
+    offset:
+      x: 0
+      y: 0
+      z: 0
+  femaleSlots:
+  - name: bicep
+    axis: 2
+    offset:
+      x: 0
+      y: 0
+      z: 1

@@ -10,7 +10,7 @@ namespace Zoxel
     /// Parents the camera position to the characters
     ///     This should run after movement systems
     /// </summary>
-    [DisableAutoCreation] // why is this chopping
+    [DisableAutoCreation]
     public class CameraSynchSystem : ComponentSystem
     {
         protected override void OnUpdate()

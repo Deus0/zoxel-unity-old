@@ -8,7 +8,7 @@ using Unity.Core;
 using UnityEngine;
 using Unity.Collections;
 
-namespace Zoxel
+namespace Zoxel.UI
 {
     [DisableAutoCreation]
     public class NavigateUISystem : JobComponentSystem

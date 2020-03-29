@@ -104,6 +104,7 @@ namespace Zoxel.Voxels
 			mesh.UploadMeshData(false);
 			//mesh.MarkDynamic();	// use this for animating
 		}
+		
 		public int[] GetTriangles()
 		{
             var exportedTriangles = new int[buildPointer.triangleIndex];
@@ -124,7 +125,9 @@ namespace Zoxel.Voxels
                 exportedVertices[i] = vertices[i].position;
 			}
 			return exportedVertices;
-		}public Vector2[] GetUVs()
+		}
+		
+		public Vector2[] GetUVs()
         {
             var exportedUVs = new Vector2[buildPointer.vertIndex];
 			//var uvs2 = uvs.ToArray();

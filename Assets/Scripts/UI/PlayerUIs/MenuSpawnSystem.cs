@@ -5,7 +5,7 @@ using Unity.Mathematics;
 using System.Collections.Generic;
 using Unity.Transforms;
 
-namespace Zoxel
+namespace Zoxel.UI
 {
     public struct MenuUI : IComponentData
     {

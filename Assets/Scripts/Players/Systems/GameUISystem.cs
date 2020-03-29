@@ -1,7 +1,10 @@
 ﻿using Unity.Entities;
+using Zoxel.UI;
 
 namespace Zoxel
 {
+    // should probaly put this into UI system as a way to control multiple UI windows at once
+    
     [DisableAutoCreation]
     public class GameUISystem : ComponentSystem
     {
