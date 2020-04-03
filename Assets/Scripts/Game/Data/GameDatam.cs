@@ -207,14 +207,14 @@ namespace Zoxel
                 if (item == null) {
                     continue;
                 }
-                if (item.Value.id == 0)
+                if (item.data.id == 0)
                 {
                     //item.Value.id = Bootstrap.GenerateUniqueID();
 
-                    Debug.LogError(item.name + " has no ID.");
+                    Debug.LogWarning("Fix Item: " + item.name + ". It has no ID.");
                     continue;
                 }
-                itemsMeta.Add(item.Value.id, item);
+                itemsMeta.Add(item.data.id, item);
             }
             return itemsMeta;
         }

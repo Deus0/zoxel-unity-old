@@ -147,13 +147,15 @@ namespace Zoxel.Voxels
             }
             return max;
         }
-        public static List<int3> FixPositions(List<VoxData> voxes, List<int3> positions)
+
+        public static void CalculateMinMax(List<VoxData> combinedVoxes, List<int3> combinedPositions, out int3 min, out int3 max)
         {
-            int3 min = new int3(666,666,666);
-            int3 max = new int3(-666,-666,-666);
-            for (int i = 0; i < voxes.Count; i++) {
-                int3 lhs = positions[i];
-                int3 rhs = lhs + voxes[i].size;
+            min = new int3(666,666,666);
+            max = new int3(-666,-666,-666);
+            for (int i = 0; i < combinedVoxes.Count; i++)
+            {
+                int3 lhs = combinedPositions[i];
+                int3 rhs = lhs + combinedVoxes[i].size;
                 if (lhs.x < min.x) min.x = lhs.x;
                 if (lhs.y < min.y) min.y = lhs.y;
                 if (lhs.z < min.z) min.z = lhs.z;
@@ -161,26 +163,40 @@ namespace Zoxel.Voxels
                 if (rhs.y > max.y) max.y = rhs.y;
                 if (rhs.z > max.z) max.z = rhs.z;
             }
+        }
+
+        public static int3 CalculateAddition(int3 min, int3 max)
+        {
             int3 addition = new int3(0,0,0);
-            if (min.x < 0) {
+            if (min.x < 0)
+            {
                 addition.x = math.abs(min.x);
             }
-            if (min.y < 0) {
+            if (min.y < 0)
+            {
                 addition.y = math.abs(min.y);
             }
-            if (min.z < 0) {
+            if (min.z < 0)
+            {
                 addition.z = math.abs(min.z);
             }
-            for (int i = 0; i < positions.Count; i++) {
+            return addition;
+        }
+        public static List<int3> FixPositions(List<int3> positions, int3 addition)
+        {
+            for (int i = 0; i < positions.Count; i++)
+            {
                 positions[i] = positions[i] + addition;
             }
             return positions;
         }
 
         // need to use vox layers instead, each layer has a list of voxes and positions
-        public void Build(List<VoxData> voxes, List<int3> positions, int3 newSize)
+        public void Build(VoxBuildLayer bodyLayer, VoxBuildLayer gearLayer, //List<VoxData> voxes, List<int3> positions, List<VoxOperation> operations,
+            int3 newSize)
         {
-            if (voxes.Count == 0) {
+            if (bodyLayer.voxes.Count == 0)
+            {
                 Debug.LogError("0 Voxes..Cannot build vox. Remember to have core on item.");
                 return;
             }
@@ -190,7 +206,7 @@ namespace Zoxel.Voxels
             // i should also change bytes depending on colours, using a colour lookup or something
             if (colorsR.Length == 0)
             {
-                var newPart = voxes[0];
+                var newPart = bodyLayer.voxes[0];
                 InitializeColors(newPart.colorsR.Length);
                 for (int i = 0; i < newPart.colorsR.Length; i++)
                 {
@@ -220,10 +236,18 @@ namespace Zoxel.Voxels
             }
 
             // first add in old parts
-            for (int i = 0; i < voxes.Count; i++)
+            BuildLayer(bodyLayer);
+            BuildLayer(gearLayer);
+        }
+
+        void BuildLayer(VoxBuildLayer layer)
+        {
+            int3 localPosition;
+            for (int i = 0; i < layer.voxes.Count; i++)
             {
-                var vox = voxes[i];
-                var position = positions[i];
+                var vox = layer.voxes[i];
+                var position = layer.positions[i];
+                var operation = layer.operations[i];
                 //Debug.LogError("Building Vox: " + vox.size + " at position " + position);
                 for (localPosition.x = 0; localPosition.x < vox.size.x; localPosition.x++)
                 {
@@ -232,6 +256,10 @@ namespace Zoxel.Voxels
                         for (localPosition.z = 0; localPosition.z < vox.size.z; localPosition.z++)
                         {
                             int partIndex = VoxelRaycastSystem.GetVoxelArrayIndex(localPosition, vox.size);
+                            if (operation == VoxOperation.FlipX)
+                            {
+                                partIndex = VoxelRaycastSystem.GetVoxelArrayIndex(new int3(vox.size.x - 1 - localPosition.x, localPosition.y, localPosition.z), vox.size);
+                            }
                             var newPosition = localPosition + position;
                             int newIndex = VoxelRaycastSystem.GetVoxelArrayIndex(newPosition, size);
                             if (vox.data[partIndex] != 0) 

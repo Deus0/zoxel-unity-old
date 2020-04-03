@@ -9,12 +9,6 @@ using Unity.Collections;
 namespace Zoxel
 {
 
-    /*[Serializable]
-    public struct DialogueOption
-    {
-        //public int id;
-    }*/
-
     /// <summary>
     /// Some examples:
     /// Load Level (Game)
@@ -59,8 +53,10 @@ namespace Zoxel
 
         public DialogueBranch AddBranchLink(DialogueBranch oldBranch)
         {
-            for (int i = 0; i < dialogueTree.branches.Length; i++) {
-                if (dialogueTree.branches[i].id == oldBranch.id) {
+            for (int i = 0; i < dialogueTree.branches.Length; i++)
+            {
+                if (dialogueTree.branches[i].id == oldBranch.id)
+                {
                     var branch = dialogueTree.branches[i];
                     branch.AddBranchLink();
                     dialogueTree.branches[i] = branch;
@@ -71,9 +67,12 @@ namespace Zoxel
             return oldBranch;
         }
 
-        public void SetSpeakerType(DialogueBranch oldBranch, bool newSpeakerType) {
-            for (int i = 0; i < dialogueTree.branches.Length; i++) {
-                if (dialogueTree.branches[i].id == oldBranch.id) {
+        public void SetSpeakerType(DialogueBranch oldBranch, bool newSpeakerType)
+        {
+            for (int i = 0; i < dialogueTree.branches.Length; i++)
+            {
+                if (dialogueTree.branches[i].id == oldBranch.id)
+                {
                     var branch = dialogueTree.branches[i];
                     branch.SetSpeakerType(newSpeakerType);
                     dialogueTree.branches[i] = branch;
@@ -82,9 +81,12 @@ namespace Zoxel
             }
         }
 
-        public void SetBranchSpeech(DialogueBranch oldBranch, string newSpeech) {
-            for (int i = 0; i < dialogueTree.branches.Length; i++) {
-                if (dialogueTree.branches[i].id == oldBranch.id) {
+        public void SetBranchSpeech(DialogueBranch oldBranch, string newSpeech)
+        {
+            for (int i = 0; i < dialogueTree.branches.Length; i++)
+            {
+                if (dialogueTree.branches[i].id == oldBranch.id)
+                {
                     var branch = dialogueTree.branches[i];
                     branch.SetSpeech(newSpeech);
                     dialogueTree.branches[i] = branch;
@@ -95,8 +97,10 @@ namespace Zoxel
 
         public DialogueBranch SetBranchLink(DialogueBranch oldBranch, int linkIndex, int linkBranchID)
         {
-            for (int i = 0; i < dialogueTree.branches.Length; i++) {
-                if (dialogueTree.branches[i].id == oldBranch.id) {
+            for (int i = 0; i < dialogueTree.branches.Length; i++)
+            {
+                if (dialogueTree.branches[i].id == oldBranch.id)
+                {
                     var branch = dialogueTree.branches[i];
                     if (linkIndex >= branch.links.Length)
                     {

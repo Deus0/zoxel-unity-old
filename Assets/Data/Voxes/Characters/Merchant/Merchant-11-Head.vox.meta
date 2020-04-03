@@ -16,11 +16,12 @@ ScriptedImporter:
   itemTexture: {fileID: 11400000, guid: fb335ccc41b838548bfe1748f670f352, type: 2}
   vox: {fileID: -3473471599655774380, guid: dd6a207c4b41340559ae82070eebf29a, type: 3}
   item: {fileID: -7585642854945373242, guid: dd6a207c4b41340559ae82070eebf29a, type: 3}
-  maleSlots:
-  - name: head
-    axis: 2
-    offset:
-      x: 0
-      y: 0
-      z: -2
-  femaleSlots: []
+  offset:
+    x: 0
+    y: 0
+    z: 0
+  maleSlot: {fileID: 11400000, guid: 17b2040a42ffc08968f78cbd3792b1ec, type: 2}
+  femaleSlots:
+  - {fileID: 11400000, guid: 0af11db6e4d02597b90952bdc260fd14, type: 2}
+  femaleOffsets: []
+  femaleModifiers: 

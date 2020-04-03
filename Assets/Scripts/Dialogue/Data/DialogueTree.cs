@@ -6,13 +6,16 @@ using Unity.Entities;
 using Unity.Mathematics;
 using Unity.Collections;
 
-namespace Zoxel {
+namespace Zoxel
+{
 
     public struct DialogueTree
     {
         public int id;
         public BlitableArray<DialogueBranch> branches;
 
+        #region Serialization
+        
         [Serializable]
         public struct SerializableDialogueTree
         {
@@ -38,7 +41,22 @@ namespace Zoxel {
             }
         }
 
-        public void AddBranch(DialogueBranch branch) {
+        public SerializableDialogueTree GetSerializeableClone()
+        {
+            SerializableDialogueTree clone = new SerializableDialogueTree();
+            clone.id = id;
+            clone.branches = new DialogueBranch.SerializeableDialogueBranch[branches.Length];
+            var normalBranches = branches.ToArray();
+            for (int i = 0; i < branches.Length; i++)
+            {
+                clone.branches[i] = normalBranches[i].GetSerializeableClone();
+            }
+            return clone;
+        }  
+        #endregion
+
+        public void AddBranch(DialogueBranch branch)
+        {
             // first store branches
             var branches_ = branches.ToArray();
             // now create new array
@@ -84,17 +102,6 @@ namespace Zoxel {
                     branches[i - 1] = originalBranches[i];
                 }
             }
-        }
-
-        public SerializableDialogueTree GetSerializeableClone() {
-            SerializableDialogueTree clone = new SerializableDialogueTree();
-            clone.id = id;
-            clone.branches = new DialogueBranch.SerializeableDialogueBranch[branches.Length];
-            var normalBranches = branches.ToArray();
-            for (int i = 0; i < branches.Length; i++) {
-                clone.branches[i] = normalBranches[i].GetSerializeableClone();
-            }
-            return clone;
-        }        
+        }      
     }
 }

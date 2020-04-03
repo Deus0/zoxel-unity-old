@@ -8,6 +8,19 @@ ScriptedImporter:
   assetBundleName: 
   assetBundleVariant: 
   script: {fileID: 11500000, guid: 5441f7bda96807d409522dc8d0af4b33, type: 3}
-  isExport: 0
-  vox: {instanceID: 0}
-  voxAssetPath: Assets/Models/Human/Human-16-LeftFoot.vox
+  scale:
+    x: 0.5
+    y: 0.5
+    z: 0.5
+  isItem: 1
+  itemTexture: {fileID: 11400000, guid: fb335ccc41b838548bfe1748f670f352, type: 2}
+  vox: {fileID: -4366728813406039251, guid: 77b4962f86d274e46b8e65a2dbea713a, type: 3}
+  item: {fileID: -6183912508347336809, guid: 77b4962f86d274e46b8e65a2dbea713a, type: 3}
+  offset:
+    x: 0
+    y: 0
+    z: -5
+  maleSlot: {fileID: 11400000, guid: afb3d62875f7274f28642d6a0c28d40d, type: 2}
+  femaleSlots: []
+  femaleOffsets: []
+  femaleModifiers: 

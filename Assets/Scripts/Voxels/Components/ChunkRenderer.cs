@@ -27,6 +27,7 @@ namespace Zoxel.Voxels
 		
 	public struct ChunkRenderer : IComponentData
 	{
+		public Entity chunk;
 		[ReadOnly]
 		public ChunkData Value;
 		// 0 for diffuse, 1 for water, 2 for glass, etc
@@ -61,10 +62,15 @@ namespace Zoxel.Voxels
 		public BlitableArray<float3> bonePositions;
 		public BlitableArray<quaternion> boneRotations;
 		public BlitableArray<float> boneInfluences;
+		public float timePassed;
 
 		#region ForMesh
-		public void SetMeshData(Mesh mesh)
+		public void SetMeshData(Mesh mesh, float noiseAmplitude = 0, float noiseValue = 0)
 		{
+			if (noiseValue != 0)
+			{
+				mesh.MarkDynamic();
+			}
 			var layout = new[]
 			{
 				new VertexAttributeDescriptor(UnityEngine.Rendering.VertexAttribute.Position, VertexAttributeFormat.Float32, 3),
@@ -73,24 +79,17 @@ namespace Zoxel.Voxels
 			};
 			mesh.SetVertexBufferParams(buildPointer.vertIndex, layout);
         	var verts = new NativeArray<ZoxelVertex>(buildPointer.vertIndex, Allocator.Temp);
-			//var vertArray = vertices.ToArray();
 			for (int i = 0; i < verts.Length; i++)
 			{
 				verts[i] = vertices[i];
 			}
         	mesh.SetVertexBufferData(verts, 0, 0, buildPointer.vertIndex);
-		
-			/*mesh.vertices = GetVertices();
-			mesh.uv = GetUVs();
-			mesh.colors = GetColors();*/
-
       		mesh.SetIndexBufferParams(buildPointer.triangleIndex, IndexFormat.UInt32);
         	var triangles2 = new NativeArray<int>(buildPointer.triangleIndex, Allocator.Temp);
 			for (int i = 0; i < triangles2.Length; i++)
 			{
 				triangles2[i] = triangles[i];
 			}
-			//mesh.SetTriangles(triangles2, 0);
 			mesh.SetIndexBufferData(triangles2, 0, 0, buildPointer.triangleIndex);//, MeshUpdateFlags.DontValidateIndices);  
 			mesh.SetSubMesh(0, new SubMeshDescriptor() {
 				baseVertex = 0,
@@ -102,8 +101,103 @@ namespace Zoxel.Voxels
 				vertexCount = buildPointer.vertIndex
 			});
 			mesh.UploadMeshData(false);
-			//mesh.MarkDynamic();	// use this for animating
 		}
+		//if (noiseValue == 0)
+		//{
+		/*} 
+		else
+		{
+			//verts[i] = vertices[i];
+			var verto = vertices[i];
+			var vert = new ZoxelVertex {
+				position = new float3(verto.position.x, verto.position.y, verto.position.z),
+				uv = verto.uv,
+				color = verto.color
+			};
+			var position = vert.position;
+			position += noiseAmplitude * (new float3(
+				noise.snoise(new float2(position.x, UnityEngine.Time.time) * noiseValue),
+				noise.snoise(new float2(position.y, UnityEngine.Time.time) * noiseValue),
+				noise.snoise(new float2(position.z, UnityEngine.Time.time) * noiseValue)
+			));
+			vert.position = position;
+			verts[i] = vert;
+		}*/
+
+		public NativeArray<ZoxelVertex> GetVertexArray(Mesh mesh)
+		{
+			var vertos = mesh.vertices;
+			List<Vector2> uvs2 = new List<Vector2>();
+			mesh.GetUVs(0, uvs2);
+			var uvs = uvs2.ToArray();
+			var colors = mesh.colors;
+        	var verts = new NativeArray<ZoxelVertex>(vertos.Length, Allocator.Persistent);
+			//Debug.LogError("Getting verts from mesh: " + vertos.Length);
+			for (int i = 0; i < verts.Length; i++)
+			{
+				verts[i] = new ZoxelVertex {
+					position = vertos[i],
+					uv = uvs[i],
+					color = new float3(colors[i].r, colors[i].g, colors[i].b)
+				};
+			}
+			return verts;
+		}
+
+        public static NativeArray<ZoxelVertex> CentreMesh(NativeArray<ZoxelVertex> vertices, Mesh mesh)
+        {
+            mesh.RecalculateBounds();
+			float3 min = mesh.bounds.min;
+			float3 extents = mesh.bounds.extents;
+            for (int i = 0; i < vertices.Length; i++)
+            {
+				var verto = vertices[i];
+				var position = verto.position;
+                position -= min;
+                position -= extents;
+				verto.position = position;
+				vertices[i] = verto;
+            }
+			return vertices;
+        }
+
+
+        public static NativeArray<ZoxelVertex> RotateMesh(NativeArray<ZoxelVertex> vertices)
+        {
+			quaternion rot = Quaternion.Euler(180, 0, 180);
+            for (int i = 0; i < vertices.Length; i++)
+            {
+				var verto = vertices[i];
+				var position = verto.position;
+                position = math.rotate(rot, position);
+				verto.position = position;
+				vertices[i] = verto;
+            }
+			return vertices;
+        }
+
+		public NativeArray<int> GetTrianglesNativeArray(Mesh mesh)
+		{
+			var tris = mesh.triangles;
+        	var tris2 = new NativeArray<int>(tris.Length, Allocator.Persistent);
+			//Debug.LogError("Getting verts from mesh: " + vertos.Length);
+			for (int i = 0; i < tris.Length; i++)
+			{
+				tris2[i] = tris[i];
+			}
+			return tris2;
+		}
+
+		public NativeArray<ZoxelVertex> GetVertexArray()
+		{
+        	var verts = new NativeArray<ZoxelVertex>(buildPointer.vertIndex, Allocator.Persistent);
+			for (int i = 0; i < verts.Length; i++)
+			{
+				verts[i] = vertices[i];
+			}
+			return verts;
+		}
+
 		
 		public int[] GetTriangles()
 		{
@@ -306,11 +400,13 @@ namespace Zoxel.Voxels
 			}
 			return weights;
 		}
-
-		public void InitializeData(int3 voxelDimensions, int maxCacheVerts, int maxCacheTriangles)
+		
+		public void InitializeData(int3 voxelDimensions)
 		{
-			//float3 voxelDimensions = new float3(16, 64, 16);
 			int xyzSize = (int)(voxelDimensions.x * voxelDimensions.y * voxelDimensions.z);
+			int maxCacheVerts = xyzSize * 4;
+			int maxCacheTriangles = maxCacheVerts / 2;
+			//float3 voxelDimensions = new float3(16, 64, 16);
 			vertices = new BlitableArray<ZoxelVertex>(maxCacheVerts, Unity.Collections.Allocator.Persistent);
 			/*vertices = new BlitableArray<float3>(maxCacheVerts, Unity.Collections.Allocator.Persistent);
 			colors = new BlitableArray<float3>(maxCacheVerts, Unity.Collections.Allocator.Persistent);

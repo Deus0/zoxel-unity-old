@@ -9,8 +9,18 @@ ScriptedImporter:
   assetBundleVariant: 
   script: {fileID: 11500000, guid: 5441f7bda96807d409522dc8d0af4b33, type: 3}
   scale:
-    x: 2
-    y: 2
-    z: 2
-  isItem: 0
+    x: 1
+    y: 1
+    z: 1
+  isItem: 1
+  itemTexture: {fileID: 11400000, guid: 52d744872e3ee2d4cbe0b65f333ebeff, type: 2}
   vox: {fileID: -9140376625490768635, guid: 790f2c82114eb6b40b7272a2a9b54408, type: 3}
+  item: {fileID: 2288877101906815068, guid: 790f2c82114eb6b40b7272a2a9b54408, type: 3}
+  offset:
+    x: 0
+    y: 0
+    z: 0
+  maleSlot: {instanceID: 0}
+  femaleSlots: []
+  femaleOffsets: []
+  femaleModifiers: 

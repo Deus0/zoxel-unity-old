@@ -75,9 +75,9 @@ namespace Zoxel
             for (int i = 0; i < inventory.items.Length; i++)
             {
                 Texture2D iconTexture = null;
-                if (inventory.items[i].metaID != 0 && meta.ContainsKey(inventory.items[i].metaID))
+                if (inventory.items[i].data.id  != 0 && meta.ContainsKey(inventory.items[i].data.id ))
                 {
-                    ItemDatam itemDatam = meta[inventory.items[i].metaID];
+                    ItemDatam itemDatam = meta[inventory.items[i].data.id ];
                     if (itemDatam != null && itemDatam.texture)
                     {
                         iconTexture = itemDatam.texture.texture;

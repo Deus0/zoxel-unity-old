@@ -1,5 +1,9 @@
-﻿using Unity.Entities;
+﻿using Unity.Collections;
+using Unity.Entities;
+using System.Collections.Generic;
 using Unity.Mathematics;
+using UnityEngine;
+
 
 namespace Zoxel
 {
@@ -8,7 +12,8 @@ namespace Zoxel
     public struct WorldItem : IComponentData
     {
         public int id;
-        public int metaID;  // ID for item meta data
         public int quantity;
+        [ReadOnly]
+        public Item data;
     }
 }

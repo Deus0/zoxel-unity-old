@@ -34,6 +34,7 @@ namespace Zoxel
         {
             characterSpawnSystem.meta = data.GetCharacters();
             characterSpawnSystem.classMeta = data.GetClasses();
+            characterSpawnSystem.items = data.GetItems();
         }
 
         public void CombineWithPlayers(PlayerSystemGroup playerSystemGroup)

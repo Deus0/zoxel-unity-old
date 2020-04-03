@@ -8,6 +8,19 @@ ScriptedImporter:
   assetBundleName: 
   assetBundleVariant: 
   script: {fileID: 11500000, guid: 5441f7bda96807d409522dc8d0af4b33, type: 3}
-  isExport: 0
-  vox: {instanceID: 0}
-  voxAssetPath: Assets/Models/Human/Human-17-LeftCalf.vox
+  scale:
+    x: 0.5
+    y: 0.5
+    z: 0.5
+  isItem: 1
+  itemTexture: {fileID: 11400000, guid: 52d744872e3ee2d4cbe0b65f333ebeff, type: 2}
+  vox: {fileID: -3236523621375679218, guid: ddd403b7dec2b344883d9d9255d84f85, type: 3}
+  item: {fileID: 3153652771158498683, guid: ddd403b7dec2b344883d9d9255d84f85, type: 3}
+  offset:
+    x: 0
+    y: 0
+    z: 0
+  maleSlot: {fileID: 11400000, guid: b773f218195ed99d39bf1e1189226f13, type: 2}
+  femaleSlots:
+  - {fileID: 11400000, guid: afb3d62875f7274f28642d6a0c28d40d, type: 2}
+  femaleModifiers: 

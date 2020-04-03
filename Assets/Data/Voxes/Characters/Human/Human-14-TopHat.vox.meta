@@ -8,6 +8,19 @@ ScriptedImporter:
   assetBundleName: 
   assetBundleVariant: 
   script: {fileID: 11500000, guid: 5441f7bda96807d409522dc8d0af4b33, type: 3}
-  isExport: 0
-  vox: {instanceID: 0}
-  voxAssetPath: Assets/Models/Human/Human-14-TopHat.vox
+  scale:
+    x: 0.5
+    y: 0.5
+    z: 0.5
+  isItem: 1
+  itemTexture: {fileID: 11400000, guid: 592c24ffa881d6b4f964a6c0e6d1fdf9, type: 2}
+  vox: {fileID: -5325766350832355385, guid: 47b40f398622f6b45a9610b7d1de95a6, type: 3}
+  item: {fileID: 2164706817165810311, guid: 47b40f398622f6b45a9610b7d1de95a6, type: 3}
+  offset:
+    x: 0
+    y: -3
+    z: 0
+  maleSlot: {fileID: 11400000, guid: 0af11db6e4d02597b90952bdc260fd14, type: 2}
+  femaleSlots: []
+  femaleOffsets: []
+  femaleModifiers: 

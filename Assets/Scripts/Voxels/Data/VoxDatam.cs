@@ -17,15 +17,6 @@ namespace Zoxel.Voxels
         [Header("Data")]
         public VoxData data;
 
-        /*public VoxDatam()
-        {
-            data = new VoxData()
-            {
-                size = new float3(16, 16, 16),
-                data = new byte[4096]
-            };
-        }*/
-
         [ContextMenu("GenerateID")]
         public void GenerateID()
         {

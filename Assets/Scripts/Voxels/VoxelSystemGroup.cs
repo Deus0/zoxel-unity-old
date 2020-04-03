@@ -28,6 +28,7 @@ namespace Zoxel.Voxels
         public CharacterRaycastSystem characterRaycastSystem;
         private ChunkMapBuilderSystem chunkMapBuilderSystem;
         public ChunkMapCompleterSystem chunkMapCompleterSystem;
+        private ChunkRendererAnimationSystem chunkRendererAnimationSystem;
 
         public void Clear()
         {
@@ -129,8 +130,13 @@ namespace Zoxel.Voxels
 
             chunkMapBuilderSystem = space.GetOrCreateSystem<ChunkMapBuilderSystem>();
             AddSystemToUpdateList(chunkMapBuilderSystem);
+
             chunkMapCompleterSystem = space.GetOrCreateSystem<ChunkMapCompleterSystem>();
             AddSystemToUpdateList(chunkMapCompleterSystem);
+
+            chunkRendererAnimationSystem = space.GetOrCreateSystem<ChunkRendererAnimationSystem>();
+            AddSystemToUpdateList(chunkRendererAnimationSystem);
+            
 
 
             if (Bootstrap.DebugChunks)
@@ -160,8 +166,8 @@ namespace Zoxel.Voxels
             characterRaycastSystem.voxelPreviewSystem = voxelPreviewSystem;
             // voxel interaction
             chunkStreamEndSystem.worldSpawnSystem = worldSpawnSystem;
-            chunkMeshEndSystem.worldSpawnSystem = worldSpawnSystem;
-            chunkMeshEndSystem.chunkSpawnSystem = chunkSpawnSystem;
+            //chunkMeshEndSystem.worldSpawnSystem = worldSpawnSystem;
+            //chunkMeshEndSystem.chunkSpawnSystem = chunkSpawnSystem;
             worldStreamSystem.worldSpawnSystem = worldSpawnSystem;
             worldStreamSystem.chunkSpawnSystem = chunkSpawnSystem;
         }

@@ -8,6 +8,19 @@ ScriptedImporter:
   assetBundleName: 
   assetBundleVariant: 
   script: {fileID: 11500000, guid: 5441f7bda96807d409522dc8d0af4b33, type: 3}
-  isExport: 0
-  vox: {instanceID: 0}
-  voxAssetPath: Assets/Models/Human/Human-2-Shirt.vox
+  scale:
+    x: 0.5
+    y: 0.5
+    z: 0.5
+  isItem: 1
+  itemTexture: {fileID: 11400000, guid: 392c08f0b9d0ecb419d557d0e1f2223e, type: 2}
+  vox: {fileID: 206213976395325350, guid: 89517c6173c4c6343907c271dbad4ed9, type: 3}
+  item: {fileID: 2089161989120129385, guid: 89517c6173c4c6343907c271dbad4ed9, type: 3}
+  offset:
+    x: 0
+    y: 0
+    z: -1
+  maleSlot: {fileID: 11400000, guid: c27a5f85e1f7abbe19e4e95b5f83c5a2, type: 2}
+  femaleSlots: []
+  femaleOffsets: []
+  femaleModifiers: 

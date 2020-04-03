@@ -5,15 +5,6 @@ using System.Collections.Generic;
 namespace Zoxel
 {
     [System.Serializable]
-    public struct InventoryItem
-    {
-        public int metaID;
-        public int quantity;
-        public byte dirty;
-        public byte dirtyQuantity;
-    }
-
-    [System.Serializable]
     public struct Inventory : IComponentData
     {
         public byte dirty;
@@ -28,11 +19,11 @@ namespace Zoxel
             {
                 if (meta != null && j < meta.Count)
                 {
-                    items[j] = new InventoryItem { metaID = meta[j].Value.id, quantity = 1 };
+                    items[j] = new InventoryItem { data = meta[j].data, quantity = 1 };
                 }
                 else
                 {
-                    items[j] = new InventoryItem { metaID = 0, quantity = 0 };
+                    items[j] = new InventoryItem { };
                 }
             }
         }
@@ -45,13 +36,18 @@ namespace Zoxel
         [System.Serializable]
         public struct SerializeableInventory
         {
-            public InventoryItem[] items;
+            public InventoryItem.SerializableInventoryItem[] items;
         }
         public string GetJson()
         {
-            SerializeableInventory myClone = new SerializeableInventory();
-            myClone.items = items.ToArray();
-            return UnityEngine.JsonUtility.ToJson(myClone);
+            var clone = new SerializeableInventory();
+            //lone.items = items.ToArray();
+            clone.items = new InventoryItem.SerializableInventoryItem[items.Length];
+            for (int i = 0; i < items.Length; i++)
+            {
+                clone.items[i] = items[i].GetSerializeableClone();
+            }
+            return UnityEngine.JsonUtility.ToJson(clone);
         }
         public static Inventory FromJson(string json)
         {
@@ -73,10 +69,17 @@ namespace Zoxel
                 return blank;
             }
             Inventory inventory = new Inventory { };
-            inventory.InitializeItems(myClone.items.Length);
-            for (int i = 0; i < myClone.items.Length; i++)
+            if (myClone.items != null)
             {
-                inventory.items[i] = myClone.items[i];
+                inventory.InitializeItems(myClone.items.Length);
+                for (int i = 0; i < myClone.items.Length; i++)
+                {
+                    inventory.items[i] = myClone.items[i].GetRealOne();
+                }
+            }
+            else
+            {
+                UnityEngine.Debug.LogError("Items is null from inventory clone.");
             }
             return inventory;
         }

@@ -28,7 +28,7 @@ namespace Zoxel
                 // transform
                 typeof(Translation),
                 typeof(Rotation),
-                typeof(Scale),
+                typeof(NonUniformScale),
                 // renderer
                 typeof(RenderMesh),
                 typeof(LocalToWorld)
@@ -53,7 +53,7 @@ namespace Zoxel
             Entity e = World.EntityManager.CreateEntity();
             World.EntityManager.AddComponentData(e, new SpawnItemCommand
             {
-                metaID = data.Value.id,
+                data = data.data,
                 quantity = quantity,
                 spawnPosition = spawnPosition,
                 spawnRotation = quaternion.identity
@@ -62,7 +62,7 @@ namespace Zoxel
 
         public struct SpawnItemCommand : IComponentData
         {
-            public int metaID;
+            public Item data;
             public int quantity;
             public float3 spawnPosition;
             public quaternion spawnRotation;
@@ -80,12 +80,17 @@ namespace Zoxel
 
         private void SpawnItem(SpawnItemCommand command)
         {
-            ItemDatam itemDatam = meta[command.metaID];
+            if (meta.ContainsKey(command.data.id) == false)
+            {
+                Debug.LogError("Item not in meta.");
+                return;
+            }
+            ItemDatam itemDatam = meta[command.data.id];
             Entity entity = World.EntityManager.CreateEntity(itemArchtype);
             int id = Bootstrap.GenerateUniqueID();
             World.EntityManager.SetComponentData(entity, new WorldItem {
                 id = id,
-                metaID = itemDatam.Value.id,
+                data = command.data,
                 quantity = command.quantity
             });
             World.EntityManager.SetComponentData(entity, new ItemBob {
@@ -94,7 +99,7 @@ namespace Zoxel
             World.EntityManager.SetComponentData(entity, new Translation {
                 Value = command.spawnPosition
             });
-            World.EntityManager.SetComponentData(entity, new Scale { Value = itemDatam.Value.scale * 0.5f });
+            World.EntityManager.SetComponentData(entity, new NonUniformScale { Value = itemDatam.model.data.scale }); // itemDatam.Value.scale * 0.5f });
             World.EntityManager.SetComponentData(entity, new Rotation { Value = Quaternion.Euler(0, UnityEngine.Random.Range(-180, 180), 0) });
 
             RenderMesh newRenderer = new RenderMesh();

@@ -34,19 +34,15 @@ namespace Zoxel
             if (itemSpawnSystem.items.ContainsKey(id))
             {
                 Entity entity = itemSpawnSystem.items[id];
-                WorldItem worldItem = World.EntityManager.GetComponentData<WorldItem>(entity);
-                int metaID = worldItem.metaID;
-
-                //Entity character = Bootstrap.instance.systemsManager.characterSpawnSystem.characters[characterID];
-                Inventory characterInventory = World.EntityManager.GetComponentData<Inventory>(character);
-
+                var worldItem = World.EntityManager.GetComponentData<WorldItem>(entity);
+                var characterInventory = World.EntityManager.GetComponentData<Inventory>(character);
+                int metaID = worldItem.data.id;
                 bool wasPickedUp = false;
-                //Debug.LogError("Want to add item to inventory: " + metaID);
                 int updatedItemIndex = -1;
                 int updatedItemValue = -1;
                 for (int i = 0; i < characterInventory.items.Length; i++)
                 {
-                    if (characterInventory.items[i].metaID == metaID)
+                    if (characterInventory.items[i].data.id == metaID)
                     {
                         InventoryItem item = characterInventory.items[i];
                         Debug.Log("At " + i + " - Stacking item: " + metaID + " to " + item.quantity + " with added quantity of: " + worldItem.quantity);
@@ -61,10 +57,11 @@ namespace Zoxel
                         updatedItemValue = item.quantity;
                         break;
                     }
-                    else if (characterInventory.items[i].metaID == 0)
+                    else if (characterInventory.items[i].data.id == 0)
                     {
                         InventoryItem item = characterInventory.items[i];
-                        item.metaID = metaID;
+                        item.data = worldItem.data;
+                        //item.metaID = metaID;
                         item.quantity = worldItem.quantity;
                         item.dirty = 1;
                         characterInventory.items[i] = item;
@@ -73,7 +70,7 @@ namespace Zoxel
                         wasPickedUp = true;
                         updatedItemIndex = i;
                         updatedItemValue = 1;
-                        Debug.Log("At " + i + " - Adding item to inventory: " + metaID + " of quantity: " + worldItem.quantity);
+                        //Debug.Log("At " + i + " - Adding item to inventory: " + metaID + " of quantity: " + worldItem.quantity);
                         break;
                     }
                     //else

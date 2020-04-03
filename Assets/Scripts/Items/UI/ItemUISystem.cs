@@ -41,113 +41,6 @@ namespace Zoxel
             });   
         }
 
-        // i want an item i can replace
-        private int FindReplaceBodyIndex(Equipment equipment, ItemDatam item)
-        {
-            if (item.maleSlots.Count == 0)
-            {
-                return -1;
-            }
-            var maleSlot =  item.maleSlots[0];
-            string maleSlotNeeded = maleSlot.name;
-            for (int i = 0; i < equipment.body.Length; i++)
-            {
-                var thisItem = meta[equipment.body[i].metaID];
-                
-                if (thisItem.maleSlots.Count > 0 && 
-                    thisItem.maleSlots[0].name == maleSlotNeeded)
-                {
-                    return i;
-                }
-            }
-            return -1;
-        }
-
-        private float2 FindNewBodyIndex(Equipment equipment, ItemDatam item)
-        {
-            if (item.maleSlots.Count == 0)
-            {
-                return new float2(-1, -1);
-            }
-            var maleSlot =  item.maleSlots[0];
-            string femaleSlotNeeded = maleSlot.name;
-            for (int i = 0; i < equipment.body.Length; i++)
-            {
-                var thisItem = meta[equipment.body[i].metaID];
-                // for all female slots, find an empty one if it is the slot of our male one
-                for (int j = 0; j < thisItem.femaleSlots.Count; j++)
-                {
-                    var femaleSlot = thisItem.femaleSlots[j];
-                    string connectToSlot = femaleSlot.name;
-                    if (connectToSlot == femaleSlotNeeded
-                        && (femaleSlot.axis == SlotAxis.Bottom && maleSlot.axis == SlotAxis.Top) 
-                        || (femaleSlot.axis == SlotAxis.Top && maleSlot.axis == SlotAxis.Bottom)
-                        || (femaleSlot.axis == SlotAxis.Left && maleSlot.axis == SlotAxis.Right)
-                        || (femaleSlot.axis == SlotAxis.Right && maleSlot.axis == SlotAxis.Left))
-                    {
-                        // check if slot is the male we need
-                        bool anythingConnectedToIt = false;
-                        // check if anything connected to it
-                        for (int k = 0; k < equipment.body.Length; k++)
-                        {
-                            if (i != k)
-                            {
-                                if (equipment.body[k].bodyIndex == i && equipment.body[k].slotIndex == j)
-                                {
-                                    anythingConnectedToIt = true;
-                                    break;
-                                }
-                            }
-                        }
-                        if (!anythingConnectedToIt)
-                        {
-                            // return the index of body part to connect to, and the slot index (female) it will connect to, say Chest, and Head slot
-                            return new float2(i, j);
-                        }
-                    }
-                }
-            }
-            return new float2(-1, -1);
-        }
-
-        private void ReplaceBodyPart(ref Inventory inventory, int itemArrayIndex, ref Equipment equipment, int bodyPartIndex)
-        {
-            var bodyPart = equipment.body[bodyPartIndex];
-            var bodyItem = inventory.items[itemArrayIndex];
-            UnityEngine.Debug.LogError("Replacing body part: " + meta[bodyPart.metaID].name
-                 + " with " +  meta[bodyItem.metaID].name);
-            // switch their metaID around
-            int tempMetaID = bodyPart.metaID;
-            bodyPart.metaID = bodyItem.metaID;
-            bodyItem.metaID = tempMetaID;
-            // then set in components
-            equipment.body[bodyPartIndex] = bodyPart;
-            inventory.items[itemArrayIndex] = bodyItem;
-            equipment.dirty = 1;
-        }
-
-        private void AddNewBodyPart(ref Inventory inventory, int itemArrayIndex, ref Equipment equipment, int bodyPartIndex, int slotIndex)
-        {
-            var oldBodyParts = equipment.body.ToArray();
-            equipment.body = new BlitableArray<InventoryBody>(oldBodyParts.Length + 1, Allocator.Persistent);
-            for (int i = 0; i < oldBodyParts.Length; i++)
-            {
-                equipment.body[i] = oldBodyParts[i];
-            }
-            InventoryItem item2 = inventory.items[itemArrayIndex];
-            var bodyPart = new InventoryBody();
-            bodyPart.metaID = item2.metaID;
-            bodyPart.bodyIndex = bodyPartIndex;
-            bodyPart.slotIndex = slotIndex;
-
-            item2.metaID = 0;
-            item2.quantity = 0;
-            inventory.items[itemArrayIndex] = item2;
-
-            equipment.body[oldBodyParts.Length] = bodyPart;
-            equipment.dirty = 1;
-        }
-
         public void OnClickedButton(Entity button, Entity player, ButtonType buttonType, int arrayIndex)
 
         {
@@ -160,12 +53,13 @@ namespace Zoxel
                 UnityEngine.Debug.LogError("Character " + player.Index + " does not have inventory component.");
                 return;
             }
-            Inventory inventory = World.EntityManager.GetComponentData<Inventory>(player);
-            InventoryItem item2 = inventory.items[arrayIndex];
+            var inventory = World.EntityManager.GetComponentData<Inventory>(player);
+            var itemClicked = inventory.items[arrayIndex];
+            var itemDataClicked = itemClicked.data;
             // button x is equip
             if (buttonType == ButtonType.ButtonX)
             {
-                if (item2.metaID != 0)
+                if (itemDataClicked.id != 0)
                 {
                     if (World.EntityManager.HasComponent<Equipment>(player) == false)
                     {
@@ -175,13 +69,12 @@ namespace Zoxel
                     //int characterID = World.EntityManager.GetComponentData<ZoxID>(player).id;
                     var equipment = World.EntityManager.GetComponentData<Equipment>(player);
                     // new item to equip, check if any slots
-                    var newBodyPart = meta[item2.metaID];
-                    float2 foundIndex = FindNewBodyIndex(equipment, newBodyPart);
+                    float2 foundIndex = equipment.FindNewBodyIndex(itemDataClicked);
                     if (foundIndex.x != -1 && foundIndex.y != -1)
                     {
                         int bodyPartIndex = (int)foundIndex.x;
                         int bodyPartSlotIndex = (int)foundIndex.y;
-                        AddNewBodyPart(ref inventory, arrayIndex, ref equipment, bodyPartIndex, bodyPartSlotIndex);
+                        equipment.AddNewBodyPart(ref inventory, arrayIndex, bodyPartIndex, bodyPartSlotIndex);
                         World.EntityManager.SetComponentData(player, equipment);
                         World.EntityManager.SetComponentData(player, inventory);
                         // add item event so it updates ui
@@ -191,10 +84,11 @@ namespace Zoxel
                     else
                     {
                         // try replace another?
-                        var bodyPartIndex = FindReplaceBodyIndex(equipment, newBodyPart);
+                        UnityEngine.Debug.LogError("Replacing for item clicked: " + meta[itemDataClicked.id].name);
+                        var bodyPartIndex = equipment.FindReplaceBodyIndex(itemDataClicked);
                         if (bodyPartIndex != -1)
                         {
-                            ReplaceBodyPart(ref inventory, arrayIndex, ref equipment, bodyPartIndex);
+                            equipment.ReplaceBodyPart(ref inventory, arrayIndex, bodyPartIndex);
                             World.EntityManager.SetComponentData(player, equipment);
                             World.EntityManager.SetComponentData(player, inventory);
                             // add item event so it updates ui
@@ -210,7 +104,7 @@ namespace Zoxel
                 // button a is item pickup / swap
                 if (inventory.selected == 0)
                 {
-                    if (item2.metaID != 0)
+                    if (itemDataClicked.id != 0)
                     {
                         //isFirst = !isFirst;
                         //firstSelected = arrayIndex;
@@ -226,9 +120,9 @@ namespace Zoxel
                     //isFirst = !isFirst;
                     // switch items
                     int selected = ((int)inventory.selected) - 1;// = (byte)(arrayIndex + 1);
-                    InventoryItem item1 = inventory.items[selected];
-                    inventory.items[selected] = item2;
-                    inventory.items[arrayIndex] = item1;
+                    InventoryItem itemFirstClicked = inventory.items[selected];
+                    inventory.items[selected] = itemClicked;
+                    inventory.items[arrayIndex] = itemFirstClicked;
 
                     World.EntityManager.SetComponentData(player, inventory);
                     // update those items/quantities and tooltip
@@ -252,7 +146,7 @@ namespace Zoxel
         {
             Inventory inventory = World.EntityManager.GetComponentData<Inventory>(character);
             UnityEngine.Texture2D iconTexture = null;
-            int itemMetaID = inventory.items[arrayIndex].metaID;
+            var itemMetaID = inventory.items[arrayIndex].data.id;
             if (itemMetaID != 0)
             {
                 ItemDatam itemDatam = meta[itemMetaID];

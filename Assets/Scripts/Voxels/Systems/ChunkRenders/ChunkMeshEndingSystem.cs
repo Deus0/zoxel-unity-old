@@ -15,9 +15,6 @@ namespace Zoxel.Voxels
     [DisableAutoCreation, UpdateAfter(typeof(ChunkMeshBuilderSystem))]
     public class ChunkMeshEndingSystem : ComponentSystem
     {
-        public WorldSpawnSystem worldSpawnSystem;
-        public ChunkSpawnSystem chunkSpawnSystem;
-
         protected override void OnUpdate()
 		{
             //int count = 0;
@@ -30,7 +27,7 @@ namespace Zoxel.Voxels
                     {
                         Debug.LogError("Finished building mesh for chunk at: " + renderer.Value.chunkPosition + " has weights: " + renderer.hasWeights);
                     }
-                    FinishChunkRender(e, ref renderer);
+                    UpdateMesh(e, ref renderer);
                     // remove chunk renderer if not skeleton
                     if (renderer.hasWeights == 0)
                     {
@@ -42,23 +39,21 @@ namespace Zoxel.Voxels
             });
 		}
 
-		public void FinishChunkRender(Entity entity, ref ChunkRenderer chunk)
+		void UpdateMesh(Entity entity, ref ChunkRenderer chunk)
         {
-            ZoxID rendererID = World.EntityManager.GetComponentData<ZoxID>(entity);
             RenderMesh renderer = World.EntityManager.GetSharedComponentData<RenderMesh>(entity);
 			Mesh mesh = renderer.mesh;
             if (mesh == null)
 			{
 				mesh = new Mesh();
+                mesh.MarkDynamic();
 			}
 			else
 			{
 				mesh.Clear();
 			}
-
             chunk.SetMeshData(mesh);
-            
-            if (chunk.hasWeights == 1)
+            /*if (chunk.hasWeights == 1)
             {
                 if (Bootstrap.DebugMeshWeights)
                 {
@@ -67,28 +62,26 @@ namespace Zoxel.Voxels
                 }
                 mesh.bindposes = chunk.GetBonePoses();
                 mesh.boneWeights = chunk.GetWeights();
-                mesh.RecalculateBounds();
+                //mesh.RecalculateBounds();
                 // centre mesh
                 mesh.vertices = mesh.vertices;
                 mesh.RecalculateTangents();
+            }*/
+            Chunk chunkComponent = World.EntityManager.GetComponentData<Chunk>(chunk.chunk);
+            World worldComponent = World.EntityManager.GetComponentData<World>(chunkComponent.world);
+            if (worldComponent.modelID != 0)
+            {
+                //ChunkMeshEndingSystem.CentreMesh(mesh);
+                //ChunkMeshEndingSystem.RotateMesh(mesh);
             }
-            else {
-			    mesh.RecalculateBounds();
-            }
-            mesh.RecalculateNormals();
             if (mesh.vertexCount != mesh.colors.Length || mesh.vertexCount != mesh.uv.Length)
 			{
 				Debug.LogError("ChunkMesh has inconsistent data: " + mesh.vertexCount + ":" + mesh.uv.Length + ":" + mesh.colors.Length);
             }
-
-            Chunk chunkComponent = World.EntityManager.GetComponentData<Chunk>(chunkSpawnSystem.chunks[rendererID.creatorID]);
-            World worldComponent = World.EntityManager.GetComponentData<World>(worldSpawnSystem.worlds[chunkComponent.worldID]);
-            if (worldComponent.modelID != 0)
-            {
-                CentreMesh(mesh);
-                RotateMesh(mesh);
-            }
-
+            mesh.RecalculateBounds();
+            mesh.RecalculateNormals();
+            mesh.RecalculateTangents();
+			//mesh.UploadMeshData(false);
             renderer.mesh = mesh;
 			renderer.subMesh = 0;
             World.EntityManager.SetSharedComponentData(entity, renderer);
@@ -99,10 +92,14 @@ namespace Zoxel.Voxels
                 renderBounds2.Value.Center = new float3(mesh.bounds.center.x, mesh.bounds.center.y, mesh.bounds.center.z);
                 World.EntityManager.SetComponentData(entity, renderBounds2);
             }
-            //Bootstrap.instance.DebugMesh = renderer.mesh;
         }
-        public void CentreMesh(Mesh mesh)
+
+        public static void CentreMesh(Mesh mesh)
         {
+            mesh.RecalculateBounds();
+            /*mesh.RecalculateBounds();
+            mesh.RecalculateNormals();
+            mesh.RecalculateTangents();*/
             Vector3[] verts = mesh.vertices;
             for (int i = 0; i < verts.Length; i++)
             {
@@ -113,23 +110,22 @@ namespace Zoxel.Voxels
                 verts[i] -= mesh.bounds.extents;
             }
             mesh.vertices = verts;
-            mesh.RecalculateBounds();
-            mesh.RecalculateNormals();
-            mesh.RecalculateTangents();
         }
 
-        public void RotateMesh(Mesh mesh)
+        public static void RotateMesh(Mesh mesh)
         {
             Vector3[] verts = mesh.vertices;
             for (int i = 0; i < verts.Length; i++)
             {
-                //verts[i].z = -verts[i].z;
                 verts[i] = math.rotate(Quaternion.Euler(180, 0, 180), verts[i]);
             }
             mesh.vertices = verts;
-            mesh.RecalculateBounds();
-            mesh.RecalculateNormals();
-            mesh.RecalculateTangents();
         }
     }
 }
+            /*mesh.RecalculateBounds();
+            mesh.RecalculateNormals();
+            mesh.RecalculateTangents();*/
+            /*mesh.RecalculateBounds();
+            mesh.RecalculateNormals();
+            mesh.RecalculateTangents();*/

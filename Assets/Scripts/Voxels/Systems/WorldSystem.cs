@@ -127,7 +127,7 @@ namespace Zoxel.Voxels
             };
             if (skeleton != null)
             {
-                worldComponent.skeletonID = skeleton.data.id;
+                //worldComponent.skeletonID = skeleton.data.id;
             }
             float renderDistance = 0;
             if (World.EntityManager.HasComponent<World>(world) == false)

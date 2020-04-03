@@ -8,6 +8,19 @@ ScriptedImporter:
   assetBundleName: 
   assetBundleVariant: 
   script: {fileID: 11500000, guid: 5441f7bda96807d409522dc8d0af4b33, type: 3}
-  isExport: 0
-  vox: {instanceID: 0}
-  voxAssetPath: Assets/Models/Human/Human-7-Shorts.vox
+  scale:
+    x: 0.5
+    y: 0.5
+    z: 0.5
+  isItem: 1
+  itemTexture: {fileID: 11400000, guid: 2e863b7a711fd554c89fb2205856610e, type: 2}
+  vox: {fileID: 4133594937949440273, guid: f44047a1f1b57564883351f6e78914b6, type: 3}
+  item: {instanceID: 0}
+  offset:
+    x: 0
+    y: 0
+    z: 0
+  maleSlot: {fileID: 11400000, guid: 2b4aeb9d7259b053b9f9d63f111fea0c, type: 2}
+  femaleSlots: []
+  femaleOffsets: []
+  femaleModifiers: 

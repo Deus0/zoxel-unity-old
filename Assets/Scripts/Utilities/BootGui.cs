@@ -143,7 +143,7 @@ namespace Zoxel
             EntityManager manager = booty.GetSystems().space.EntityManager;
             Inventory inventory = manager.GetComponentData<Inventory>(playerCharacterEntity);
             GUILayout.Label("Displaying Items for unnamed character with max items of [" + inventory.items.Length + "].");
-            for (int i = 0; i < inventory.items.Length; i++)
+            /*for (int i = 0; i < inventory.items.Length; i++)
             {
                 if (inventory.items[i].metaID == 0)
                 {
@@ -154,7 +154,7 @@ namespace Zoxel
                     //ItemDatam item = booty.GetSystems().itemSpawnSystem.meta[inventory.items[i].metaID];
                     //GUILayout.Label("Item [" + i + "] is " + item.name + " x" + inventory.items[i].quantity);
                 }
-            }
+            }*/
         }
 
         private void DebugAIStates()

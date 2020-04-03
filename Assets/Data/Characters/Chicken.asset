@@ -19,17 +19,23 @@ MonoBehaviour:
   maxVelocity: 8
   behaviour: {fileID: 11400000, guid: 478386927d5f0d448b513aee0000090e, type: 2}
   defaultClass: {fileID: 11400000, guid: 03a3297af740f404189a1d604402ebb9, type: 2}
+  skills: []
   quests: []
+  questsToGive: []
   items: []
   itemPickupRadius: 0
   dropItems:
-  - item: {fileID: 11400000, guid: aedf2b1accee01c43a6aa6643dae34dc, type: 2}
+  - item: {fileID: 2288877101906815068, guid: 790f2c82114eb6b40b7272a2a9b54408, type: 3}
     quantity:
       x: 1
-      y: 1
+      y: 3
+  vox: {fileID: 3634737440447653224, guid: 2c4c1e6736cc12c4681e90eb5eaebc46, type: 3}
+  body: []
+  gear: []
+  animator: {fileID: 0}
+  skeleton: {fileID: 0}
   spawnSound: {fileID: 11400000, guid: dfc4c18e202770742a5c4ff545161b34, type: 2}
   deathSound: {fileID: 11400000, guid: ab6a39e5d94cc914bbd9bd20b905b9c1, type: 2}
-  vox: {fileID: 3634737440447653224, guid: 2c4c1e6736cc12c4681e90eb5eaebc46, type: 3}
   stats:
     willDie: 0
     leveledUp: 0

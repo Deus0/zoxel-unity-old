@@ -41,6 +41,7 @@ namespace Zoxel.Voxels
 	{
 		// remove these for zoxIDs
         public int id;
+		public Entity world;
         public int worldID;
 
 		public byte isGenerating;   // used in side system to know what chunks are still generating

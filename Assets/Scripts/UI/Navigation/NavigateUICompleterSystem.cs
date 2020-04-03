@@ -118,7 +118,7 @@ namespace Zoxel.UI
         //      This removes any links
         private void OnButtonClicked(Entity player, Entity ui, int arrayIndex, ButtonType buttonType)
         {
-            if (World.EntityManager.Exists(ui) == false)
+            if (World.EntityManager.Exists(ui) == false || !World.EntityManager.HasComponent<PanelUI>(ui))
             {
                 return;
             }

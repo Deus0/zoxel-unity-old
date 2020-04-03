@@ -302,12 +302,13 @@ namespace Zoxel.Voxels
         public void SpawnChunks(SpawnChunkCommand command)
         {
             int worldID = command.worldID;
-            World world = World.EntityManager.GetComponentData<World>(worldSpawnSystem.worlds[worldID]);
+            var worldEntity = worldSpawnSystem.worlds[worldID];
+            World world = World.EntityManager.GetComponentData<World>(worldEntity);
             if (ChunkSpawnSystem.isDebugLog)
             {
                 Debug.LogError("Spawning World's Chunks [" + command.chunkIDs.Length + "] with dimensions: " + world.voxelDimensions + ", id: " + worldID);
             }
-            Translation worldTranslation = World.EntityManager.GetComponentData<Translation>(worldSpawnSystem.worlds[worldID]);
+            Translation worldTranslation = World.EntityManager.GetComponentData<Translation>(worldEntity);
             NativeArray<Entity> entities = new NativeArray<Entity>(command.chunkPositions.Length, Allocator.Temp);
             // materials
             int renderEntitiesCount = 0;
@@ -356,6 +357,7 @@ namespace Zoxel.Voxels
                 worldSpawnSystem.worldLookups[worldID] = lookupTable;
 
                 Chunk chunk = World.EntityManager.GetComponentData<Chunk>(chunkEntity);
+                chunk.world = worldEntity;
                 chunk.id = chunkIDs[i];
                 chunk.worldID = command.worldID;
                 chunk.Value.chunkPosition = chunkPositions[i];
@@ -387,7 +389,7 @@ namespace Zoxel.Voxels
                     {
                         renderEntitiesSmall[j] = renderEntities[renderEntityCount * materials.Count + j];
                     }
-                    AddRenderEntitiesToChunk(ref chunk, world, materials, spawnPosition, renderEntitiesSmall, model);
+                    AddRenderEntitiesToChunk(chunkEntity, ref chunk, world, materials, spawnPosition, renderEntitiesSmall, model);
                     renderEntityCount++;
                 }
                 else
@@ -475,7 +477,7 @@ namespace Zoxel.Voxels
         }
 
 
-        public void AddRenderEntitiesToChunk(World world, ref Chunk chunk)
+        public void AddRenderEntitiesToChunk(World world, Entity chunkEntity, ref Chunk chunk)
         {
             List<Material> materials = GetWorldMaterials(world.id);
             float3 spawnPosition = World.EntityManager.GetComponentData<Translation>(chunks[chunk.id]).Value;
@@ -489,11 +491,11 @@ namespace Zoxel.Voxels
             {
                 entities[i] = World.EntityManager.Instantiate(chunkRenderPrefab);
             }
-            AddRenderEntitiesToChunk(ref chunk, world, materials, spawnPosition, entities, model);
+            AddRenderEntitiesToChunk(chunkEntity, ref chunk, world, materials, spawnPosition, entities, model);
 
         }
 
-        public void AddRenderEntitiesToChunk(ref Chunk chunk, World world, List<Material> materials, float3 spawnPosition, Entity[] renderEntities, VoxData model)
+        public void AddRenderEntitiesToChunk(Entity chunkEntity, ref Chunk chunk, World world, List<Material> materials, float3 spawnPosition, Entity[] renderEntities, VoxData model)
         {
             if (ChunkSpawnSystem.isDebugLog)
             {
@@ -506,6 +508,7 @@ namespace Zoxel.Voxels
                 Entity renderEntity = renderEntities[j];
                 int renderID = SetChunkRenderEntity(
                     renderEntity,
+                    chunkEntity,
                     ref chunk,
                     materials[j],
                     j,
@@ -527,35 +530,43 @@ namespace Zoxel.Voxels
             }
         }
 
-        private int SetChunkRenderEntity(Entity newEntity, ref Chunk chunk, Material material, int materialID, float3 spawnPosition, 
+        private int SetChunkRenderEntity(Entity chunkRendererEntity, Entity chunkEntity, ref Chunk chunk,
+            Material material, int materialID, float3 spawnPosition, 
             bool isModel, int skeletonID)
         {
             int id = Bootstrap.GenerateUniqueID();
-            World.EntityManager.SetComponentData(newEntity, new ZoxID { id = id, creatorID = chunk.id });
-            World.EntityManager.SetComponentData(newEntity, new Translation { Value = spawnPosition });
-            World.EntityManager.SetComponentData(newEntity, new NonUniformScale { Value = new float3(1,1,1) });
-            World.EntityManager.SetComponentData(newEntity, new Rotation { Value = quaternion.identity });
-            World.EntityManager.SetComponentData(newEntity, new Parent { Value = worldSpawnSystem.worlds[chunk.worldID] });
+            if (World.EntityManager.HasComponent<ChunkRenderer>(chunkRendererEntity))
+            {
+                var chunkRenderer = World.EntityManager.GetComponentData<ChunkRenderer>(chunkRendererEntity);
+                chunkRenderer.chunk = chunkEntity;
+                World.EntityManager.SetComponentData(chunkRendererEntity, chunkRenderer);
+            }
+            World.EntityManager.SetComponentData(chunkRendererEntity, new ZoxID { id = id, creatorID = chunk.id });
+            World.EntityManager.SetComponentData(chunkRendererEntity, new Translation { Value = spawnPosition });
+            World.EntityManager.SetComponentData(chunkRendererEntity, new NonUniformScale { Value = new float3(1,1,1) });
+            World.EntityManager.SetComponentData(chunkRendererEntity, new Rotation { Value = quaternion.identity });
+            World.EntityManager.SetComponentData(chunkRendererEntity, new Parent { Value = worldSpawnSystem.worlds[chunk.worldID] });
             // Render material data
-            RenderMesh renderer = World.EntityManager.GetSharedComponentData<RenderMesh>(newEntity);
+            RenderMesh renderer = World.EntityManager.GetSharedComponentData<RenderMesh>(chunkRendererEntity);
             renderer.material = material;
             renderer.subMesh = materialID;
             renderer.mesh = new Mesh();
-            World.EntityManager.SetSharedComponentData(newEntity, renderer);
+            World.EntityManager.SetSharedComponentData(chunkRendererEntity, renderer);
             if (isModel)
             {
-                AddChunkRenderComponent(newEntity, ref chunk, materialID, skeletonID);
+                AddChunkRenderComponent(chunkRendererEntity, chunkEntity, ref chunk, materialID, skeletonID);
             }
-            chunkRenders.Add(id, newEntity);
+            chunkRenders.Add(id, chunkRendererEntity);
             return id;
         }
 
-        public void AddChunkRenderComponent(Entity chunkRenderEntity, ref Chunk chunk, int materialID, int skeletonID)// byte buildState = 0)
+        public void AddChunkRenderComponent(Entity chunkRenderEntity, Entity chunkEntity, ref Chunk chunk, int materialID, int skeletonID)// byte buildState = 0)
         {
             ChunkRenderer chunkRender = new ChunkRenderer { };
+            chunkRender.chunk = chunkEntity;
             chunkRender.materialID = (byte)materialID;
             chunkRender.SetMetaData(voxelSpawnSystem.meta, voxelSpawnSystem.voxelIDs);
-            chunkRender.InitializeData(chunk.Value.voxelDimensions, ChunkSpawnSystem.maxCacheVerts, ChunkSpawnSystem.maxCacheTriangles);
+            chunkRender.InitializeData(chunk.Value.voxelDimensions); //, ChunkSpawnSystem.maxCacheVerts, ChunkSpawnSystem.maxCacheTriangles);
             chunkRender.Value = chunk.Value;
             if (skeletonID != 0)
             {

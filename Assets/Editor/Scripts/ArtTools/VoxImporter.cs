@@ -26,8 +26,12 @@ namespace Zoxel.Voxels
         //[HideInInspector, SerializeField]
         private string voxAssetPath;
         string filename;
-        public List<MaleSlot> maleSlots;
-        public List<FemaleSlot> femaleSlots;
+        public int3 offset;
+        public SlotDatam maleSlot;
+        public List<SlotDatam> femaleSlots;
+        public List<int3> femaleOffsets;
+        public List<VoxOperation> femaleModifiers;
+
 
         public override void OnImportAsset(AssetImportContext ctx)
         {
@@ -40,15 +44,14 @@ namespace Zoxel.Voxels
                     item = ScriptableObject.CreateInstance<ItemDatam>();
                     item.name = filename + " Item";
                 }
-                if (item.Value.id == 0)
+                if (item.data.id == 0)
                 {
-                    item.Value.id = Bootstrap.GenerateUniqueID();
+                    item.data.id = Bootstrap.GenerateUniqueID();
                 }
                 item.model = vox;
-                item.Value.scale = 0.5f;
                 item.texture = itemTexture;
-                item.maleSlots = maleSlots;
-                item.femaleSlots = femaleSlots;
+                item.data.offset = offset;
+                item.data.SetSlots(maleSlot, femaleSlots, femaleOffsets, femaleModifiers);
                 ctx.AddObjectToAsset(item.name, item);
             }
         }

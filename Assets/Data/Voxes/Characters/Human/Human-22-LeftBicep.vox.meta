@@ -15,18 +15,11 @@ ScriptedImporter:
   isItem: 1
   itemTexture: {fileID: 11400000, guid: 163e13966c7b38646bbdf8722e625d05, type: 2}
   vox: {fileID: -902188814197891922, guid: 3676bb4ddd9bae24d9172ac2c8937585, type: 3}
-  item: {instanceID: 0}
-  maleSlots:
-  - name: bicep
-    axis: 1
-    offset:
-      x: 0
-      y: 0
-      z: 0
+  item: {fileID: -6202362112819762984, guid: 3676bb4ddd9bae24d9172ac2c8937585, type: 3}
+  offset:
+    x: 0
+    y: 0
+    z: 0
+  maleSlot: {fileID: 11400000, guid: 1622b3ba17a09bd77aa492c97b4df523, type: 2}
   femaleSlots:
-  - name: forearm
-    axis: 2
-    offset:
-      x: 0
-      y: 0
-      z: 0
+  - {fileID: 11400000, guid: 451d7ff2d9be8a4ac8e0d916afd58fab, type: 2}

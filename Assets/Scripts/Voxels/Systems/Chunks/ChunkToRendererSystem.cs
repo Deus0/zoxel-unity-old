@@ -45,7 +45,7 @@ namespace Zoxel.Voxels
 				}
 				else
 				{
-					chunkSpawnSystem.AddChunkRenderComponent(chunkRenderEntity, ref chunk, 0, 0);
+					chunkSpawnSystem.AddChunkRenderComponent(chunkRenderEntity, chunkEntity, ref chunk, 0, 0);
 				}
 				if (World.EntityManager.HasComponent<ChunkRendererBuilder>(chunkRenderEntity))
 				{

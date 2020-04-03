@@ -49,8 +49,9 @@ namespace Zoxel.Voxels
                 //Debug.LogError("Adding Chunk Renders for World: " + world.id);
                 for (int i = 0; i < ids.Length; i++)
                 {
-                    Chunk chunk = World.EntityManager.GetComponentData<Chunk>(chunkSpawnSystem.chunks[ids[i]]);
-                    chunkSpawnSystem.AddRenderEntitiesToChunk(world, ref chunk);
+                    var chunkEntity = chunkSpawnSystem.chunks[ids[i]];
+                    Chunk chunk = World.EntityManager.GetComponentData<Chunk>(chunkEntity);
+                    chunkSpawnSystem.AddRenderEntitiesToChunk(world, chunkEntity, ref chunk);
                     World.EntityManager.SetComponentData(chunkSpawnSystem.chunks[ids[i]], chunk);
                 }
             }
@@ -78,7 +79,7 @@ namespace Zoxel.Voxels
                         Chunk chunk = World.EntityManager.GetComponentData<Chunk>(chunkEntity);
                         if (chunk.chunkRenders.Length == 0 && renders[i] == 1)
                         {
-                            chunkSpawnSystem.AddRenderEntitiesToChunk(world, ref chunk);
+                            chunkSpawnSystem.AddRenderEntitiesToChunk(world, chunkEntity, ref chunk);
 
                             if (World.EntityManager.HasComponent<ChunkBuilder>(chunkEntity))
                             {

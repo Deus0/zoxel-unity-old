@@ -27,6 +27,7 @@ namespace Zoxel
         // data
         public Dictionary<int, CharacterDatam> meta = new Dictionary<int, CharacterDatam>();
         public Dictionary<int, ClassDatam> classMeta = new Dictionary<int, ClassDatam>();
+        public Dictionary<int, ItemDatam> items = new Dictionary<int, ItemDatam>();
         
         // spawned
         public Dictionary<int, Entity> characters = new Dictionary<int, Entity>();
@@ -56,6 +57,7 @@ namespace Zoxel
                 typeof(Character),
                 typeof(NearbyCharacters),
                 typeof(Equipment),
+                typeof(Skeleton),
                 // game
                 typeof(Stats),
                 typeof(Skills),
@@ -130,7 +132,7 @@ namespace Zoxel
             for (int i = 0; i < command.amount; i++)
             {
                 Entity entity = entities[i];
-                SetCharacter(entity, command.characterIDs[i], command.worldID, command.metaID, command.classID, command.clanID, command.position, command.creatorID);
+                SetCharacter(entity, command.characterIDs[i], false, command.worldID, command.metaID, command.classID, command.clanID, command.position, command.creatorID);
                 SetNPCCharacter(entity, command.characterIDs[i], command.worldID, command.metaID, command.position);
             }
         }
@@ -139,19 +141,21 @@ namespace Zoxel
         {
             Entity entity = World.EntityManager.CreateEntity(playerArchtype);
             int id;
+            bool isLoadingPlayer = false;
             if (command.characterID != 0)
             {
                 id = command.characterID;
+                isLoadingPlayer = true;
             }
             else
             {
                 id = Bootstrap.GenerateUniqueID();
             }
-            SetCharacter(entity, id, command.worldID, command.metaID, command.classID, command.clanID, command.position);
+            SetCharacter(entity, id, isLoadingPlayer,command.worldID, command.metaID, command.classID, command.clanID, command.position);
             SetPlayerCharacter(entity, id, command.worldID, command.metaID, command.position);
             cameraSystem.ConnectCameraToCharacter(command.camera, entity);
             playerSpawnSystem.SetPlayerCharacter(entity, command.playerID);
-            if (command.characterID != 0)
+            if (isLoadingPlayer)
             {
                 saveSystem.LoadPlayer(entity);
             }
@@ -166,7 +170,7 @@ namespace Zoxel
         {
             Entity entity = World.EntityManager.CreateEntity(npcArchtype);
             int id = Bootstrap.GenerateUniqueID();
-            SetCharacter(entity, id, command.worldID, command.metaID, command.classID, command.clanID, command.position);
+            SetCharacter(entity, id, false, command.worldID, command.metaID, command.classID, command.clanID, command.position);
             SetNPCCharacter(entity, id, command.worldID, command.metaID, command.position);
         }
         #endregion
@@ -263,7 +267,7 @@ namespace Zoxel
             });
         }
 
-        private void SetCharacter(Entity entity, int id, int worldID, int metaID, int classID, int clanID, float3 position, int creatorID = 0)
+        private void SetCharacter(Entity entity, int id, bool isLoadingPlayer, int worldID, int metaID, int classID, int clanID, float3 position, int creatorID = 0)
         {
             if (characters.ContainsKey(id) == true)
             {
@@ -310,7 +314,7 @@ namespace Zoxel
                 receiveShadows = true
             });
             float3 bodySize = new float3(0.1f, 0.1f, 0.1f);
-            if (characterDatam.vox != null)
+            if (characterDatam.vox != null && !isLoadingPlayer)
             {
                 bodySize = characterDatam.vox.data.GetSize();
                 World.EntityManager.SetComponentData(entity, new Body { size = bodySize });
@@ -322,7 +326,7 @@ namespace Zoxel
                 worldID = worldID,
                 voxelDimensions = voxelDimensions
             });
-            if (characterDatam.animator)
+            /*if (characterDatam.animator)
             {
                 World.EntityManager.SetComponentData(entity, new Zoxel.Animations.Animator {
                     data = characterDatam.animator.data.GetBlittableArray()
@@ -331,13 +335,13 @@ namespace Zoxel
             else
             {
                 World.EntityManager.RemoveComponent<Zoxel.Animations.Animator>(entity);
-            }
-            if (characterDatam.skeleton)
+            }*/
+            /*if (characterDatam.skeleton)
             {
                 Skeleton skeleton = new Skeleton { };
                 skeleton.InitializeBones(World.EntityManager, entity, characterDatam.skeleton);
                 World.EntityManager.AddComponentData(entity, skeleton);
-            }
+            }*/
             World.EntityManager.SetComponentData(entity, characterDatam.stats.Clone());
             // Physics
             World.EntityManager.SetComponentData(entity, new BodyInnerForce
@@ -353,17 +357,23 @@ namespace Zoxel
                     Value = characterDatam.behaviour.Value.seek
                 });
 
-            if (classID != 0)
+            if (!isLoadingPlayer)
             {
-                GiveClassSkills(id, classMeta[classID]);
-            }
-            else if (characterDatam.defaultClass)
-            {
-                GiveClassSkills(id, characterDatam.defaultClass);
+                if (classID != 0)
+                {
+                    GiveClassSkills(id, classMeta[classID]);
+                }
+                else if (characterDatam.defaultClass)
+                {
+                    GiveClassSkills(id, characterDatam.defaultClass);
+                }
             }
             Equipment equipment = new Equipment{};
-            equipment.EquipBody(characterDatam.body);
-            //equipment.equipGear(characterDatam.gear);
+            if (!isLoadingPlayer)
+            {
+                equipment.EquipBody(characterDatam.body);
+                equipment.EquipGear(characterDatam.gear);
+            }
             World.EntityManager.SetComponentData(entity, equipment);
         }
 

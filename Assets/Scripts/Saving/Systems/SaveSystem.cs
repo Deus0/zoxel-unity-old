@@ -132,6 +132,8 @@ namespace Zoxel
             SaveComponentData<Inventory>(character, "Players", zoxID.id.ToString());
             SaveComponentData<Stats>(character, "Players", zoxID.id.ToString());
             SaveComponentData<Skills>(character, "Players", zoxID.id.ToString());
+            SaveComponentData<Equipment>(character, "Players", zoxID.id.ToString());
+            SaveComponentData<QuestLog>(character, "Players", zoxID.id.ToString());
             if (World.EntityManager.HasComponent<CameraLink>(character))
             {
                 CameraLink cameraLink = EntityManager.GetComponentData<CameraLink>(character);
@@ -152,17 +154,22 @@ namespace Zoxel
         public void LoadPlayer(Entity character)
         {
             ZoxID zoxID = EntityManager.GetComponentData<ZoxID>(character);
-            CameraLink cameraLink = EntityManager.GetComponentData<CameraLink>(character);
-            Entity camera = cameraLink.camera;// CameraSystem.cameras[cameraLink.cameraID];
             LoadComponentData<Translation>(character, "Players", zoxID.id.ToString());
             LoadComponentData<Rotation>(character, "Players", zoxID.id.ToString());
             LoadComponentData<Inventory>(character, "Players", zoxID.id.ToString());
             LoadComponentData<Stats>(character, "Players", zoxID.id.ToString());
             LoadComponentData<Skills>(character, "Players", zoxID.id.ToString());
-            LoadComponentData<FirstPersonCamera>(camera, "Players", zoxID.id.ToString());
-            FirstPersonCamera firstPersonCamera = EntityManager.GetComponentData<FirstPersonCamera>(camera);
-            firstPersonCamera.enabled = 1;
-            EntityManager.SetComponentData(camera, firstPersonCamera);
+            LoadComponentData<Equipment>(character, "Players", zoxID.id.ToString());
+            LoadComponentData<QuestLog>(character, "Players", zoxID.id.ToString());
+            if (World.EntityManager.HasComponent<CameraLink>(character))
+            {
+                CameraLink cameraLink = EntityManager.GetComponentData<CameraLink>(character);
+                Entity camera = cameraLink.camera;// CameraSystem.cameras[cameraLink.cameraID];
+                LoadComponentData<FirstPersonCamera>(camera, "Players", zoxID.id.ToString());
+                FirstPersonCamera firstPersonCamera = EntityManager.GetComponentData<FirstPersonCamera>(camera);
+                firstPersonCamera.enabled = 1;
+                EntityManager.SetComponentData(camera, firstPersonCamera);
+            }
         }
 
         public bool HasAnySaveGames()
@@ -249,6 +256,30 @@ namespace Zoxel
                     json = "";
                 }
             }
+            else if (typeof(T) == typeof(Equipment))
+            {
+                if (World.EntityManager.HasComponent<Equipment>(e))
+                {
+                    Equipment component = EntityManager.GetComponentData<Equipment>(e);
+                    json = component.GetJson();
+                }
+                else
+                {
+                    json = "";
+                }
+            }
+            else if (typeof(T) == typeof(QuestLog))
+            {
+                if (World.EntityManager.HasComponent<QuestLog>(e))
+                {
+                    QuestLog component = EntityManager.GetComponentData<QuestLog>(e);
+                    json = component.GetJson();
+                }
+                else
+                {
+                    json = "";
+                }
+            }
             else
             {
                 T component = EntityManager.GetComponentData<T>(e);
@@ -278,6 +309,17 @@ namespace Zoxel
                 else if (typeof(Skills) == typeof(T))
                 {
                     Skills component = Skills.FromJson(json);
+                    EntityManager.SetComponentData(e, component);
+                }
+                else if (typeof(Equipment) == typeof(T))
+                {
+                    Equipment component = Equipment.FromJson(json);
+                    component.dirty = 1;
+                    EntityManager.SetComponentData(e, component);
+                }
+                else if (typeof(QuestLog) == typeof(T))
+                {
+                    QuestLog component = QuestLog.FromJson(json);
                     EntityManager.SetComponentData(e, component);
                 }
                 else

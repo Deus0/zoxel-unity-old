@@ -4,24 +4,6 @@ using UnityEngine;
 
 namespace Zoxel
 {
-    public enum StatType
-    {
-        Base,
-        State,
-        Regen,
-        Attribute,
-        Level
-    }
-
-    [System.Serializable]
-    public struct StatData
-    {
-        public int id;
-        public void GenerateID()
-        {
-            id = Bootstrap.GenerateUniqueID();
-        }
-    }
 
     [CreateAssetMenu(fileName = "Stat", menuName = "Zoxel/Stat")]
     public class StatDatam : ScriptableObject

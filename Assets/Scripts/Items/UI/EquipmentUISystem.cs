@@ -59,9 +59,9 @@ namespace Zoxel
             {
                 var piece = inventory.body[i];
                 Texture2D iconTexture = null;
-                if (piece.metaID != 0)
+                if (piece.data.id != 0)
                 {
-                    ItemDatam itemDatam = meta[piece.metaID];
+                    ItemDatam itemDatam = meta[piece.data.id];
                     if (itemDatam != null && itemDatam.texture)
                     {
                         iconTexture = itemDatam.texture.texture;
