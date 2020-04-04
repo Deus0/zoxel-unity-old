@@ -40,7 +40,7 @@ namespace Zoxel.Animations
             {
                 if (animator.data.Length == 0)
                 {
-                    UnityEngine.Debug.LogError("Animator for entity doesnt have animations.");
+                    //UnityEngine.Debug.LogError("Animator for entity doesnt have animations.");
                 }
                 return;
             }

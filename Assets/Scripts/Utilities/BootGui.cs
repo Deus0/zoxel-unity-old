@@ -37,7 +37,7 @@ namespace Zoxel
                 GUILayout.Label("   > [" + ((GameState)(booty.EntityManager.GetComponentData<Game>(booty.game).newState)) + "]");
                 GUILayout.Label("Worlds " + booty.GetSystems().voxelSystemGroup.worldSpawnSystem.worlds.Count);
                 GUILayout.Label("Chunks " + booty.GetSystems().voxelSystemGroup.chunkSpawnSystem.chunks.Count);
-                GUILayout.Label("ChunkRenders " + booty.GetSystems().voxelSystemGroup.chunkSpawnSystem.chunkRenders.Count);
+                //GUILayout.Label("ChunkRenders " + booty.GetSystems().voxelSystemGroup.chunkRenderSystem.chunkRenders.Count);
 
                 GUILayout.Label(" - ");
                 GUILayout.Label("Controllers " + booty.GetSystems().playerSystemGroup.playerSpawnSystem.controllers.Count);

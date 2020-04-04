@@ -14,8 +14,7 @@ namespace Zoxel
         public byte newState;  // current state of game
         public byte previousState;  // current state of game
         public float timeChanged;
-
-        public int mapID;   // current map loaded
+        public Entity map;   // current map loaded
         public BlitableArray<int> spawnedPlayerIDs; // current loaded player characters
         public float lastCheckedEndOfGame;
 

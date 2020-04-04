@@ -39,12 +39,12 @@ namespace Zoxel
                                 if (controller.inputType == (byte)(DeviceType.KeyboardMouse))
                                 {
                                     float2 screenPosition = cameraSystem.GetScreenPosition(zoxID);
-                                    raycaster.commandID = voxelRaycastSystem.QueueRaycast(screenPosition, worldBound.worldID, camera);
+                                    raycaster.commandID = voxelRaycastSystem.QueueRaycast(screenPosition, worldBound.world, camera);
                                 }
                                 else
                                 {
                                     float2 screenPosition = cameraSystem.GetScreenPosition(zoxID, new float2(Screen.width / 2f, Screen.height / 2f));
-                                    raycaster.commandID = voxelRaycastSystem.QueueRaycast(screenPosition, worldBound.worldID, camera);
+                                    raycaster.commandID = voxelRaycastSystem.QueueRaycast(screenPosition, worldBound.world, camera);
                                 }
                             }
                             else

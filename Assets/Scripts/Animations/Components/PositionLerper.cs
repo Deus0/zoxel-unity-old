@@ -9,5 +9,6 @@ namespace Zoxel
         public float lifeTime;
         public float3 positionBegin;
         public float3 positionEnd;
+        public byte loop;
     }
 }

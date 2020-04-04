@@ -62,7 +62,7 @@ namespace Zoxel.WorldGeneration
                 {
                     float3 cameraPosition = float3.zero;
                     cameraPosition.y = 0;
-                    int previousWorldID = -1;
+                    Entity previousWorld = new Entity();
 
                     if (spawnZone.clanID == 0)
                     {
@@ -84,12 +84,12 @@ namespace Zoxel.WorldGeneration
                     
                     if (!hasAliveOnes)
                     {
-                        int worldID = chunk.worldID;
+                        var world = chunk.world;
                         //cameraPosition = math.transform(math.inverse(localToWorld.Value), cameraPosition);
-                        if (previousWorldID != worldID)
+                        if (previousWorld != world)
                         {
-                            previousWorldID = worldID;
-                            float4x4 worldTransform = World.EntityManager.GetComponentData<LocalToWorld>(worldSpawnSystem.worlds[worldID]).Value;
+                            previousWorld = world;
+                            float4x4 worldTransform = World.EntityManager.GetComponentData<LocalToWorld>(world).Value;
                             cameraPosition = math.transform(math.inverse(worldTransform), cameraSystem.GetMainCamera().transform.position); // math.inverse
                             cameraPosition.y = 0;
                         }
@@ -136,8 +136,7 @@ namespace Zoxel.WorldGeneration
                                     var biomeData = spawnZone.spawnDatas[spawnBiomeType];
                                     if (biomeData.monsterMetaID != 0)
                                     {
-                                        newSpawned.AddRange(CharacterSpawnSystem.SpawnNPCs(
-                                            World.EntityManager, worldID, biomeData.monsterMetaID, spawnZone.clanID, spawnPosition, 1));
+                                        newSpawned.AddRange(CharacterSpawnSystem.SpawnNPCs(World.EntityManager, world, biomeData.monsterMetaID, spawnZone.clanID, spawnPosition, 1));
                                     }
                                 }
                             }

@@ -16,7 +16,7 @@ namespace Zoxel.Voxels
         // queue
         public static List<float3> commandsPositions = new List<float3>();
         public static List<int> commandsTypes = new List<int>();
-        public static List<int> commandsWorlds = new List<int>();
+        public static List<Entity> commandsWorlds = new List<Entity>();
 
         public List<int> voxelIDs = new List<int>();
         public Dictionary<int, VoxelDatam> meta = new Dictionary<int, VoxelDatam>();
@@ -27,6 +27,14 @@ namespace Zoxel.Voxels
             commandsTypes.Clear();
         }
 
+
+        public static void QueueVoxel(float3 spawnPosition, Entity world, int voxelID)
+        {
+            commandsWorlds.Add(world);
+            commandsPositions.Add(new float3(math.floor(spawnPosition.x), math.floor(spawnPosition.y), math.floor(spawnPosition.z)));
+            commandsTypes.Add(voxelID);
+        }
+
         protected override void OnUpdate()
         {
             //Debug.LogError("Running VoxelSpawnSystem.");
@@ -35,17 +43,17 @@ namespace Zoxel.Voxels
                 int commandIndex = 0;// commandsPositions.Count - 1;
                 float3 position = commandsPositions[commandIndex];
                 int type = commandsTypes[commandIndex];
-                int worldID = commandsWorlds[commandIndex];
-                SpawnVoxel(new int3(position), type, worldID);
+                var world = commandsWorlds[commandIndex];
+                SpawnVoxel(new int3(position), type, world);
                 commandsPositions.RemoveAt(commandIndex);
                 commandsTypes.RemoveAt(commandIndex);
                 commandsWorlds.RemoveAt(commandIndex);
             }
         }
 
-        void SpawnVoxel(int3 spawnPosition, int voxelID, int worldID)
+        void SpawnVoxel(int3 spawnPosition, int voxelID, Entity world)
         {
-            var voxelDimensions = World.EntityManager.GetComponentData<World>(worldSpawnSystem.worlds[worldID]).voxelDimensions;
+            var voxelDimensions = World.EntityManager.GetComponentData<World>(world).voxelDimensions;
             var chunkPosition = VoxelRaycastSystem.GetChunkPosition(spawnPosition, voxelDimensions);// new float3(spawnPosition.x / 16, spawnPosition.y / 16, spawnPosition.z / 16);
             var localPosition = VoxelRaycastSystem.GetLocalPosition(spawnPosition, chunkPosition, voxelDimensions);
             //Debug.LogError("Spawning voxel of Type: " + spawnType + " M: " + spawnPosition.ToString() + " C: " + chunkPosition.ToString() + " L:" + localPosition);
@@ -93,14 +101,6 @@ namespace Zoxel.Voxels
             {
                 World.EntityManager.AddComponentData(foundChunk, new ChunkBuilder { });
             }
-        }
-
-
-        public static void QueueVoxel(float3 spawnPosition, int worldID, int voxelID)
-        {
-            commandsWorlds.Add(worldID);
-            commandsPositions.Add(new float3(math.floor(spawnPosition.x), math.floor(spawnPosition.y), math.floor(spawnPosition.z)));
-            commandsTypes.Add(voxelID);
         }
     }
 }

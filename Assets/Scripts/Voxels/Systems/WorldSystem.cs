@@ -43,6 +43,7 @@ namespace Zoxel.Voxels
         {
             worldArchtype = World.EntityManager.CreateArchetype(
                 typeof(World),
+                typeof(ZoxID),
                 typeof(Translation),
                 typeof(NonUniformScale),
                 typeof(Rotation),
@@ -54,12 +55,12 @@ namespace Zoxel.Voxels
         {
             Entities.WithAll<SpawnMapCommand>().ForEach((Entity e, ref SpawnMapCommand command) =>
             {
-                SpawnWorld(command.spawnID, command.spawnPosition, mapsMeta[command.mapID]);
+                SpawnWorld(command.spawnID, command.spawnPosition, mapsMeta[command.mapID], command.game);
                 World.EntityManager.DestroyEntity(e);
             });
             Entities.WithAll<RemoveMap>().ForEach((Entity e, ref RemoveMap command) =>
             {
-                DestroyWorld(command.spawnID);
+                DestroyWorld(command.map);
                 World.EntityManager.DestroyEntity(e);
             });
             Entities.WithAll<UpdateModelCommand>().ForEach((Entity e, ref UpdateModelCommand command) =>
@@ -75,7 +76,7 @@ namespace Zoxel.Voxels
         }
 
         #region Model
-        public int SpawnModel(float3 spawnPosition, VoxDatam model)
+        public Entity SpawnModel(float3 spawnPosition, VoxDatam model)
         {
             if (model != null)
             {
@@ -85,11 +86,11 @@ namespace Zoxel.Voxels
                 worldLookups.Add(id,new WorldChunkMap{ chunks = new Dictionary<int3, Entity>() });
                 World.EntityManager.SetComponentData(world, new Translation { Value = spawnPosition });
                 UpdateModel(world, model.data, null, id);
-                return id;
+                return world;
             }
             else 
             {
-                return 0;
+                return new Entity();
             }
         }
 
@@ -116,11 +117,11 @@ namespace Zoxel.Voxels
                 models.Add(id, model);
             }
             float3 scale = new float3(model.scale.x / 16f, model.scale.y / 16f, model.scale.z / 16f);
+            World.EntityManager.SetComponentData(world, new ZoxID { id = id });
             World worldComponent = new World
             {
-                id = id,
-                chunkIDs = new BlitableArray<int>(0, Unity.Collections.Allocator.Persistent),
-                chunkPositions = new BlitableArray<int3>(0, Unity.Collections.Allocator.Persistent),
+                //chunkIDs = new BlitableArray<int>(0, Unity.Collections.Allocator.Persistent),
+                //chunkPositions = new BlitableArray<int3>(0, Unity.Collections.Allocator.Persistent),
                 scale = scale,
                 voxelDimensions = model.size,
                 modelID = model.id
@@ -142,6 +143,7 @@ namespace Zoxel.Voxels
                 World.EntityManager, 
                 chunkSpawnSystem, 
                 true, 
+                world,
                 ref worldComponent,
                 int3.Zero(),
                 renderDistance,
@@ -163,10 +165,10 @@ namespace Zoxel.Voxels
             return 0;
         }*/
 
-        public int SpawnMap(MapDatam map)
+        public int SpawnMap(MapDatam map, Entity game)
         {
             int newID = Bootstrap.GenerateUniqueID();
-            SpawnWorld(newID, map.worldPosition, map);
+            SpawnWorld(newID, map.worldPosition, map, game);
             return newID;
         }
         private void UpdateMap(Entity worldEntity, MapDatam map, int id)
@@ -188,7 +190,6 @@ namespace Zoxel.Voxels
             World.EntityManager.SetComponentData(worldEntity, new NonUniformScale { Value = map.worldScale });
             World world = new World
             {
-                id = id,
                 chunkIDs = new BlitableArray<int>(0, Unity.Collections.Allocator.Persistent),
                 chunkPositions = new BlitableArray<int3>(0, Unity.Collections.Allocator.Persistent),
                 scale = map.worldScale,
@@ -196,10 +197,11 @@ namespace Zoxel.Voxels
                 bounds = 32
             };
             World.EntityManager.SetComponentData(worldEntity, world);
+            World.EntityManager.SetComponentData(worldEntity, new ZoxID { id = id });
             if (Application.isPlaying == false)
             {
-                WorldStreamSystem.StreamChunksIn(World.EntityManager,chunkSpawnSystem, models.ContainsKey(world.id),
-                     ref world, int3.Zero(), Bootstrap.GetRenderDistance(), Bootstrap.GetLoadDistance());
+                WorldStreamSystem.StreamChunksIn(World.EntityManager,chunkSpawnSystem, world.modelID != 0,
+                    worldEntity, ref world, int3.Zero(), Bootstrap.GetRenderDistance(), Bootstrap.GetLoadDistance());
             }
         }
         #endregion
@@ -221,23 +223,20 @@ namespace Zoxel.Voxels
                 VoxelRaycastSystem.WorldPositionToVoxelPosition(position.Value),
                 world.voxelDimensions);
             chunkPosition.y = 0;
-            WorldStreamSystem.StreamChunksIn(World.EntityManager, chunkSpawnSystem, models.ContainsKey(world.id), 
-                ref world, chunkPosition, Bootstrap.GetRenderDistance(), Bootstrap.GetLoadDistance());
+            WorldStreamSystem.StreamChunksIn(World.EntityManager, chunkSpawnSystem, world.modelID != 0, 
+                worldEntity, ref world, chunkPosition, Bootstrap.GetRenderDistance(), Bootstrap.GetLoadDistance());
             World.EntityManager.SetComponentData(worldEntity, world);
         }
 
-        public void SetWorldPosition(int streamerID, int worldID, int3 newCentralPosition)
+        public void SetWorldPosition(int streamerID, Entity worldEntity, int3 newCentralPosition)
         {
-            if (worlds.ContainsKey(worldID) == false)
+            if (World.EntityManager.Exists(worldEntity))
             {
-                //Debug.LogError(worldID + " not found world.");
-                return;
+                World world = World.EntityManager.GetComponentData<World>(worldEntity);
+                WorldStreamSystem.StreamChunksIn(World.EntityManager,chunkSpawnSystem, world.modelID != 0, 
+                    worldEntity, ref world, newCentralPosition, Bootstrap.GetRenderDistance(), Bootstrap.GetLoadDistance());
+                World.EntityManager.SetComponentData(worldEntity, world);
             }
-            Entity worldEntity = worlds[worldID];
-            World world = World.EntityManager.GetComponentData<World>(worldEntity);
-            WorldStreamSystem.StreamChunksIn(World.EntityManager,chunkSpawnSystem, models.ContainsKey(world.id), 
-                ref world, newCentralPosition, Bootstrap.GetRenderDistance(), Bootstrap.GetLoadDistance());//, maps[worldID].isCentredWorld);
-            World.EntityManager.SetComponentData(worldEntity, world);
         }
 
 
@@ -266,12 +265,13 @@ namespace Zoxel.Voxels
         {
             public int mapID;
             public int spawnID;
+            public Entity game;
             public float3 spawnPosition;
         }
 
         public struct RemoveMap : IComponentData
         {
-            public int spawnID;
+            public Entity map;
         }
 
         public struct UpdateModelCommand : IComponentData
@@ -282,7 +282,7 @@ namespace Zoxel.Voxels
             public int skeletonID;
         }
 
-        public int QueueMap(float3 spawnPosition, MapDatam map)
+        public int QueueMap(float3 spawnPosition, MapDatam map, Entity game)
         {
             int newID = Bootstrap.GenerateUniqueID();
             Entity e = World.EntityManager.CreateEntity();
@@ -290,7 +290,8 @@ namespace Zoxel.Voxels
             {
                 spawnID = newID,
                 mapID = map.id,
-                spawnPosition = spawnPosition
+                spawnPosition = spawnPosition,
+                game = game
             });
             return newID;
         }
@@ -307,16 +308,18 @@ namespace Zoxel.Voxels
             });
         }
 
-        private void SpawnWorld(int id, float3 spawnPosition, MapDatam map) //, VoxDatam model = null)
+        private void SpawnWorld(int id, float3 spawnPosition, MapDatam map, Entity gameEntity)
         {
-            if (map != null) // || model != null)
+            if (map != null)
             {
-                // float3 streamPosition = float3.zero;    // use this for streaming cameras
                 Entity world = World.EntityManager.CreateEntity(worldArchtype);
                 worlds.Add(id, world);
                 worldLookups.Add(id,new WorldChunkMap{ chunks = new Dictionary<int3, Entity>() });
                 World.EntityManager.SetComponentData(world, new Translation { Value = spawnPosition });
                 UpdateMap(world, map, id);
+                Game game = World.EntityManager.GetComponentData<Game>(gameEntity);
+                game.map = world;
+                World.EntityManager.SetComponentData(gameEntity, game);
             }
             else
             {
@@ -341,38 +344,41 @@ namespace Zoxel.Voxels
             worldLookups.Clear();
         }
 
-        public void DestroyWorld(int worldID)
+        public void DestroyWorld(Entity worldEntity)
         {
-            chunkSpawnSystem.DestroyWorld(worldID);
-            if (worlds.ContainsKey(worldID))
+            if (World.EntityManager.Exists(worldEntity) == false)
             {
-                if (World.EntityManager.HasComponent<World>(worlds[worldID]))
+                return;
+            }
+            int worldID = World.EntityManager.GetComponentData<ZoxID>(worldEntity).id;
+            chunkSpawnSystem.DestroyWorld(worldEntity);
+            if (World.EntityManager.Exists(worldEntity))
+            {
+                if (World.EntityManager.HasComponent<World>(worldEntity))
                 {
-                    World world = World.EntityManager.GetComponentData<World>(worlds[worldID]);
-                    for (int i = 0; i < world.chunkIDs.Length; i++)
+                    World world = World.EntityManager.GetComponentData<World>(worldEntity);
+                    world.Dispose();
+                    /*for (int i = 0; i < world.chunkIDs.Length; i++)
                     {
                         chunkSpawnSystem.RemoveChunk(world.chunkIDs[i]);
-                    }
+                    }*/
                 }
-                if (World.EntityManager.Exists(worlds[worldID]))
-                {
-                    World.EntityManager.DestroyEntity(worlds[worldID]);
-                }
-                worlds.Remove(worldID);
-                worldLookups.Remove(worldID);
+                World.EntityManager.DestroyEntity(worldEntity);
             }
+            worlds.Remove(worldID);
+            worldLookups.Remove(worldID);
         }
+
         public void DestroyWorldWeakly(int worldID)
         {
-            //chunkSpawnSystem.DestroyWorld(worldID);
             if (worlds.ContainsKey(worldID))
             {
                 if (World.EntityManager.HasComponent<World>(worlds[worldID]))
                 {
                     World world = World.EntityManager.GetComponentData<World>(worlds[worldID]);
-                    for (int i = 0; i < world.chunkIDs.Length; i++)
+                    for (int i = 0; i < world.chunks.Length; i++)
                     {
-                        chunkSpawnSystem.RemoveChunk(world.chunkIDs[i]);
+                        chunkSpawnSystem.RemoveChunk(world.chunks[i]);
                     }
                 }
                 worlds.Remove(worldID);

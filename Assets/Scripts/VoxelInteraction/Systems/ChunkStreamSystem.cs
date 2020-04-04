@@ -76,7 +76,7 @@ namespace Zoxel.Voxels
                     streamer.didUpdate = 0;
                     // tell worldspawner to update
                     // move this stuff to here
-                    worldSpawnSystem.SetWorldPosition(zoxID.id, streamer.worldID, streamer.chunkPosition);
+                    worldSpawnSystem.SetWorldPosition(zoxID.id, streamer.world, streamer.chunkPosition);
                 }
             });
         }

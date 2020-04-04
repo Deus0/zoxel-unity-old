@@ -178,7 +178,7 @@ namespace Zoxel
             if (caster.DidCast() == 1)
             {
                 //Debug.LogError("Spawning voxel at: " + caster.voxelPosition.ToString());
-                VoxelSpawnSystem.QueueVoxel(caster.voxelPosition, worldBound.worldID, voxelMeta.Value.id);
+                VoxelSpawnSystem.QueueVoxel(caster.voxelPosition, worldBound.world, voxelMeta.Value.id);
             }
         }
 
@@ -267,7 +267,7 @@ namespace Zoxel
                 {
                     clanID = Bootstrap.GenerateUniqueID();
                 }
-                CharacterSpawnSystem.SpawnNPC(World.EntityManager, worldBound.worldID, monsterID, clanID, caster.voxelPosition, zoxID.id);
+                CharacterSpawnSystem.SpawnNPC(World.EntityManager, worldBound.world, monsterID, clanID, caster.voxelPosition, zoxID.id);
                 /*if (datam.Value.isSpawnHostile != 1)
                 {
                     Entity npc = characterSpawnSystem.characters[spawnedID];

@@ -11,13 +11,14 @@ namespace Zoxel.Voxels
     {
         public ChunkSpawnSystem chunkSpawnSystem;
         public WorldSpawnSystem worldSpawnSystem;
+        public ChunkRenderSystem chunkRenderSystem;
 
-        public static void CreateWorldUpdate(EntityManager EntityManager, int worldID, 
+        public static void CreateWorldUpdate(EntityManager EntityManager, Entity world, 
             List<int> worldsChunkIDs, List<int> oldChunkIDs, Dictionary<int, bool> allRenders)
         {
             Entity e = EntityManager.CreateEntity();
             WorldStreamCommand worldStreamCommand = new WorldStreamCommand { };
-            worldStreamCommand.worldID = worldID;
+            worldStreamCommand.world = world;
             worldStreamCommand.SetIDs(worldsChunkIDs, oldChunkIDs);
             worldStreamCommand.SetRenders(allRenders);
             EntityManager.AddComponentData(e, worldStreamCommand);
@@ -27,11 +28,6 @@ namespace Zoxel.Voxels
         {
             Entities.WithAll<WorldStreamCommand>().ForEach((Entity e, ref WorldStreamCommand command) =>
             {
-                /*if (command.isModel == 1) {
-                    Debug.LogError("Updating model");
-                } else {
-                    Debug.LogError("Updating world");
-                }*/
                 UpdateWorld(command);
                 command.Dispose();
                 World.EntityManager.DestroyEntity(e);
@@ -41,7 +37,7 @@ namespace Zoxel.Voxels
         void UpdateWorld(WorldStreamCommand command)
         {
             // , Dictionary<int, bool> allRenders
-            Entity worldEntity = worldSpawnSystem.worlds[command.worldID];
+            Entity worldEntity = command.world;
             World world = World.EntityManager.GetComponentData<World>(worldEntity);
             var ids = command.newIDs.ToArray();
             if (command.isModel == 1)
@@ -51,7 +47,7 @@ namespace Zoxel.Voxels
                 {
                     var chunkEntity = chunkSpawnSystem.chunks[ids[i]];
                     Chunk chunk = World.EntityManager.GetComponentData<Chunk>(chunkEntity);
-                    chunkSpawnSystem.AddRenderEntitiesToChunk(world, chunkEntity, ref chunk);
+                    chunkRenderSystem.AddRenderEntitiesToChunk(world, chunkEntity, ref chunk);
                     World.EntityManager.SetComponentData(chunkSpawnSystem.chunks[ids[i]], chunk);
                 }
             }
@@ -79,7 +75,6 @@ namespace Zoxel.Voxels
                         Chunk chunk = World.EntityManager.GetComponentData<Chunk>(chunkEntity);
                         if (chunk.chunkRenders.Length == 0 && renders[i] == 1)
                         {
-                            chunkSpawnSystem.AddRenderEntitiesToChunk(world, chunkEntity, ref chunk);
 
                             if (World.EntityManager.HasComponent<ChunkBuilder>(chunkEntity))
                             {
@@ -89,12 +84,19 @@ namespace Zoxel.Voxels
                             {
                                 World.EntityManager.AddComponentData(chunkEntity, new ChunkBuilder { });
                             }
+                            if (chunkRenderSystem != null)
+                            {
+                                chunkRenderSystem.AddRenderEntitiesToChunk(world, chunkEntity, ref chunk);
+                            }
                         }
                         else if (chunk.chunkRenders.Length != 0 && renders[i] == 0)
                         {
-                            chunkSpawnSystem.RemoveRenderEntitiesFromChunk(ref chunk);
+                            if (chunkRenderSystem != null)
+                            {
+                                chunkRenderSystem.RemoveRenderEntitiesFromChunk(ref chunk);
+                            }
                         }
-                        World.EntityManager.SetComponentData(chunkSpawnSystem.chunks[ids[i]], chunk);
+                        World.EntityManager.SetComponentData(chunkEntity, chunk);
                     }
                 }
             }
@@ -102,9 +104,8 @@ namespace Zoxel.Voxels
         }
 
         public static void StreamChunksIn(EntityManager EntityManager, ChunkSpawnSystem chunkSpawnSystem,
-            bool isModel, ref World world, int3 centerWorldPosition, float renderSize, float loadSize, bool isCentredWorld = true)
+            bool isModel, Entity worldEntity, ref World world, int3 centerWorldPosition, float renderSize, float loadSize, bool isCentredWorld = true)
         {
-            //bool isModel = worldSpawnSystem.models.ContainsKey(world.id);
             world.centralPosition = centerWorldPosition;
             int boundsSize =  (int)math.max(renderSize, loadSize);
             // Calculate Bounds
@@ -132,55 +133,6 @@ namespace Zoxel.Voxels
             lowerBounds.x = (int)lowerBounds.x;
             lowerBounds.y = (int)lowerBounds.y;
             lowerBounds.z = (int)lowerBounds.z;
-            /*if (lowerBounds.x > 2048)
-            {
-                lowerBounds.x = 0;
-            }
-            if (lowerBounds.x < -2048)
-            {
-                lowerBounds.x = 0;
-            }
-            if (lowerBounds.y > 2048)
-            {
-                lowerBounds.y = 0;
-            }
-            if (lowerBounds.y < -2048)
-            {
-                lowerBounds.y = 0;
-            }
-            if (lowerBounds.z > 2048)
-            {
-                lowerBounds.z = 0;
-            }
-            if (lowerBounds.z < -2048)
-            {
-                lowerBounds.z = 0;
-            }
-
-            if (upperBounds.x > 2048)
-            {
-                upperBounds.x = 0;
-            }
-            if (upperBounds.x < -2048)
-            {
-                upperBounds.x = 0;
-            }
-            if (upperBounds.y > 2048)
-            {
-                upperBounds.y = 0;
-            }
-            if (upperBounds.y < -2048)
-            {
-                upperBounds.y = 0;
-            }
-            if (upperBounds.z > 2048)
-            {
-                upperBounds.z = 0;
-            }
-            if (upperBounds.z < -2048)
-            {
-                upperBounds.z = 0;
-            }*/
 
             for (spawnChunkPosition.x = lowerBounds.x; spawnChunkPosition.x <= upperBounds.x; spawnChunkPosition.x++)
             {
@@ -238,7 +190,7 @@ namespace Zoxel.Voxels
                 }
             }
             // finally, spawn the chunks
-            int[] newIDs = chunkSpawnSystem.SpawnChunks(world.id, newPositions.ToArray(), newRenders.ToArray());
+            int[] newIDs = chunkSpawnSystem.SpawnChunks(worldEntity, newPositions.ToArray(), newRenders.ToArray());
             worldsChunkIDs.AddRange(newIDs); // add new ids here for added chunk positions
             // Remove chunks that arn't in onlyPositions list
             if (worldsChunkIDs.Count != worldChunkPositions.Count)
@@ -295,7 +247,7 @@ namespace Zoxel.Voxels
                 world.chunkPositions[a] = position; //worldChunkPositions[i];
                 a++;
             }
-            WorldStreamSystem.CreateWorldUpdate(EntityManager, world.id, worldsChunkIDs, oldChunkIDs, allRenders);
+            WorldStreamSystem.CreateWorldUpdate(EntityManager, worldEntity, worldsChunkIDs, oldChunkIDs, allRenders);
         }
 
 

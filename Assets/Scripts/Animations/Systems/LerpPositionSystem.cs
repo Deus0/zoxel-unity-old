@@ -22,22 +22,22 @@ namespace Zoxel
 
             public void Execute(ref PositionLerper lerper, ref Translation position)
             {
-                position.Value = math.lerp(lerper.positionBegin, lerper.positionEnd,
-                    (time - lerper.createdTime) / lerper.lifeTime);
+                var timePassed = time - lerper.createdTime;
+                if (timePassed > lerper.lifeTime && lerper.loop == 1)
+                {
+                    var tempEnd = lerper.positionEnd;
+                    lerper.positionEnd = lerper.positionBegin;
+                    lerper.positionBegin = tempEnd;
+                    lerper.createdTime = time;
+                    timePassed = 0;
+                }
+                position.Value = math.lerp(lerper.positionBegin, lerper.positionEnd, timePassed / lerper.lifeTime);
             }
         }
         protected override JobHandle OnUpdate(JobHandle inputDeps)
         {
             return new ForceJob { time = UnityEngine.Time.time }.Schedule(this, inputDeps);
         }
-    }
-
-    public struct PositionEntityLerper : IComponentData
-    {
-        public float createdTime;
-        public float lifeTime;
-        public float3 positionBegin;
-        public Entity positionEnd;
     }
     /// <summary>
     /// Add force to bodies

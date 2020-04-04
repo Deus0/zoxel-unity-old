@@ -44,7 +44,7 @@ namespace Zoxel
                     var skeletonPosition = World.EntityManager.GetComponentData<Translation>(bone.skeleton);
                     var newPosition = math.rotate(skeletonRotation.Value, bone.position);
                     DebugLines.DrawCubeLines(skeletonPosition.Value + newPosition, skeleton.mulRotation,
-                                new float3(boneDebugSize, boneDebugSize, boneDebugSize), Color.red);
+                                new float3(boneDebugSize, boneDebugSize, boneDebugSize) * 0.6f, Color.red);
                 }
             });
             

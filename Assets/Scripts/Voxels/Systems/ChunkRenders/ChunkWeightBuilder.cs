@@ -11,31 +11,28 @@ namespace Zoxel.Voxels
     public class ChunkWeightBuilder : JobComponentSystem
     {
         [BurstCompile]
-        struct ChunkMeshBuilderJob : IJobForEach<ChunkRendererBuilder, ChunkRenderer> //IJobForEach<ChunkRenderer>
+        struct ChunkMeshBuilderJob : IJobForEach<ChunkRendererBuilder, ChunkRenderer, ChunkRendererWeights>
         {
-            public void Execute(ref ChunkRendererBuilder chunkRendererBuilder, ref ChunkRenderer chunk)   //Entity entity, int index,  
+            public void Execute(ref ChunkRendererBuilder chunkRendererBuilder, ref ChunkRenderer chunk, ref ChunkRendererWeights chunkRendererWeights)   //Entity entity, int index,  
             {
                 if ((chunkRendererBuilder.state == 3) && 
                     (chunk.hasWeights == 1))
                 {
-                    /*if (ChunkSpawnSystem.isDebugLog)
-                    {
-                        UnityEngine.Debug.LogError("Processing ChunkWeightBuilder meshes.");
-                    }*/
                     chunkRendererBuilder.state = 4;
-                    // for each bone
-                    for (int i = 0; i < chunk.bonePositions.Length; i++)
+                    // for each bone - give it weight for the distance it is to the positions
+                    for (int i = 0; i < chunkRendererWeights.bonePositions.Length; i++)
                     {
-                        float influence = chunk.boneInfluences[i];
+                        var bonePosition = chunkRendererWeights.bonePositions[i];
+                        float influence = chunkRendererWeights.boneInfluences[i];
                         //DrawDebugSphere(chunk.bones[i], influence);
                         // for each bone, fight weights within radius using vertexes
                         for (int j = 0; j < chunk.vertices.Length; j++)
                         {
-                            float distanceTo = math.distance(chunk.vertices[j].position, chunk.bonePositions[i]);
+                            float distanceTo = math.distance(chunk.vertices[j].position, bonePosition);
                             if (distanceTo < influence)
                             {
-                                chunk.boneWeights0[j] = 1;
-                                chunk.boneWeightsIndexes0[j] = i;
+                                chunkRendererWeights.boneWeights0[j] = 1;
+                                chunkRendererWeights.boneWeightsIndexes0[j] = i;
                             }
                         }
                     }

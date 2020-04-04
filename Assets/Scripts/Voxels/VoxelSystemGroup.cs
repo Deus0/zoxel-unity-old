@@ -16,7 +16,7 @@ namespace Zoxel.Voxels
         ChunkMeshBuilderSystem chunkMeshBuildSystem;
         ChunkMeshEndingSystem chunkMeshEndSystem;
         ChunkSideCullingSystem chunkSideCullSystem;
-        ChunkToRendererSystem chunkUpdateSystem;
+        ChunkToRendererSystem chunkToRendererSystem;
         ChunkWeightBuilder chunkWeightBuilder;
         ChunkSidesSystem chunkSideSystem;
         VoxelRaycastSystem voxelRaycastSystem;
@@ -29,6 +29,9 @@ namespace Zoxel.Voxels
         private ChunkMapBuilderSystem chunkMapBuilderSystem;
         public ChunkMapCompleterSystem chunkMapCompleterSystem;
         private ChunkRendererAnimationSystem chunkRendererAnimationSystem;
+        private ChunkRenderSystem chunkRenderSystem;
+        private DebugChunkSystem debugChunkSystem;
+        private RenderSystem renderSystem;
 
         public void Clear()
         {
@@ -52,8 +55,8 @@ namespace Zoxel.Voxels
                 voxelSpawnSystem.meta.Add(voxel.Value.id, voxel);
                 voxelSpawnSystem.voxelIDs.Add(voxel.Value.id);
             }
-            chunkUpdateSystem.meta = voxelSpawnSystem.meta;
-            chunkUpdateSystem.voxelIDs = voxelSpawnSystem.voxelIDs;
+            chunkToRendererSystem.meta = voxelSpawnSystem.meta;
+            chunkToRendererSystem.voxelIDs = voxelSpawnSystem.voxelIDs;
 
             worldSpawnSystem.mapsMeta = new Dictionary<int, MapDatam>();
             foreach (MapDatam map in maps)
@@ -90,55 +93,62 @@ namespace Zoxel.Voxels
         {
             // entity spawn
             worldSpawnSystem = space.GetOrCreateSystem<WorldSpawnSystem>();
-            chunkSpawnSystem = space.GetOrCreateSystem<ChunkSpawnSystem>();
-            voxelSpawnSystem = space.GetOrCreateSystem<VoxelSpawnSystem>();
             AddSystemToUpdateList(worldSpawnSystem);
+            chunkSpawnSystem = space.GetOrCreateSystem<ChunkSpawnSystem>();
             AddSystemToUpdateList(chunkSpawnSystem);
+            chunkRenderSystem = space.GetOrCreateSystem<ChunkRenderSystem>();
+            AddSystemToUpdateList(chunkRenderSystem);
+            voxelSpawnSystem = space.GetOrCreateSystem<VoxelSpawnSystem>();
             AddSystemToUpdateList(voxelSpawnSystem);
             
             // mesh gen
-            chunkMeshBuildSystem = space.GetOrCreateSystem<ChunkMeshBuilderSystem>();
-            chunkMeshEndSystem = space.GetOrCreateSystem<ChunkMeshEndingSystem>();
-            chunkSideCullSystem = space.GetOrCreateSystem<ChunkSideCullingSystem>();
-            chunkUpdateSystem = space.GetOrCreateSystem<ChunkToRendererSystem>();
             chunkSideSystem = space.GetOrCreateSystem<ChunkSidesSystem>();
-            AddSystemToUpdateList(chunkMeshBuildSystem);
-            AddSystemToUpdateList(chunkMeshEndSystem);
-            AddSystemToUpdateList(chunkSideCullSystem);
-            AddSystemToUpdateList(chunkUpdateSystem);
             AddSystemToUpdateList(chunkSideSystem);
-            //chunkBuildStarterSystem = space.GetOrCreateSystem<ChunkBuildStarterSystem>();
-            //AddSystemToUpdateList(chunkBuildStarterSystem);
+            chunkSideCullSystem = space.GetOrCreateSystem<ChunkSideCullingSystem>();
+            AddSystemToUpdateList(chunkSideCullSystem);
+            chunkToRendererSystem = space.GetOrCreateSystem<ChunkToRendererSystem>();
+            AddSystemToUpdateList(chunkToRendererSystem);
+            chunkMeshBuildSystem = space.GetOrCreateSystem<ChunkMeshBuilderSystem>();
+            AddSystemToUpdateList(chunkMeshBuildSystem);
+            chunkMeshEndSystem = space.GetOrCreateSystem<ChunkMeshEndingSystem>();
+            AddSystemToUpdateList(chunkMeshEndSystem);
+
             chunkWeightBuilder = space.GetOrCreateSystem<ChunkWeightBuilder>();
             AddSystemToUpdateList(chunkWeightBuilder);
-            // player x voxel systems
-            chunkStreamSystem = space.GetOrCreateSystem<ChunkStreamSystem>();
-            chunkStreamEndSystem = space.GetOrCreateSystem<ChunkStreamEndSystem>();
-            voxelRaycastSystem = space.GetOrCreateSystem<VoxelRaycastSystem>();
-            voxelPreviewSystem = space.GetOrCreateSystem<VoxelPreviewSystem>();
-            characterRaycastSystem = space.GetOrCreateSystem<CharacterRaycastSystem>();
-            AddSystemToUpdateList(chunkStreamSystem);
-            AddSystemToUpdateList(chunkStreamEndSystem);
-            AddSystemToUpdateList(voxelRaycastSystem);
-            AddSystemToUpdateList(voxelPreviewSystem);
-            AddSystemToUpdateList(characterRaycastSystem);
+
+            // maps
             chunkMapStarterSystem = space.GetOrCreateSystem<ChunkMapStarterSystem>();
             AddSystemToUpdateList(chunkMapStarterSystem);
-
-            worldStreamSystem = space.GetOrCreateSystem<WorldStreamSystem>();
-            AddSystemToUpdateList(worldStreamSystem);
-
             chunkMapBuilderSystem = space.GetOrCreateSystem<ChunkMapBuilderSystem>();
             AddSystemToUpdateList(chunkMapBuilderSystem);
-
             chunkMapCompleterSystem = space.GetOrCreateSystem<ChunkMapCompleterSystem>();
             AddSystemToUpdateList(chunkMapCompleterSystem);
 
-            chunkRendererAnimationSystem = space.GetOrCreateSystem<ChunkRendererAnimationSystem>();
-            AddSystemToUpdateList(chunkRendererAnimationSystem);
+            // player streaming
+            worldStreamSystem = space.GetOrCreateSystem<WorldStreamSystem>();
+            AddSystemToUpdateList(worldStreamSystem);
+            chunkStreamSystem = space.GetOrCreateSystem<ChunkStreamSystem>();
+            AddSystemToUpdateList(chunkStreamSystem);
+            chunkStreamEndSystem = space.GetOrCreateSystem<ChunkStreamEndSystem>();
+            AddSystemToUpdateList(chunkStreamEndSystem);
+
+            // interact
+            voxelRaycastSystem = space.GetOrCreateSystem<VoxelRaycastSystem>();
+            AddSystemToUpdateList(voxelRaycastSystem);
+            voxelPreviewSystem = space.GetOrCreateSystem<VoxelPreviewSystem>();
+            AddSystemToUpdateList(voxelPreviewSystem);
+            characterRaycastSystem = space.GetOrCreateSystem<CharacterRaycastSystem>();
+            AddSystemToUpdateList(characterRaycastSystem);
             
+            renderSystem = space.GetOrCreateSystem<RenderSystem>();
+            AddSystemToUpdateList(renderSystem);
 
-
+            if (Bootstrap.instance.isAnimateRenders)
+            {
+                chunkRendererAnimationSystem = space.GetOrCreateSystem<ChunkRendererAnimationSystem>();
+                AddSystemToUpdateList(chunkRendererAnimationSystem);
+            }
+            
             if (Bootstrap.DebugChunks)
             {
                 debugChunkSystem = space.GetOrCreateSystem<DebugChunkSystem>();
@@ -150,7 +160,6 @@ namespace Zoxel.Voxels
             }
             SetLinks();
         }
-        private DebugChunkSystem debugChunkSystem;
 
         void SetLinks()
         {
@@ -159,7 +168,6 @@ namespace Zoxel.Voxels
             chunkSpawnSystem.voxelSpawnSystem = voxelSpawnSystem;
             voxelSpawnSystem.worldSpawnSystem = worldSpawnSystem;
             voxelSpawnSystem.chunkSpawnSystem = chunkSpawnSystem;
-            chunkUpdateSystem.chunkSpawnSystem = chunkSpawnSystem;
             voxelRaycastSystem.worldSpawnSystem = worldSpawnSystem;
             voxelRaycastSystem.chunkSpawnSystem = chunkSpawnSystem;
             characterRaycastSystem.voxelRaycastSystem = voxelRaycastSystem;
@@ -170,6 +178,14 @@ namespace Zoxel.Voxels
             //chunkMeshEndSystem.chunkSpawnSystem = chunkSpawnSystem;
             worldStreamSystem.worldSpawnSystem = worldSpawnSystem;
             worldStreamSystem.chunkSpawnSystem = chunkSpawnSystem;
+            worldStreamSystem.chunkRenderSystem = chunkRenderSystem;
+            chunkToRendererSystem.chunkSpawnSystem = chunkSpawnSystem;
+            chunkToRendererSystem.chunkRenderSystem = chunkRenderSystem;
+            if (chunkRenderSystem != null)
+            {
+                chunkRenderSystem.worldSpawnSystem = worldSpawnSystem;
+                chunkRenderSystem.voxelSpawnSystem = voxelSpawnSystem;
+            }
         }
 
         public void CombineWithCameras(CameraSystemGroup cameraSystemGroup)

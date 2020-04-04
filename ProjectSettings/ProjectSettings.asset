@@ -12,11 +12,12 @@ PlayerSettings:
   targetDevice: 2
   useOnDemandResources: 0
   accelerometerFrequency: 60
-  companyName: MrPenguin
-  productName: SlimeWars
+  companyName: Zeltex
+  productName: Zoxel
   defaultCursor: {fileID: 0}
   cursorHotspot: {x: 0, y: 0}
-  m_SplashScreenBackgroundColor: {r: 0, g: 0, b: 0, a: 1}
+  m_SplashScreenBackgroundColor: {r: 0.027344167, g: 0.007812619, b: 0.039078355,
+    a: 1}
   m_ShowUnitySplashScreen: 1
   m_ShowUnitySplashLogo: 1
   m_SplashScreenOverlayOpacity: 1
@@ -282,7 +283,7 @@ PlayerSettings:
   - m_BuildTarget: 
     m_Icons:
     - serializedVersion: 2
-      m_Icon: {fileID: 2800000, guid: dd86ce1189672d14794642f33a3b03d8, type: 3}
+      m_Icon: {fileID: 2800000, guid: cfbc78026c44eb46abf63f80a1a7e56e, type: 3}
       m_Width: 128
       m_Height: 128
       m_Kind: 0
@@ -659,8 +660,7 @@ PlayerSettings:
   ps4IncludedModules: []
   ps4attribVROutputEnabled: 0
   monoEnv: 
-  splashScreenBackgroundSourceLandscape: {fileID: 21300000, guid: dd86ce1189672d14794642f33a3b03d8,
-    type: 3}
+  splashScreenBackgroundSourceLandscape: {fileID: 0}
   splashScreenBackgroundSourcePortrait: {fileID: 0}
   blurSplashScreenBackground: 0
   spritePackerPolicy: 
@@ -693,7 +693,7 @@ PlayerSettings:
     Android: 1
     Standalone: 0
   il2cppCompilerConfiguration:
-    Standalone: 1
+    Standalone: 0
   managedStrippingLevel:
     Standalone: 3
   incrementalIl2cppBuild: {}

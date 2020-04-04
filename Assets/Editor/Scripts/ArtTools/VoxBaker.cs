@@ -23,7 +23,7 @@ namespace Zoxel
         List<System.Type> types;
         private VoxDatam bakedVoxDatam;
         public float spawnScale = 1;
-        private int worldID = 0;
+        private Entity world;
 
         // Add menu named "My Window" to the Window menu
         [MenuItem("Zoxel/VoxBaker")]
@@ -45,8 +45,6 @@ namespace Zoxel
         }
         public void OnDisable()
         {
-            //Debug.Log("Disabling Vox Baker.");
-            worldID = 0;
             DestroyECS();
         }
 
@@ -71,30 +69,21 @@ namespace Zoxel
                 {
                     if (GUILayout.Button("Spawn Mesh"))
                     {
-                        worldID = 0;
                         InitECS();
                         BakeMesh();
                     }
-                    /*if (GUILayout.Button("Spawn Oldschool Mesh"))
-                    {
-                        SkinnedMeshRenderer skinnyMesh = CreateSkinny().GetComponent<SkinnedMeshRenderer>();
-                        voxDatam.skeleton.BakeMeshWeights(skinnyMesh);
-                        VoxBaker.SaveMesh(skinnyMesh.sharedMesh);
-                    }*/
                 }
                 else
                 {
-                    /*if (worldID == 0 && GUILayout.Button("Test World"))
+                    if (!space.EntityManager.Exists(world))
                     {
-                        worldID = space.GetOrCreateSystem<VoxelSystemGroup>().worldSpawnSystem.QueueWorld(Unity.Mathematics.float3.zero, gameDatam.startingMap);
-
-                    }*/
-                    if ((bakedVoxDatam != voxDatam || worldID == 0) && GUILayout.Button("ReBake Mesh"))
-                    {
-                        BakeMesh();
-                        Repaint();
+                        if ((bakedVoxDatam != voxDatam) && GUILayout.Button("ReBake Mesh"))
+                        {
+                            BakeMesh();
+                            Repaint();
+                        }
                     }
-                    else if (worldID != 0 )
+                    else
                     {
                         if (mesh == null)
                         {
@@ -120,7 +109,6 @@ namespace Zoxel
                     if (GUILayout.Button("Despawn Mesh"))
                     {
                         mesh = null;
-                        worldID = 0;
                         DestroyECS();
                     }
                 }
@@ -189,12 +177,11 @@ namespace Zoxel
             foreach (KeyValuePair<int, Unity.Entities.Entity> KVP in chunkSpawnSystem.chunks)
             {
                 Chunk chunk = entityManager.GetComponentData<Chunk>(KVP.Value);
-                if (chunk.worldID == worldID)
+                if (chunk.world == world)
                 {
                     if (chunk.chunkRenders.Length > 0)
                     {
-                        mesh = entityManager.GetSharedComponentData<Unity.Rendering.RenderMesh>(
-                            chunkSpawnSystem.chunkRenders[chunk.chunkRenders[0]]).mesh;
+                        mesh = entityManager.GetSharedComponentData<Unity.Rendering.RenderMesh>(chunk.chunkRenders[0]).mesh;
                     }
                     else
                     {
@@ -257,14 +244,14 @@ namespace Zoxel
         void BakeMesh()
         {
             VoxelSystemGroup voxelSystemGroup = space.GetOrCreateSystem<VoxelSystemGroup>();
-            if (worldID != 0)
+            if (space.EntityManager.Exists(world))
             {
-                voxelSystemGroup.worldSpawnSystem.DestroyWorld(worldID);
+                voxelSystemGroup.worldSpawnSystem.DestroyWorld(world);
             }
             //voxDatam.bakedMaterial = voxMaterial;
-            worldID = voxelSystemGroup.worldSpawnSystem.SpawnModel(float3.zero, voxDatam);
+            world = voxelSystemGroup.worldSpawnSystem.SpawnModel(float3.zero, voxDatam);
             bakedVoxDatam = voxDatam;
-            space.EntityManager.SetComponentData(voxelSystemGroup.worldSpawnSystem.worlds[worldID],
+            space.EntityManager.SetComponentData(world,
                 new Unity.Transforms.NonUniformScale { Value = new float3(spawnScale, spawnScale, spawnScale) });
         }
 

@@ -21,7 +21,7 @@ namespace Zoxel.Voxels
                     ChunkTown chunkTown = World.EntityManager.GetComponentData<ChunkTown>(e);
                     if (chunkTown.buildings.Length > 0)
                     {
-                        CharacterSpawnSystem.SpawnNPC(World.EntityManager, chunk.worldID, chunkTown.buildings[0].characterID, chunkTown.buildings[0].position);
+                        CharacterSpawnSystem.SpawnNPC(World.EntityManager, chunk.world, chunkTown.buildings[0].characterID, chunkTown.buildings[0].position);
                     }
                     /*if ((Bootstrap.instance == null || !Bootstrap.instance.isBiomeMaps)
                         && World.EntityManager.HasComponent<Biome>(e))

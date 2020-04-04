@@ -85,8 +85,7 @@ namespace Zoxel
                         {
                             worldID = worldSpawnSystem.GetFirstWorldID();
                         }*/
-                        spawnedIDs.AddRange(CharacterSpawnSystem.SpawnNPCs(
-                                World.EntityManager, worldID, data.spawnedOne.Value.id, wavesClanID, data.spawnPosition, data.spawnAmount));
+                        //spawnedIDs.AddRange(CharacterSpawnSystem.SpawnNPCs(World.EntityManager, world, data.spawnedOne.Value.id, wavesClanID, data.spawnPosition, data.spawnAmount));
                         index++;
                     }
                 }

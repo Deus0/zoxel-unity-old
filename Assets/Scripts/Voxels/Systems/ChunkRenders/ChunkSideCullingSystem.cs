@@ -22,9 +22,9 @@ namespace Zoxel.Voxels
     public class ChunkSideCullingSystem : JobComponentSystem
 	{
 		[BurstCompile]
-		struct ChunkSideCullingJob : IJobForEach<ChunkRendererBuilder, ChunkRenderer>
+		struct ChunkSideCullingJob : IJobForEach<ChunkRendererBuilder, ChunkRenderer, ChunkSides>
 		{
-			public void Execute(ref ChunkRendererBuilder chunkRendererBuilder, ref ChunkRenderer chunk)
+			public void Execute(ref ChunkRendererBuilder chunkRendererBuilder, ref ChunkRenderer chunk, ref ChunkSides chunkSides)
 			{
 				if (chunkRendererBuilder.state == 1)
 				{
@@ -44,7 +44,7 @@ namespace Zoxel.Voxels
 							for (position.z = 0; position.z < chunk.Value.voxelDimensions.z; position.z++)
                             {
                                 normalVoxelIndex++;
-								if (normalVoxelIndex >= chunk.sidesUp.Length)
+								if (normalVoxelIndex >= chunkSides.sidesUp.Length)
 								{
 									//UnityEngine.Debug.LogError("normalVoxelIndex is too high at: " + normalVoxelIndex);
 									return;
@@ -54,12 +54,12 @@ namespace Zoxel.Voxels
 								if (meta == 0)
 								{
 									// if air don't draw anything!
-									chunk.sidesUp[normalVoxelIndex] = 0;
-									chunk.sidesDown[normalVoxelIndex] = 0;
-									chunk.sidesLeft[normalVoxelIndex] = 0;
-									chunk.sidesRight[normalVoxelIndex] = 0;
-									chunk.sidesForward[normalVoxelIndex] = 0;
-									chunk.sidesBack[normalVoxelIndex] = 0;
+									chunkSides.sidesUp[normalVoxelIndex] = 0;
+									chunkSides.sidesDown[normalVoxelIndex] = 0;
+									chunkSides.sidesLeft[normalVoxelIndex] = 0;
+									chunkSides.sidesRight[normalVoxelIndex] = 0;
+									chunkSides.sidesForward[normalVoxelIndex] = 0;
+									chunkSides.sidesBack[normalVoxelIndex] = 0;
 								}
 								// for all solid voxels
 								else
@@ -71,11 +71,11 @@ namespace Zoxel.Voxels
                                         voxelIndex = VoxelRaycastSystem.GetVoxelArrayIndex(position + int3.Up(), chunk.Value.voxelDimensions);// (int)(sizeY * sizeX * (position.x) + sizeY * (position.y + 1) + (position.z));
 										if (chunk.Value.voxels[voxelIndex] == 0)
 										{
-											chunk.sidesUp[normalVoxelIndex] = 1;
+											chunkSides.sidesUp[normalVoxelIndex] = 1;
 										}
 										else
 										{
-											chunk.sidesUp[normalVoxelIndex] = 0;
+											chunkSides.sidesUp[normalVoxelIndex] = 0;
 										}
 									}
 									else
@@ -83,11 +83,11 @@ namespace Zoxel.Voxels
                                         voxelIndex = (int)(chunk.Value.voxelDimensions.z * (position.x) + (position.z));  // get the XZ Index
 										if (chunk.Value.voxelsUp[voxelIndex] == 0)
 										{
-											chunk.sidesUp[normalVoxelIndex] = 1;
+											chunkSides.sidesUp[normalVoxelIndex] = 1;
 										}
 										else
 										{
-											chunk.sidesUp[normalVoxelIndex] = 0;
+											chunkSides.sidesUp[normalVoxelIndex] = 0;
 										}
 									}
 									if (position.y > 0)
@@ -97,11 +97,11 @@ namespace Zoxel.Voxels
                                         //voxelIndexDown = (int)(sizeY * sizeX * (position.x) + sizeY * (position.y - 1) + (position.z));
 										if (chunk.Value.voxels[voxelIndex] == 0)
 										{
-											chunk.sidesDown[normalVoxelIndex] = 1;
+											chunkSides.sidesDown[normalVoxelIndex] = 1;
 										}
 										else
 										{
-											chunk.sidesDown[normalVoxelIndex] = 0;
+											chunkSides.sidesDown[normalVoxelIndex] = 0;
 										}
 									}
 									else
@@ -110,11 +110,11 @@ namespace Zoxel.Voxels
                                         voxelIndex = (int)(chunk.Value.voxelDimensions.z * (position.x) + (position.z));
 										if (chunk.Value.voxelsDown[voxelIndex] == 0)
 										{
-											chunk.sidesDown[normalVoxelIndex] = 1;
+											chunkSides.sidesDown[normalVoxelIndex] = 1;
 										}
 										else
 										{
-											chunk.sidesDown[normalVoxelIndex] = 0;
+											chunkSides.sidesDown[normalVoxelIndex] = 0;
 										}
 									}
 									 // Z AXIS - Forward - Back
@@ -126,11 +126,11 @@ namespace Zoxel.Voxels
                                         //voxelIndexForward = (int)((position.z + 1) + sizeY * (position.y) + sizeY * sizeX * (position.x));
 										if (chunk.Value.voxels[voxelIndex] == 0)
 										{
-											chunk.sidesForward[normalVoxelIndex] = 1;
+											chunkSides.sidesForward[normalVoxelIndex] = 1;
 										}
 										else
 										{
-											chunk.sidesForward[normalVoxelIndex] = 0;
+											chunkSides.sidesForward[normalVoxelIndex] = 0;
 										}
 									}
 									else
@@ -138,11 +138,11 @@ namespace Zoxel.Voxels
                                         voxelIndex = (int)(chunk.Value.voxelDimensions.y * (position.x) + (position.y));
 										if (chunk.Value.voxelsForward[voxelIndex] == 0)
 										{
-											chunk.sidesForward[normalVoxelIndex] = 1;
+											chunkSides.sidesForward[normalVoxelIndex] = 1;
 										}
 										else
 										{
-											chunk.sidesForward[normalVoxelIndex] = 0;
+											chunkSides.sidesForward[normalVoxelIndex] = 0;
 										}
 										//chunk.sidesForward[voxelIndex] = 1;
 									}
@@ -154,11 +154,11 @@ namespace Zoxel.Voxels
                                         //voxelIndexBack = (int)((position.z - 1) + sizeY * (position.y) + sizeY * sizeX * (position.x));
 										if (chunk.Value.voxels[voxelIndex] == 0)
 										{
-											chunk.sidesBack[normalVoxelIndex] = 1;
+											chunkSides.sidesBack[normalVoxelIndex] = 1;
 										}
 										else
 										{
-											chunk.sidesBack[normalVoxelIndex] = 0;
+											chunkSides.sidesBack[normalVoxelIndex] = 0;
 										}
 									}
 									else
@@ -166,11 +166,11 @@ namespace Zoxel.Voxels
                                         voxelIndex = (int)(chunk.Value.voxelDimensions.y * (position.x) + (position.y));
 										if (chunk.Value.voxelsBack[voxelIndex] == 0)
 										{
-											chunk.sidesBack[normalVoxelIndex] = 1;
+											chunkSides.sidesBack[normalVoxelIndex] = 1;
 										}
 										else
 										{
-											chunk.sidesBack[normalVoxelIndex] = 0;
+											chunkSides.sidesBack[normalVoxelIndex] = 0;
 										}
 										//chunk.sidesBack[voxelIndex] = 1;
 									}
@@ -185,11 +185,11 @@ namespace Zoxel.Voxels
                                         //voxelIndexLeft = (int)(sizeY * sizeX * (position.x - 1) + sizeY * (position.y) +(position.z));
 										if (chunk.Value.voxels[voxelIndex] == 0)
 										{
-											chunk.sidesLeft[normalVoxelIndex] = 1;
+											chunkSides.sidesLeft[normalVoxelIndex] = 1;
 										}
 										else
 										{
-											chunk.sidesLeft[normalVoxelIndex] = 0;
+											chunkSides.sidesLeft[normalVoxelIndex] = 0;
 										}
 									}
 									else //if (position.x == 0)
@@ -197,11 +197,11 @@ namespace Zoxel.Voxels
                                         voxelIndex = (int)(chunk.Value.voxelDimensions.z * (position.y) + (position.z));
 										if (chunk.Value.voxelsLeft[voxelIndex] == 0)
 										{
-											chunk.sidesLeft[normalVoxelIndex] = 1;
+											chunkSides.sidesLeft[normalVoxelIndex] = 1;
 										}
 										else
 										{
-											chunk.sidesLeft[normalVoxelIndex] = 0;
+											chunkSides.sidesLeft[normalVoxelIndex] = 0;
 										}
 									}
 									if (position.x < chunk.Value.voxelDimensions.x - 1)
@@ -212,11 +212,11 @@ namespace Zoxel.Voxels
                                         //voxelIndexRight = (int)(sizeY * sizeX * (position.x + 1) + sizeY * (position.y) + (position.z));
 										if (chunk.Value.voxels[voxelIndex] == 0)
 										{
-											chunk.sidesRight[normalVoxelIndex] = 1;
+											chunkSides.sidesRight[normalVoxelIndex] = 1;
 										}
 										else
 										{
-											chunk.sidesRight[normalVoxelIndex] = 0;
+											chunkSides.sidesRight[normalVoxelIndex] = 0;
 										}
 									}
 									else// if (position.x == 15)
@@ -224,11 +224,11 @@ namespace Zoxel.Voxels
                                         voxelIndex = (int)(chunk.Value.voxelDimensions.z * (position.y) + (position.z));
 										if (chunk.Value.voxelsRight[voxelIndex] == 0)
 										{
-											chunk.sidesRight[normalVoxelIndex] = 1;
+											chunkSides.sidesRight[normalVoxelIndex] = 1;
 										}
 										else
 										{
-											chunk.sidesRight[normalVoxelIndex] = 0;
+											chunkSides.sidesRight[normalVoxelIndex] = 0;
 										}
 									}
 									#endregion

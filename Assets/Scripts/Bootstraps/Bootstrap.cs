@@ -22,15 +22,20 @@ namespace Zoxel
     /// Boot Code for Zoxel
     /// </summary>
     [RequireComponent(typeof(AudioManager), typeof(ParticlesManager))]
-    public class Bootstrap : MonoBehaviour//, ICustomBootstrap
+    public class Bootstrap : MonoBehaviour
     {
         public static Bootstrap instance;
-        // Debug Settings - put this in a datam file
         public static bool isAudio = true;
         public static bool isRenderChunks = true;
         public static bool isParticles = true;
         public static bool isStreamChunks = true;
+        [Header("Settings")]
+        public bool isCustomRenderSystem = false;
+        public bool isMutateVoxes = false;
+        public bool isAnimateRenders = false;
         public bool isMonsters = false;
+        public bool isUseModels = true;
+        [Header("Debug Settings")]
         public bool DebugColliders = true;
         // debugs
         public static bool DebugChunks = false;
@@ -225,9 +230,9 @@ namespace Zoxel
         {
             get { return EntityManager.GetComponentData<Game>(game).id; }
         }
-        public int WorldID
+        public Entity World
         {
-            get { return EntityManager.GetComponentData<Game>(game).mapID; }
+            get { return EntityManager.GetComponentData<Game>(game).map; }
         }
 
         [ContextMenu("GiveStatToPlayers")]
@@ -317,7 +322,7 @@ namespace Zoxel
         public void SpawnCharacters()
         {
             CharacterSpawnSystem.SpawnNPCs(EntityManager,
-                WorldID, character.Value.id, clanToSpawn, spawnPosition, amountToSpawn);
+                World, character.Value.id, clanToSpawn, spawnPosition, amountToSpawn);
         }
 
         public IEnumerator RunSpawnCharactersTest()

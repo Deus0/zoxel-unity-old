@@ -56,7 +56,7 @@ namespace Zoxel
             return game;
         }
 
-        private void OnStateChanged(int worldID, int metaID, GameState oldState, GameState newState)
+        private void OnStateChanged(Entity world, int metaID, GameState oldState, GameState newState)
         {
             Debug.Log("New Game state: " + newState);
             if (oldState == GameState.StartScreen && newState == GameState.MainMenu)
@@ -172,7 +172,7 @@ namespace Zoxel
                         gameEndSystem.Enabled = false;
                         game.newState = ((byte)GameState.InGame);
                     }
-                    OnStateChanged(game.mapID, game.metaID, previousState, (GameState)game.state);
+                    OnStateChanged(game.map, game.metaID, previousState, (GameState)game.state);
                     //OnStateChanged.Invoke((GameState)game.state);
                 }
 
@@ -181,7 +181,7 @@ namespace Zoxel
                     game.newState = ((byte)GameState.StartScreen);
                     if (mainMenuMap != null)
                     {
-                        game.mapID = worldSpawnSystem.SpawnMap(mainMenuMap);
+                        worldSpawnSystem.SpawnMap(mainMenuMap, e);
                         LightManager.instance.SetLight("MainMenuSun");
                     }
                 }
@@ -225,8 +225,7 @@ namespace Zoxel
                 }
                 else if (game.state == ((byte)GameState.ClearingGame))
                 {
-                    ClearGame(game.mapID);
-                    game.mapID = 0;
+                    ClearGame(game.map);
                     game.newState = ((byte)GameState.LoadingStartScreen);
                 }
 
@@ -241,11 +240,11 @@ namespace Zoxel
             });
         }
 
-        private void ClearGame(int mapID)
+        private void ClearGame(Entity map)
         {
             UnityEngine.Time.timeScale = 1;
             //systemsManager.ClearGame();
-            worldSpawnSystem.DestroyWorld(mapID);
+            worldSpawnSystem.DestroyWorld(map);
             //worldSpawnSystem.Clear();       // should clear chunks of the spawned units
             characterSpawnSystem.Clear();   // just need to clear player characters though
             cameraSystem.Clear();      // need to remove all cameras from game

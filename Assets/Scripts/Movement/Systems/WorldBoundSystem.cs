@@ -20,10 +20,6 @@ namespace Zoxel
 
             public void Execute(ref WorldBound worldBound, ref Translation position)
             {
-                if (worldBound.worldID == 0)
-                {
-                    return;
-                }
                 var voxelPosition = worldBound.voxelPosition;
                 var chunkPosition = VoxelRaycastSystem.GetChunkPosition(voxelPosition, worldBound.voxelDimensions);
                 float3 voxelPositionMax = new float3(

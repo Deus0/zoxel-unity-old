@@ -26,16 +26,15 @@ namespace Zoxel.Voxels
 	{
 
         [BurstCompile]
-		struct ChunkSidesJob : IJobForEach<ChunkBuilder, Chunk>
+		struct ChunkSidesJob : IJobForEach<ChunkBuilder, Chunk, ZoxID>
 		{
 			[ReadOnly]
 			public NativeArray<Chunk> chunks;
             [ReadOnly]
             public NativeArray<float4> chunkMap;
 
-            private Chunk GetChunk(ref Chunk chunkInput, int3 chunkAddition, out bool failed)
+            private Chunk GetChunk(ref Chunk chunkInput, int worldID, int3 chunkAddition, out bool failed)
             {
-                int worldID = chunkInput.worldID;
                 int3 chunkPosition = chunkInput.Value.chunkPosition + chunkAddition;
                 float4 chunkPointer = new float4(chunkPosition.x, chunkPosition.y, chunkPosition.z, worldID);
                 int indexOf = chunkMap.IndexOf(chunkPointer);
@@ -51,7 +50,7 @@ namespace Zoxel.Voxels
                 }
             }
 
-            public void Execute(ref ChunkBuilder chunkBuilder, ref Chunk chunk)
+            public void Execute(ref ChunkBuilder chunkBuilder, ref Chunk chunk, ref ZoxID zoxID)
 			{
 				if (chunkBuilder.state == 0)
                 {
@@ -71,7 +70,7 @@ namespace Zoxel.Voxels
 						if (chunk.indexUp != -1)
                         {
                             position.y = 0;
-							Chunk otherChunk = GetChunk(ref chunk, int3.Up(), out failed);
+							Chunk otherChunk = GetChunk(ref chunk, zoxID.creatorID, int3.Up(), out failed);
 							if (failed)
 							{
 								for (position.x = 0; position.x < chunk.Value.voxelDimensions.x; position.x++)
@@ -116,7 +115,7 @@ namespace Zoxel.Voxels
 						voxelIndex = 0;
 						if (chunk.indexDown != -1)
 						{
-							Chunk otherChunk = GetChunk(ref chunk, int3.Down(), out failed);
+							Chunk otherChunk = GetChunk(ref chunk, zoxID.creatorID, int3.Down(), out failed);
 							if (failed)
 							{
 								for (position.x = 0; position.x < chunk.Value.voxelDimensions.x; position.x++)
@@ -173,7 +172,7 @@ namespace Zoxel.Voxels
 						voxelIndex = 0;
 						if (chunk.indexLeft != -1)
 						{
-							Chunk otherChunk = GetChunk(ref chunk, int3.Left(), out failed);
+							Chunk otherChunk = GetChunk(ref chunk,zoxID.creatorID,  int3.Left(), out failed);
 							if (failed)
 							{
 								for (position.y = 0; position.y < chunk.Value.voxelDimensions.y; position.y++)
@@ -220,7 +219,7 @@ namespace Zoxel.Voxels
 						voxelIndex = 0;
 						if (chunk.indexRight != -1)
 						{
-							Chunk otherChunk = GetChunk(ref chunk, int3.Right(), out failed);
+							Chunk otherChunk = GetChunk(ref chunk, zoxID.creatorID, int3.Right(), out failed);
 							if (failed)
 							{
 								for (position.y = 0; position.y < chunk.Value.voxelDimensions.y; position.y++)
@@ -270,7 +269,7 @@ namespace Zoxel.Voxels
 						voxelIndex = 0;
 						if (chunk.indexForward != -1)
 						{
-							Chunk otherChunk = GetChunk(ref chunk, int3.Forward(), out failed);
+							Chunk otherChunk = GetChunk(ref chunk, zoxID.creatorID, int3.Forward(), out failed);
 							if (failed)
 							{
 								for (position.x = 0; position.x < chunk.Value.voxelDimensions.x; position.x++)
@@ -317,7 +316,7 @@ namespace Zoxel.Voxels
 						voxelIndex = 0;
 						if (chunk.indexBack != -1)
 						{
-							Chunk otherChunk = GetChunk(ref chunk, int3.Back(), out failed);
+							Chunk otherChunk = GetChunk(ref chunk, zoxID.creatorID, int3.Back(), out failed);
 							if (failed)
 							{
 								for (position.x = 0; position.x < chunk.Value.voxelDimensions.x; position.x++)
@@ -382,7 +381,7 @@ namespace Zoxel.Voxels
 		protected override void OnCreate()
         {
             base.OnCreate();
-			chunkQuery = GetEntityQuery(ComponentType.ReadOnly<Chunk>());
+			chunkQuery = GetEntityQuery(ComponentType.ReadOnly<Chunk>(), ComponentType.ReadOnly<ZoxID>());
 			chunkQuery2 = GetEntityQuery(ComponentType.ReadOnly<ChunkBuilder>());
 		}
 
@@ -393,13 +392,16 @@ namespace Zoxel.Voxels
 				return new JobHandle();
 			}
             var chunks = chunkQuery.ToComponentDataArray<Chunk>(Allocator.TempJob);
+            var chunkIDs = chunkQuery.ToComponentDataArray<ZoxID>(Allocator.TempJob);
             NativeArray<float4> chunkMap = new NativeArray<float4>(chunks.Length, Allocator.TempJob);
-            int i = 0;
-            foreach (Chunk chunk in chunks)
+            //int i = 0;
+            //foreach (Chunk chunk in chunks)
+			for (int i = 0; i < chunks.Length; i++)
             {
+				var chunk = chunks[i];
+				var worldID = chunkIDs[i].creatorID;
                 // do a check, add to nativeArrayList if it needs to update the chunks or the surrounding one needs it
-                chunkMap[i] = new float4(chunk.Value.chunkPosition.x, chunk.Value.chunkPosition.y, chunk.Value.chunkPosition.z, chunk.worldID);
-                i++;
+                chunkMap[i] = new float4(chunk.Value.chunkPosition.x, chunk.Value.chunkPosition.y, chunk.Value.chunkPosition.z, worldID);
             }
             ChunkSidesJob job = new ChunkSidesJob
 			{
@@ -410,6 +412,7 @@ namespace Zoxel.Voxels
 			handle.Complete();
 			job.chunks.Dispose();
             chunkMap.Dispose();
+			chunkIDs.Dispose();
 			return handle;
 		}
 	}

@@ -213,7 +213,7 @@ namespace Zoxel
                 {
                     Debug.Log("New Map Set: " + newMap.name);
                     //systemsManager.voxelSystemGroup.worldSpawnSystem.QueueWorld(float3.zero, map);
-                    space.GetOrCreateSystem<VoxelSystemGroup>().worldSpawnSystem.QueueMap(float3.zero, map);
+                    space.GetOrCreateSystem<VoxelSystemGroup>().worldSpawnSystem.QueueMap(float3.zero, map, new Entity());
                     this.titleContent = new GUIContent("MapMaker [" + map.name + "]");
                     // clear buttons
                     ClearButtons();

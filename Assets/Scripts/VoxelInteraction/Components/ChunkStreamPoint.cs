@@ -9,7 +9,7 @@ namespace Zoxel
     [Serializable]
     public struct ChunkStreamPoint : IComponentData
     {
-        public int worldID;
+        public Entity world;
         public byte didUpdate;
         public int3 chunkPosition; // when position changes, update the position
         public int3 voxelDimensions;

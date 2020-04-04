@@ -31,17 +31,8 @@ namespace Zoxel.WorldGeneration
                 {
                     return;
                 }
-                //World world = worldSpawnSystem.worlds[chunk.worldID];
-                if (!worldSpawnSystem.maps.ContainsKey(chunk.worldID))
-                {
-                    return;
-                }
-               // chunk.isGenerating = 1;
-                MapDatam map = worldSpawnSystem.maps[chunk.worldID];
-                // add all the things to it
-
-                //BiomeDatam biome = map.biomes[biomeIndex];
-                //map.biomes[biomeIndex].InitializeIDs(map.tilemap);
+                int worldID = World.EntityManager.GetComponentData<ZoxID>(e).creatorID;
+                MapDatam map = worldSpawnSystem.maps[worldID];
 
                 Biome chunkBiome = new Biome { }; // World.EntityManager.GetComponentData<ChunkTerrain>(e);
                 chunkBiome.biomes = new BlitableArray<byte>((int)(chunk.Value.voxelDimensions.x * chunk.Value.voxelDimensions.z), Allocator.Persistent);

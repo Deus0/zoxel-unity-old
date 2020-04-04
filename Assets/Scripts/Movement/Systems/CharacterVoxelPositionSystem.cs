@@ -15,13 +15,12 @@ namespace Zoxel
         {
             Entities.WithAll<WorldBound, Translation>().ForEach((Entity e, ref WorldBound worldBound, ref Translation translation) =>
             {
-                //worldBound.enabled = 1;
-                float3 positionOfMe = translation.Value;//- worldBound.lastNoise;
-                if (worldSpawnSystem.worlds.ContainsKey(worldBound.worldID) == false)
+                Entity worldEntity = worldBound.world;
+                if (World.EntityManager.Exists(worldEntity) == false)
                 {
                     return;
                 }
-                Entity worldEntity = worldSpawnSystem.worlds[worldBound.worldID];
+                float3 positionOfMe = translation.Value;
                 if (worldBound.enabled == 0)
                 {
                     worldBound.worldTransform = World.EntityManager.GetComponentData<LocalToWorld>(worldEntity).Value;

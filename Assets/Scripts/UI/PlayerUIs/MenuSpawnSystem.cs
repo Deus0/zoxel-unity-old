@@ -417,10 +417,9 @@ namespace Zoxel.UI
         private void LoadPlayer(Entity camera, int characterID, int classID)
         {
             Game gameComponent = EntityManager.GetComponentData<Game>(game);
-            worldSpawnSystem.DestroyWorld(gameComponent.mapID);
+            worldSpawnSystem.DestroyWorld(gameComponent.map);
             LightManager.instance.SetLight("GameSun");
-            gameComponent.mapID = worldSpawnSystem.SpawnMap(startingMap);
-            EntityManager.SetComponentData(game, gameComponent);
+            worldSpawnSystem.SpawnMap(startingMap, game);
             int3 newPosition = int3.Zero();
             foreach (Entity e in chunkSpawnSystem.chunks.Values)
             {
@@ -434,7 +433,10 @@ namespace Zoxel.UI
             int playerID = World.EntityManager.GetComponentData<Controller>(camera).deviceID;
             SetGameState(GameState.LoadCharacter);
             CharacterSpawnSystem.SpawnPlayer(World.EntityManager,
-                gameComponent.id, playerID, camera, gameComponent.mapID,
+                playerID, 
+                camera, 
+                EntityManager.GetComponentData<Game>(game).map,
+                game,
                 startingCharacter.Value.id, classID, characterID, newPosition.ToFloat3());
         }
 

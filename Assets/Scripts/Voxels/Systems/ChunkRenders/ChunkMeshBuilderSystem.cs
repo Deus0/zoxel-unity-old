@@ -19,79 +19,21 @@ namespace Zoxel.Voxels
 	public class ChunkMeshBuilderSystem : JobComponentSystem
     {
         [BurstCompile]
-		struct ChunkMeshBuilderJob : IJobForEach<ChunkRendererBuilder, ChunkRenderer> //IJobForEach<ChunkRenderer>
+		struct ChunkMeshBuilderJob : IJobForEach<ChunkRendererBuilder, ChunkRenderer, ChunkSides> //IJobForEach<ChunkRenderer>
 		{
-            #region Statics
-            public static readonly float3[] cubeVertices = new float3[]
-			{
-				// up
-				new float3(0, 1, 0),
-				new float3(1, 1, 0),
-				new float3(1, 1, 1),
-				new float3(0, 1, 1),
-				// down
-				new float3(0, 0, 0),
-				new float3(1, 0, 0),
-				new float3(1, 0, 1),
-				new float3(0, 0, 1),
-				// left
-				new float3(0, 0, 0),
-				new float3(0, 1, 0),
-				new float3(0, 1, 1),
-				new float3(0, 0, 1),
-				// right
-				new float3(1, 0, 0),
-				new float3(1, 1, 0),
-				new float3(1, 1, 1),
-				new float3(1, 0, 1),
-				// forward
-				new float3(0, 0, 0),
-				new float3(1, 0, 0),
-				new float3(1, 1, 0),
-				new float3(0, 1, 0),
-				// back
-				new float3(0, 0, 1),
-				new float3(1, 0, 1),
-				new float3(1, 1, 1),
-				new float3(0, 1, 1)
-			};
-
-			public static readonly int[] cubeTriangles = new int[]
-			{
-				3, 1, 0, 3, 2, 1,
-
-				0, 2, 3, 0, 1, 2,
-
-				3, 1, 0, 3, 2, 1,
-
-				0, 2, 3, 0, 1, 2,
-
-				3, 1, 0, 3, 2, 1,
-
-				0, 2, 3, 0, 1, 2
-			};
-			#endregion
-
-			public void Execute(ref ChunkRendererBuilder chunkRendererBuilder, ref ChunkRenderer chunk)   //Entity entity, int index,  
+            public void Execute(ref ChunkRendererBuilder chunkRendererBuilder, ref ChunkRenderer chunk, ref ChunkSides chunkSides)   //Entity entity, int index,  
 			{
 				if (chunkRendererBuilder.state == 2)
                 {
-                    chunkRendererBuilder.state = 3;
-                    /*if (ChunkSpawnSystem.isDebugLog)
+                    if (chunkSides.sidesUp.Length != 0)
                     {
-                        UnityEngine.Debug.LogError("Building Chunk Mesh at: " + chunk.Value.chunkPosition + "::" + chunk.Value.voxelDimensions);
-                    }*/
-                    ///if (chunk.vertices.Length == 0)
-                    //{
-                        //UnityEngine.Debug.LogError("chunk.vertices.Length == 0.");
-                       // return;
-                    //}
-                    GenerateCubeMesh(ref chunk);
-                    //GenerateSmoothMesh(ref chunk);
+                        chunkRendererBuilder.state = 3;
+                        GenerateCubeMesh(ref chunk, ref chunkSides);
+                    }
                 }
 			}
 
-            private void GenerateCubeMesh(ref ChunkRenderer chunk)
+            private void GenerateCubeMesh(ref ChunkRenderer chunk, ref ChunkSides chunkSides)
             {
                 // used in builder
                 chunk.buildPointer = new BuildPointer();
@@ -111,12 +53,12 @@ namespace Zoxel.Voxels
                             for (sideIndex = 0; sideIndex <= 5; sideIndex++)
                             {
                                 // if sides allow it, then add vertex side of model!
-                                if ((sideIndex == 0 && chunk.sidesUp[voxelArrayIndex] != 0)
-                                    || (sideIndex == 1 && chunk.sidesDown[voxelArrayIndex] != 0)
-                                    || (sideIndex == 2 && chunk.sidesLeft[voxelArrayIndex] != 0)
-                                    || (sideIndex == 3 && chunk.sidesRight[voxelArrayIndex] != 0)
-                                    || (sideIndex == 4 && chunk.sidesBack[voxelArrayIndex] != 0)
-                                    || (sideIndex == 5 && chunk.sidesForward[voxelArrayIndex] != 0))
+                                if ((sideIndex == 0 && chunkSides.sidesUp[voxelArrayIndex] != 0)
+                                    || (sideIndex == 1 && chunkSides.sidesDown[voxelArrayIndex] != 0)
+                                    || (sideIndex == 2 && chunkSides.sidesLeft[voxelArrayIndex] != 0)
+                                    || (sideIndex == 3 && chunkSides.sidesRight[voxelArrayIndex] != 0)
+                                    || (sideIndex == 4 && chunkSides.sidesBack[voxelArrayIndex] != 0)
+                                    || (sideIndex == 5 && chunkSides.sidesForward[voxelArrayIndex] != 0))
                                 {
                                     BuildVoxelSide(ref chunk, sideIndex, voxelMetaIndex, position);
                                     if (chunk.buildPointer.vertIndex + 4 >= chunk.vertices.Length ||
@@ -303,6 +245,59 @@ namespace Zoxel.Voxels
 
                 return p;
             }
+
+
+
+            #region Statics
+            public static readonly float3[] cubeVertices = new float3[]
+			{
+				// up
+				new float3(0, 1, 0),
+				new float3(1, 1, 0),
+				new float3(1, 1, 1),
+				new float3(0, 1, 1),
+				// down
+				new float3(0, 0, 0),
+				new float3(1, 0, 0),
+				new float3(1, 0, 1),
+				new float3(0, 0, 1),
+				// left
+				new float3(0, 0, 0),
+				new float3(0, 1, 0),
+				new float3(0, 1, 1),
+				new float3(0, 0, 1),
+				// right
+				new float3(1, 0, 0),
+				new float3(1, 1, 0),
+				new float3(1, 1, 1),
+				new float3(1, 0, 1),
+				// forward
+				new float3(0, 0, 0),
+				new float3(1, 0, 0),
+				new float3(1, 1, 0),
+				new float3(0, 1, 0),
+				// back
+				new float3(0, 0, 1),
+				new float3(1, 0, 1),
+				new float3(1, 1, 1),
+				new float3(0, 1, 1)
+			};
+
+			public static readonly int[] cubeTriangles = new int[]
+			{
+				3, 1, 0, 3, 2, 1,
+
+				0, 2, 3, 0, 1, 2,
+
+				3, 1, 0, 3, 2, 1,
+
+				0, 2, 3, 0, 1, 2,
+
+				3, 1, 0, 3, 2, 1,
+
+				0, 2, 3, 0, 1, 2
+			};
+			#endregion
 
 
         }

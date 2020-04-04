@@ -49,9 +49,6 @@ MonoBehaviour:
   gear:
   - {fileID: 2164706817165810311, guid: 47b40f398622f6b45a9610b7d1de95a6, type: 3}
   - {fileID: 2089161989120129385, guid: 89517c6173c4c6343907c271dbad4ed9, type: 3}
-  - {fileID: -163356816642506193, guid: f44047a1f1b57564883351f6e78914b6, type: 3}
-  animator: {fileID: 11400000, guid: da6b3154b6d8d7543a9c7619dd204e6a, type: 2}
-  skeleton: {fileID: 11400000, guid: d7cb6ee014710eb84a5ac9d3f67b812c, type: 2}
   spawnSound: {fileID: 11400000, guid: dfc4c18e202770742a5c4ff545161b34, type: 2}
   deathSound: {fileID: 11400000, guid: ab6a39e5d94cc914bbd9bd20b905b9c1, type: 2}
   stats:

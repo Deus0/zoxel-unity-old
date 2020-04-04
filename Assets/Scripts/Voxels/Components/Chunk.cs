@@ -5,60 +5,26 @@ using Unity.Collections;
 
 namespace Zoxel.Voxels
 {
-	public struct ChunkData
-	{
-		public int3 chunkPosition;
-		public float3 worldScale;
-		public int3 voxelDimensions;  // 16 16 16
-
-		public BlitableArray<byte> voxels;
-		public BlitableArray<byte> voxelsUp;
-		public BlitableArray<byte> voxelsDown;
-		public BlitableArray<byte> voxelsLeft;
-		public BlitableArray<byte> voxelsRight;
-		public BlitableArray<byte> voxelsForward;
-		public BlitableArray<byte> voxelsBack;
-
-
-		public void Dispose()
-		{
-			if (voxels.Length > 0) {
-				voxels.Dispose();
-			}
-			if (voxelsUp.Length > 0) {
-				voxelsUp.Dispose();
-				voxelsDown.Dispose();
-				voxelsLeft.Dispose();
-				voxelsRight.Dispose();
-				voxelsForward.Dispose();
-				voxelsBack.Dispose();
-			}
-		}
-
-	}
-
 	public struct Chunk : IComponentData
 	{
-		// remove these for zoxIDs
-        public int id;
+		// links
 		public Entity world;
-        public int worldID;
-
-		public byte isGenerating;   // used in side system to know what chunks are still generating
-
+		public BlitableArray<Entity> chunkRenders;
+		// data
 		public ChunkData Value;
-		public BlitableArray<int> chunkRenders;
+		// states
+		public byte isGenerating;   // used in side system to know what chunks are still generating
 		public byte isMapDirty;
 		public byte isWeights;
 
-		// 16 x 16
+		// replace these with Entity indexes
 		public int indexUp;
 		public int indexDown;
 		public int indexLeft;
 		public int indexRight;
 		public int indexForward;
 		public int indexBack;
-
+		// are these used?
 		public byte hasUpdatedUp;
 		public byte hasUpdatedDown;
 		public byte hasUpdatedLeft;
@@ -72,37 +38,41 @@ namespace Zoxel.Voxels
                 (int)(Value.chunkPosition.y * Value.voxelDimensions.y), 
                 (int)(Value.chunkPosition.z * Value.voxelDimensions.z));
 		}
-		public void InitializeData(int3 voxelDimensions)
+
+		public void Init(int3 voxelDimensions)
 		{
 			int xyzSize = (int)(voxelDimensions.x * voxelDimensions.y * voxelDimensions.z);
-			int xzSize = (int)(voxelDimensions.x * voxelDimensions.z);
-			int yzSize = (int)(voxelDimensions.y * voxelDimensions.z);
-			int xySize = (int)(voxelDimensions.x * voxelDimensions.y);
 			Value.voxels = new BlitableArray<byte>(xyzSize, Allocator.Persistent);
+			int xzSize = (int)(voxelDimensions.x * voxelDimensions.z);
 			Value.voxelsUp = new BlitableArray<byte>(xzSize, Allocator.Persistent);
 			Value.voxelsDown = new BlitableArray<byte>(xzSize, Allocator.Persistent);
+			int yzSize = (int)(voxelDimensions.y * voxelDimensions.z);
 			Value.voxelsLeft = new BlitableArray<byte>(yzSize, Allocator.Persistent);
 			Value.voxelsRight = new BlitableArray<byte>(yzSize, Allocator.Persistent);
+			int xySize = (int)(voxelDimensions.x * voxelDimensions.y);
 			Value.voxelsForward = new BlitableArray<byte>(xySize, Allocator.Persistent);
 			Value.voxelsBack = new BlitableArray<byte>(xySize, Allocator.Persistent);
+		}
+		
+		public static void Destroy(EntityManager EntityManager, Entity e)
+		{
+			if (EntityManager.Exists(e))
+			{
+				if (EntityManager.HasComponent<Chunk>(e))
+				{
+					Chunk chunk = EntityManager.GetComponentData<Chunk>(e);
+					chunk.Dispose();
+				}
+				EntityManager.DestroyEntity(e);
+			}
 		}
 
 		public void Dispose()
 		{
 			Value.Dispose();
-			chunkRenders.Dispose();
-		}
-		
-		public static void Destroy(EntityManager entityManager, Entity e)
-		{
-			if (entityManager.Exists(e))
+			if (chunkRenders.Length > 0)
 			{
-				if (entityManager.HasComponent<Chunk>(e))
-				{
-					Chunk chunk = entityManager.GetComponentData<Chunk>(e);
-					chunk.Dispose();
-				}
-				entityManager.DestroyEntity(e);
+				chunkRenders.Dispose();
 			}
 		}
 	}

@@ -11,7 +11,7 @@ namespace Zoxel
     {
         public byte enabled;
         // Voxel World Binding
-        public int worldID;
+        public Entity world;
         public int3 voxelDimensions;
         public float3 lastNoise;
         public float4x4 worldTransform;

@@ -25,7 +25,7 @@ namespace Zoxel.Voxels
         public static float3 failedPosition = new float3(0, -10000, 0);
         //private static int randRange = 2;
         //private static int randRangeAdd = 2;
-        private static List<int> commandIDs = new List<int>();
+        private static List<Entity> commandWorlds = new List<Entity>();
         private static List<Entity> cameraIDs = new List<Entity>();
         private static List<float3> commandScreenPositions = new List<float3>();
         private static List<int3> commandsVoxelDimensions = new List<int3>();
@@ -39,13 +39,13 @@ namespace Zoxel.Voxels
             return voxelPosition;
         }
 
-        public int QueueRaycast(float2 screenPosition, int worldID, Entity camera)
+        public int QueueRaycast(float2 screenPosition, Entity world, Entity camera)
         {
             int id = Bootstrap.GenerateUniqueID();
-            commandIDs.Add(id);
+            /*commandWorlds.Add(id);
             commandScreenPositions.Add(new float3(screenPosition.x, screenPosition.y, 0));
             cameraIDs.Add(camera);
-            commandsVoxelDimensions.Add(World.EntityManager.GetComponentData<World>(worldSpawnSystem.worlds[worldID]).voxelDimensions);
+            commandsVoxelDimensions.Add(World.EntityManager.GetComponentData<World>(worldSpawnSystem.worlds[worldID]).voxelDimensions);*/
             return id;
         }
 

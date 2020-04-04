@@ -41,8 +41,19 @@ namespace Zoxel.Voxels
 
 		void UpdateMesh(Entity entity, ref ChunkRenderer chunk)
         {
-            RenderMesh renderer = World.EntityManager.GetSharedComponentData<RenderMesh>(entity);
-			Mesh mesh = renderer.mesh;
+            Mesh mesh = null;
+            RenderMesh renderer = new RenderMesh();
+            ChunkMesh chunkRenderer = new ChunkMesh();
+            if (World.EntityManager.HasComponent<RenderMesh>(entity))
+            {
+                renderer = World.EntityManager.GetSharedComponentData<RenderMesh>(entity);
+			    mesh = renderer.mesh;
+            }
+            else if (World.EntityManager.HasComponent<ChunkMesh>(entity))
+            {
+                chunkRenderer = World.EntityManager.GetSharedComponentData<ChunkMesh>(entity);
+			    mesh = chunkRenderer.mesh;
+            }
             if (mesh == null)
 			{
 				mesh = new Mesh();
@@ -52,7 +63,9 @@ namespace Zoxel.Voxels
 			{
 				mesh.Clear();
 			}
-            chunk.SetMeshData(mesh);
+            Chunk chunkComponent = World.EntityManager.GetComponentData<Chunk>(chunk.chunk);
+            World worldComponent = World.EntityManager.GetComponentData<World>(chunkComponent.world);
+            chunk.SetMeshData(mesh, worldComponent.modelID != 0);
             /*if (chunk.hasWeights == 1)
             {
                 if (Bootstrap.DebugMeshWeights)
@@ -67,13 +80,6 @@ namespace Zoxel.Voxels
                 mesh.vertices = mesh.vertices;
                 mesh.RecalculateTangents();
             }*/
-            Chunk chunkComponent = World.EntityManager.GetComponentData<Chunk>(chunk.chunk);
-            World worldComponent = World.EntityManager.GetComponentData<World>(chunkComponent.world);
-            if (worldComponent.modelID != 0)
-            {
-                //ChunkMeshEndingSystem.CentreMesh(mesh);
-                //ChunkMeshEndingSystem.RotateMesh(mesh);
-            }
             if (mesh.vertexCount != mesh.colors.Length || mesh.vertexCount != mesh.uv.Length)
 			{
 				Debug.LogError("ChunkMesh has inconsistent data: " + mesh.vertexCount + ":" + mesh.uv.Length + ":" + mesh.colors.Length);
@@ -82,9 +88,18 @@ namespace Zoxel.Voxels
             mesh.RecalculateNormals();
             mesh.RecalculateTangents();
 			//mesh.UploadMeshData(false);
-            renderer.mesh = mesh;
-			renderer.subMesh = 0;
-            World.EntityManager.SetSharedComponentData(entity, renderer);
+            
+            if (World.EntityManager.HasComponent<RenderMesh>(entity))
+            {
+                renderer.mesh = mesh;
+                //renderer.subMesh = 0;
+                World.EntityManager.SetSharedComponentData(entity, renderer);
+            }
+            else if (World.EntityManager.HasComponent<ChunkMesh>(entity))
+            {
+                chunkRenderer.mesh = mesh;
+                World.EntityManager.SetSharedComponentData(entity, chunkRenderer);
+            }
             if (World.EntityManager.HasComponent<RenderBounds>(entity))
             {
                 RenderBounds renderBounds2 = World.EntityManager.GetComponentData<RenderBounds>(entity);

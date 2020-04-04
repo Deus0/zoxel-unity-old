@@ -132,8 +132,8 @@ namespace Zoxel
             for (int i = 0; i < command.amount; i++)
             {
                 Entity entity = entities[i];
-                SetCharacter(entity, command.characterIDs[i], false, command.worldID, command.metaID, command.classID, command.clanID, command.position, command.creatorID);
-                SetNPCCharacter(entity, command.characterIDs[i], command.worldID, command.metaID, command.position);
+                SetCharacter(entity, command.characterIDs[i], false, command.world, command.metaID, command.classID, command.clanID, command.position, command.creatorID);
+                SetNPCCharacter(entity, command.characterIDs[i], command.metaID, command.position); // command.world, 
             }
         }
 
@@ -151,27 +151,29 @@ namespace Zoxel
             {
                 id = Bootstrap.GenerateUniqueID();
             }
-            SetCharacter(entity, id, isLoadingPlayer,command.worldID, command.metaID, command.classID, command.clanID, command.position);
-            SetPlayerCharacter(entity, id, command.worldID, command.metaID, command.position);
-            cameraSystem.ConnectCameraToCharacter(command.camera, entity);
-            playerSpawnSystem.SetPlayerCharacter(entity, command.playerID);
-            if (isLoadingPlayer)
+            if (SetCharacter(entity, id, isLoadingPlayer, command.world, command.metaID, command.classID, command.clanID, command.position))
             {
-                saveSystem.LoadPlayer(entity);
+                SetPlayerCharacter(entity, id, command.world, command.metaID, command.position);
+                cameraSystem.ConnectCameraToCharacter(command.camera, entity);
+                playerSpawnSystem.SetPlayerCharacter(entity, command.playerID);
+                if (isLoadingPlayer)
+                {
+                    saveSystem.LoadPlayer(entity);
+                }
+                Entity gameEntity = command.game;
+                var game = World.EntityManager.GetComponentData<Game>(gameEntity);
+                game.AddPlayerCharacter(id);
+                World.EntityManager.SetComponentData(gameEntity, game);
+                worldSpawnSystem.OnAddedStreamer(entity, command.world);
             }
-            Entity gameEntity = gameStartSystem.games[command.gameID];
-            var game = World.EntityManager.GetComponentData<Game>(gameEntity);
-            game.AddPlayerCharacter(id);
-            World.EntityManager.SetComponentData(gameEntity, game);
-            worldSpawnSystem.OnAddedStreamer(entity, command.worldID);
         }
 
         private void SpawnNPCCharacter(SpawnCharacterCommand command)
         {
             Entity entity = World.EntityManager.CreateEntity(npcArchtype);
             int id = Bootstrap.GenerateUniqueID();
-            SetCharacter(entity, id, false, command.worldID, command.metaID, command.classID, command.clanID, command.position);
-            SetNPCCharacter(entity, id, command.worldID, command.metaID, command.position);
+            SetCharacter(entity, id, false, command.world, command.metaID, command.classID, command.clanID, command.position);
+            SetNPCCharacter(entity, id, command.metaID, command.position);
         }
         #endregion
 
@@ -187,9 +189,10 @@ namespace Zoxel
             World.EntityManager.SetComponentData(characterEntity, newSkills);
             skillsSystem.InitializeSkills(characterEntity, newSkills);
         }
-        private void SetNPCCharacter(Entity entity, int id, int worldID, int metaID, float3 position)
+        private void SetNPCCharacter(Entity entity, int id, int metaID, float3 position) //  Entity world, 
         {
-            if (meta.ContainsKey(metaID)) {
+            if (meta.ContainsKey(metaID))
+            {
                 CharacterDatam characterDatam = meta[metaID];
                 BehaviourData beh = characterDatam.behaviour.Value;
                 SetNPC(entity, beh, id, characterDatam.movementSpeed, characterDatam.turnSpeed);
@@ -236,14 +239,13 @@ namespace Zoxel
                 });
             }
         }
-        private void SetPlayerCharacter(Entity entity, int id, int worldID, int metaID, float3 position)
+        private void SetPlayerCharacter(Entity entity, int id, Entity world, int metaID, float3 position)
         {
             CharacterDatam characterDatam = meta[metaID];
             var voxelDimensions = new int3(16, 64, 16);
-            if (worldSpawnSystem != null && worldSpawnSystem.worlds.ContainsKey(worldID))
+            if (worldSpawnSystem != null)
             {
-                voxelDimensions = World.EntityManager.GetComponentData<Voxels.World>(
-                    worldSpawnSystem.worlds[worldID]).voxelDimensions;
+                voxelDimensions = World.EntityManager.GetComponentData<Voxels.World>(world).voxelDimensions;
             }
 
             Inventory inventory = new Inventory { };
@@ -260,24 +262,34 @@ namespace Zoxel
             CrosshairSpawnSystem.SpawnUI(World.EntityManager, entity);
             World.EntityManager.SetComponentData(entity, new ChunkStreamPoint
             {
-                worldID = worldID,
+                world = world,
                 voxelDimensions = voxelDimensions,
                 didUpdate = 1,
                 chunkPosition = VoxelRaycastSystem.GetChunkPosition(new int3(position), voxelDimensions)
             });
         }
 
-        private void SetCharacter(Entity entity, int id, bool isLoadingPlayer, int worldID, int metaID, int classID, int clanID, float3 position, int creatorID = 0)
+        private bool SetCharacter(Entity entity, int id, bool isLoadingPlayer, Entity world, int metaID, int classID, int clanID, float3 position, int creatorID = 0)
         {
+            if (!World.EntityManager.Exists(world))
+            {
+                Debug.LogError("Cannot spawn character into a non existing world.");
+                return false;
+            }
+            if (!World.EntityManager.HasComponent<Voxels.World>(world))
+            {
+                Debug.LogError("Cannot spawn character into a world without a component.");
+                return false;
+            }
             if (characters.ContainsKey(id) == true)
             {
-                return;
+                return false;
             }
             characters.Add(id, entity);
             if (!meta.ContainsKey(metaID))
             {
                 Debug.LogError("Meta not contained: " + metaID);
-                return;
+                return false;
             }
             CharacterDatam characterDatam = meta[metaID];
             // ZOXID
@@ -295,9 +307,9 @@ namespace Zoxel
                 });
             // WORLD BINDING
             int3 voxelDimensions = new int3(16, 64, 16); // float3.zero;
-            if (worldSpawnSystem != null && worldSpawnSystem.worlds.ContainsKey(worldID))
+            if (worldSpawnSystem != null)
             {
-                voxelDimensions = World.EntityManager.GetComponentData<Voxels.World>(worldSpawnSystem.worlds[worldID]).voxelDimensions;
+                voxelDimensions = World.EntityManager.GetComponentData<Voxels.World>(world).voxelDimensions;
             }
             // TRANSFORMS
             World.EntityManager.SetComponentData(entity, new Translation { Value = position });
@@ -323,25 +335,9 @@ namespace Zoxel
             }
             World.EntityManager.SetComponentData(entity, new WorldBound { 
                 size = bodySize,
-                worldID = worldID,
+                world = world,
                 voxelDimensions = voxelDimensions
             });
-            /*if (characterDatam.animator)
-            {
-                World.EntityManager.SetComponentData(entity, new Zoxel.Animations.Animator {
-                    data = characterDatam.animator.data.GetBlittableArray()
-                });
-            }
-            else
-            {
-                World.EntityManager.RemoveComponent<Zoxel.Animations.Animator>(entity);
-            }*/
-            /*if (characterDatam.skeleton)
-            {
-                Skeleton skeleton = new Skeleton { };
-                skeleton.InitializeBones(World.EntityManager, entity, characterDatam.skeleton);
-                World.EntityManager.AddComponentData(entity, skeleton);
-            }*/
             World.EntityManager.SetComponentData(entity, characterDatam.stats.Clone());
             // Physics
             World.EntityManager.SetComponentData(entity, new BodyInnerForce
@@ -375,6 +371,7 @@ namespace Zoxel
                 equipment.EquipGear(characterDatam.gear);
             }
             World.EntityManager.SetComponentData(entity, equipment);
+            return true;
         }
 
         #endregion
@@ -384,11 +381,11 @@ namespace Zoxel
         private struct SpawnCharacterCommand : IComponentData
         {
             public byte isPlayer;
-            public int gameID;
             public int creatorID;
             public int playerID;
             public Entity camera;    // change this to entity
-            public int worldID;
+            public Entity game;
+            public Entity world;
             public int metaID;
             public int classID;
             public int clanID;
@@ -418,42 +415,49 @@ namespace Zoxel
         /// Spawns into a world
         /// Gives a class as a choice
         /// </summary>
-        public static void SpawnPlayer(EntityManager EntityManager, int gameID, int playerID, Entity camera, int worldID, int metaID, int classID, int characterID, float3 position)
+        public static void SpawnPlayer(EntityManager EntityManager,
+            int playerID, 
+            Entity camera, Entity world, Entity game,
+            int metaID, int classID, int characterID, float3 position)
         {
+            if (EntityManager.Exists(world) == false)
+            {
+                Debug.LogError("Cannot spawn Player into non existing world.");
+                return;
+            }
             Entity e = EntityManager.CreateEntity();
             EntityManager.AddComponentData(e, new SpawnCharacterCommand
             {
                 isPlayer = 1,
-                gameID = gameID,
                 playerID = playerID,
                 camera = camera,
-                worldID = worldID,
+                world = world,
+                game = game,
                 metaID = metaID,
                 classID = classID,
                 characterID = characterID,
                 position = position
             });
-            // if characterID != 0, use SaveSystem.LoadPlayer(playerID) -> uses component to load a character
         }
-        public static void SpawnNPC(EntityManager EntityManager, int worldID, int metaID, float3 position, int creatorID = 0)
+        public static void SpawnNPC(EntityManager EntityManager, Entity world, int metaID, float3 position, int creatorID = 0)
         {
             Entity e = EntityManager.CreateEntity();
             EntityManager.AddComponentData(e, new SpawnCharacterCommand
             {
-                worldID = worldID,
+                world = world,
                 metaID = metaID,
                 position = position,
                 creatorID = creatorID
             });
         }
 
-        public static int SpawnNPC(EntityManager EntityManager, int worldID, int metaID, int clanID, float3 position, int creatorID = 0)
+        public static int SpawnNPC(EntityManager EntityManager, Entity world, int metaID, int clanID, float3 position, int creatorID = 0)
         {
             int characterID = Bootstrap.GenerateUniqueID();
             Entity e = EntityManager.CreateEntity();
             EntityManager.AddComponentData(e, new SpawnCharacterCommand
             {
-                worldID = worldID,
+                world = world,
                 metaID = metaID,
                 position = position,
                 clanID = clanID,
@@ -463,11 +467,11 @@ namespace Zoxel
             return characterID;
         }
 
-        public static int[] SpawnNPCs(EntityManager EntityManager, int worldID, int metaID, int clanID, float3 position, int amount)
+        public static int[] SpawnNPCs(EntityManager EntityManager, Entity world, int metaID, int clanID, float3 position, int amount)
         {
             SpawnCharacterCommand command = new SpawnCharacterCommand
             {
-                worldID = worldID,
+                world = world,
                 metaID = metaID,
                 position = position,
                 amount = amount,

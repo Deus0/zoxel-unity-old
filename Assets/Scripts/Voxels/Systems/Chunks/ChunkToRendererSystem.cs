@@ -11,6 +11,7 @@ namespace Zoxel.Voxels
     public class ChunkToRendererSystem : ComponentSystem
 	{
 		public ChunkSpawnSystem chunkSpawnSystem;
+		public ChunkRenderSystem chunkRenderSystem;
 		public Dictionary<int, VoxelDatam> meta;
 		public List<int> voxelIDs;
 
@@ -36,7 +37,7 @@ namespace Zoxel.Voxels
 			// later for all renders, do this
 			for (int i = 0; i < chunk.chunkRenders.Length; i++)
 			{
-				Entity chunkRenderEntity = chunkSpawnSystem.chunkRenders[chunk.chunkRenders[i]];
+				Entity chunkRenderEntity = chunk.chunkRenders[i];//chunkSpawnSystem.chunkRenders[chunk.chunkRenders[i]];
 				if (World.EntityManager.HasComponent<ChunkRenderer>(chunkRenderEntity))
 				{
 					ChunkRenderer chunkRenderer = World.EntityManager.GetComponentData<ChunkRenderer>(chunkRenderEntity);
@@ -45,7 +46,7 @@ namespace Zoxel.Voxels
 				}
 				else
 				{
-					chunkSpawnSystem.AddChunkRenderComponent(chunkRenderEntity, chunkEntity, ref chunk, 0, 0);
+					chunkRenderSystem.AddChunkRenderComponent(chunkRenderEntity, chunkEntity, ref chunk, 0, 0);
 				}
 				if (World.EntityManager.HasComponent<ChunkRendererBuilder>(chunkRenderEntity))
 				{

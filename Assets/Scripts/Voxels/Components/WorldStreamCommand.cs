@@ -7,7 +7,7 @@ namespace Zoxel {
         public struct WorldStreamCommand : IComponentData
         {
             // data for new and old chunks
-            public int worldID;
+            public Entity world;
             public byte isModel;
             public BlitableArray<int> newIDs;
             public BlitableArray<byte> newRenders;
