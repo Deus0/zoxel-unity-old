@@ -11,28 +11,16 @@ using UnityEngine.Rendering;
 
 namespace Zoxel.Voxels
 {
-	public struct BuildPointer
-	{
-		public int vertIndex;
-		public int triangleIndex;
-	}
-		
 	public struct ChunkRenderer : IComponentData
 	{
 		public Entity chunk;
 		[ReadOnly]
 		public ChunkData Value;
+		public byte isCenter;
 		// 0 for diffuse, 1 for water, 2 for glass, etc
 		public byte materialID;
 		// if has weights, does a weight baker system pass after mesh baking
 		public byte hasWeights;
-		// animation
-		public float timePassed;
-
-		// mesh build data
-		public BuildPointer buildPointer;
-		public BlitableArray<ZoxelVertex> vertices;
-		public BlitableArray<int> triangles;
 
 		// Build Data
 		// UVs per voxel - 0 for cube - 1 for the 0th index of uvs - uvMaps[i - 1]
@@ -40,14 +28,23 @@ namespace Zoxel.Voxels
 		public BlitableArray<float3> voxelColors;
 		public BlitableArray<VoxelUVMap> uvMaps;
 
-		public void Init(int3 voxelDimensions)
+		public void SetMetaData(Dictionary<int, VoxelDatam> meta, List<int> voxelIDs)
 		{
-			//Debug.LogError("Initiating ChunkRenderer: " + voxelDimensions);
-			int xyzSize = (int)(voxelDimensions.x * voxelDimensions.y * voxelDimensions.z);
-			int maxCacheVerts = xyzSize * 4;
-			int maxCacheTriangles = maxCacheVerts / 2;
-			vertices = new BlitableArray<ZoxelVertex>(maxCacheVerts, Unity.Collections.Allocator.Persistent);
-			triangles = new BlitableArray<int>(maxCacheTriangles, Unity.Collections.Allocator.Persistent);
+			// meta data for building models
+			modelIndexes = new BlitableArray<int>(meta.Count, Unity.Collections.Allocator.Persistent);
+			int a = 0;
+			foreach (VoxelDatam voxel in meta.Values)
+			{
+				modelIndexes[a] = voxel.Value.meshIndex;
+				a++;
+			}
+			uvMaps = new BlitableArray<VoxelUVMap>(voxelIDs.Count, Allocator.Persistent);
+			for (int i = 0; i < voxelIDs.Count; i++)
+			{
+				int metaID = voxelIDs[i];
+				VoxelDatam voxels = meta[metaID];
+				uvMaps[i] = voxels.uvMap;
+			}
 		}
 		
 		public void Dispose()
@@ -64,24 +61,33 @@ namespace Zoxel.Voxels
 			{
 				uvMaps.Dispose();
 			}
-			if (vertices.Length > 0)
-			{
-				vertices.Dispose();
-			}
-			if (triangles.Length > 0)
-			{
-				triangles.Dispose();
-			}
-			//Value.Dispose();
 		}
 
 		#region ForMesh
-		public void SetMeshData(Mesh mesh, bool isModel)
+		/*public void SetMeshData(ref ChunkMesh chunkMesh, bool isCenter)
 		{
-			if (isModel)
+			chunkMesh.vertices = new BlitableArray<ZoxelVertex>(chunkMesh.buildPointer.vertIndex, Allocator.Persistent);
+			for (int i = 0; i < chunkMesh.vertices.Length; i++)
 			{
-				mesh.MarkDynamic();
+				chunkMesh.vertices[i] = vertices[i];
 			}
+			chunkMesh.verticesDirty = 1;
+			//chunkMesh.triangles = new int[buildPointer.triangleIndex];
+			chunkMesh.vertices = new BlitableArray<int>(buildPointer.triangleIndex, Allocator.Persistent);
+			for (int i = 0; i < chunkMesh.triangles.Length; i++)
+			{
+				chunkMesh.triangles[i] = triangles[i];
+			}
+			chunkMesh.trianglesDirty = 1;
+		}*/
+			/*if (isCenter)
+			{
+				verts = ChunkRenderer.CentreMesh(verts);
+				verts = ChunkRenderer.RotateMesh(verts);
+			}*/
+
+		/*public void SetMeshData(Mesh mesh, bool isCenter)
+		{
 			var layout = new[]
 			{
 				new VertexAttributeDescriptor(UnityEngine.Rendering.VertexAttribute.Position, VertexAttributeFormat.Float32, 3),
@@ -95,7 +101,7 @@ namespace Zoxel.Voxels
 				verts[i] = vertices[i];
 			}
 			// calculate bounds from verts
-			if (isModel)
+			if (isCenter)
 			{
 				verts = ChunkRenderer.CentreMesh(verts);
 				verts = ChunkRenderer.RotateMesh(verts);
@@ -118,9 +124,9 @@ namespace Zoxel.Voxels
 				vertexCount = buildPointer.vertIndex
 			});
 			mesh.UploadMeshData(false);
-		}
+		}*/
 
-		public NativeArray<ZoxelVertex> GetVertexArray(Mesh mesh)
+		/*public NativeArray<ZoxelVertex> GetVertexArray(Mesh mesh)
 		{
 			var vertos = mesh.vertices;
 			List<Vector2> uvs2 = new List<Vector2>();
@@ -227,20 +233,10 @@ namespace Zoxel.Voxels
 				tris2[i] = tris[i];
 			}
 			return tris2;
-		}
-
-		public NativeArray<ZoxelVertex> GetVertexArray()
-		{
-        	var verts = new NativeArray<ZoxelVertex>(buildPointer.vertIndex, Allocator.Persistent);
-			for (int i = 0; i < verts.Length; i++)
-			{
-				verts[i] = vertices[i];
-			}
-			return verts;
-		}
+		}*/
 
 		
-		public int[] GetTriangles()
+		/*public int[] GetTriangles()
 		{
             var exportedTriangles = new int[buildPointer.triangleIndex];
 			//var triangles2 = triangles.ToArray();
@@ -282,29 +278,9 @@ namespace Zoxel.Voxels
                 exportedColors[i] = new Color(color.x, color.y, color.z);
 			}
 			return exportedColors;
-		}
+		}*/
 
 		#endregion
-
-
-		public void SetMetaData(Dictionary<int, VoxelDatam> meta, List<int> voxelIDs)
-		{
-			// meta data for building models
-			modelIndexes = new BlitableArray<int>(meta.Count, Unity.Collections.Allocator.Persistent);
-			int a = 0;
-			foreach (VoxelDatam voxel in meta.Values)
-			{
-				modelIndexes[a] = voxel.Value.meshIndex;
-				a++;
-			}
-			uvMaps = new BlitableArray<VoxelUVMap>(voxelIDs.Count, Allocator.Persistent);
-			for (int i = 0; i < voxelIDs.Count; i++)
-			{
-				int metaID = voxelIDs[i];
-				VoxelDatam voxels = meta[metaID];
-				uvMaps[i] = voxels.uvMap;
-			}
-		}
 
 	}
 

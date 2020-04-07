@@ -29,10 +29,10 @@ ScriptedImporter:
   - x: 4
     y: 3
     z: 1
-  - x: -4
+  - x: 4
     y: 3
     z: 1
   - x: 0
     y: 7
     z: 0
-  femaleModifiers: 
+  femaleModifiers: 000000000100000000000000

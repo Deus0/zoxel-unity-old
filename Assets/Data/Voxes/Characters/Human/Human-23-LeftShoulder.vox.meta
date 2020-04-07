@@ -19,7 +19,12 @@ ScriptedImporter:
   offset:
     x: 0
     y: 4
-    z: 1
+    z: 0
   maleSlot: {fileID: 11400000, guid: 333ad04ad689c3f0793ee40ffe9abcc0, type: 2}
   femaleSlots:
   - {fileID: 11400000, guid: 1622b3ba17a09bd77aa492c97b4df523, type: 2}
+  femaleOffsets:
+  - x: 1
+    y: 0
+    z: 0
+  femaleModifiers: 

@@ -31,11 +31,36 @@ namespace Zoxel
                     newPosition -= totalSize / 2f;
                     newPosition += newSize / 2f;
                     newPosition = math.rotate(rot, newPosition);
-                    DebugLines.DrawCubeLines(translation.Value + newPosition, rotation.Value, newSize * 0.5f, Color.grey);
+                    //DebugLines.DrawCubeLines(translation.Value + newPosition, rotation.Value, newSize * 0.5f, Color.grey);
                 }
             });
-
+            
             Entities.WithAll<Bone>().ForEach((Entity e, ref Bone bone) =>
+            {
+                if (World.EntityManager.Exists(bone.skeleton) && World.EntityManager.HasComponent<Skeleton>(bone.skeleton))
+                {
+                    //Matrix4x4 localToWorldPos = localToWorld.Value;
+                    //Vector3 position = localToWorldPos.GetColumn(3);
+                    float3 worldPosition = bone.GetWorldPosition(World.EntityManager, e);
+                    var skeleton = World.EntityManager.GetComponentData<Skeleton>(bone.skeleton);
+                    var skeletonRotation = World.EntityManager.GetComponentData<Rotation>(bone.skeleton);
+                    //var newPosition = math.rotate(skeleton.mulRotation, position);
+                    DebugLines.DrawCubeLines(worldPosition, skeletonRotation.Value, 1.2f * (new float3(boneDebugSize, boneDebugSize, boneDebugSize)), Color.green);
+                    /*float3 influenceSize = 1f * ((bone.influenceMax - bone.influenceMin).ToFloat3() / 32f);
+                    float3 midPoint = (influenceSize / 2f);
+                    float3 influenceOffset = (bone.influenceMax.ToFloat3() / 32f - midPoint);*/
+                    float3 influenceSize = bone.GetInfluenceSize();
+                    float3 influenceOffset = bone.GetInfluenceOffset();
+                    DebugLines.DrawCubeLines(worldPosition + influenceOffset, skeletonRotation.Value, 0.5f * influenceSize, Color.red);
+                }
+            });
+        }
+
+    }
+}
+
+
+            /*Entities.WithAll<Bone>().ForEach((Entity e, ref Bone bone) =>
             {
                 if (World.EntityManager.Exists(bone.skeleton) && World.EntityManager.HasComponent<Skeleton>(bone.skeleton))
                 {
@@ -46,26 +71,7 @@ namespace Zoxel
                     DebugLines.DrawCubeLines(skeletonPosition.Value + newPosition, skeleton.mulRotation,
                                 new float3(boneDebugSize, boneDebugSize, boneDebugSize) * 0.6f, Color.red);
                 }
-            });
-            
-            Entities.WithAll<Bone, LocalToWorld>().ForEach((Entity e, ref Bone bone, ref LocalToWorld localToWorld) =>
-            {
-                if (World.EntityManager.Exists(bone.skeleton) && World.EntityManager.HasComponent<Skeleton>(bone.skeleton))
-                {
-                    Matrix4x4 localToWorldPos = localToWorld.Value;
-                    Vector3 position = localToWorldPos.GetColumn(3);
-                    var skeleton = World.EntityManager.GetComponentData<Skeleton>(bone.skeleton);
-                    var skeletonRotation = World.EntityManager.GetComponentData<Rotation>(bone.skeleton);
-                    //var newPosition = math.rotate(skeleton.mulRotation, position);
-                    DebugLines.DrawCubeLines(position, skeletonRotation.Value,
-                                1.2f * (new float3(boneDebugSize, boneDebugSize, boneDebugSize)), Color.green);
-                }
-            });
-        }
-
-    }
-}
-
+            });*/
                 /*if (World.EntityManager.Exists(parent.Value) && World.EntityManager.HasComponent<LocalToWorld>(parent.Value))
                 {
                     Matrix4x4 localToWorldPos = localToWorld.Value;

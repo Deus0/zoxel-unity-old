@@ -8,24 +8,15 @@ using Unity.Collections;
 
 namespace Zoxel
 {
-    public struct Bone : IComponentData
-    {
-        public byte voxelInfluence;
-        public float3 position;           // position within chunk - used for skinning
-        public Entity parent;           // parent bone
-        public Entity skeleton;
-    }
-        //public int id;
-        //public int3 localPosition;
-        //public int3 local;              // position offset from parent position - use this for animation - moving bones
-
     public struct Skeleton : IComponentData
     {
+        private static EntityArchetype boneArchtype;
         public BlitableArray<Entity> bones;
         public int3 size;
         public BlitableArray<int3> positions;
         public BlitableArray<int3> sizes;
         public quaternion mulRotation;
+        public BlitableArray<byte> boneIndexes;
 
         public void Dispose(EntityManager EntityManager)
         {
@@ -60,59 +51,8 @@ namespace Zoxel
                 positions[i] = positions_[i];
             }
         }
-        private static EntityArchetype boneArchtype;
-        public BlitableArray<byte> boneIndexes;
 
-        public void BakeWeights(EntityManager EntityManager, NativeArray<ZoxelVertex> verticesN)
-        {
-            var vertices = verticesN.ToArray();
-            boneIndexes = new BlitableArray<byte>(vertices.Length, Allocator.Persistent);
-
-            for (int j = 0; j < boneIndexes.Length; j++)
-            {
-                boneIndexes[j] = 0;
-            }
-            // for each bone - give it weight for the distance it is to the positions
-            float influence = 2 / 32f; // 0.04f;
-            float influenceAdd = 2 / 32f; //0.04f;
-            for (int k = 0; k < 32; k += 2)
-            {
-                for (int i = 0; i < bones.Length; i++)
-                {
-                    float boneInfluence = (int) EntityManager.GetComponentData<Bone>(bones[(int)i]).voxelInfluence;
-                    if (influence <= boneInfluence / 32f)
-                    {
-                        var bonePosition = EntityManager.GetComponentData<Bone>(bones[(int)i]).position;
-                        for (int j = 0; j < vertices.Length; j++)
-                        {
-                            if (boneIndexes[j] == 0)
-                            {
-                                float distanceTo = math.distance(vertices[j].position, bonePosition);
-                                if (distanceTo < influence)
-                                {
-                                    boneIndexes[j] = (byte)(i + 1);
-                                }
-                            }
-                        }
-                    }
-                    // influence should have a minimum and max, a bounding box around the bone position
-                    // this can be set in bones when generating and debugged with more box lines
-                    //DrawDebugSphere(chunk.bones[i], influence);
-                    // for each bone, fight weights within radius using vertexes
-                }
-                influence += influenceAdd;
-            }
-
-            for (int j = 0; j < boneIndexes.Length; j++)
-            {
-                if (boneIndexes[j] != 0)
-                {
-                    boneIndexes[j] = (byte)((int)boneIndexes[j] - 1);
-                }
-            }
-        }
-
-        public void SetBones(EntityManager EntityManager, Entity skeleton, int3[] positions, int[] parents)
+        public void SetBones(EntityManager EntityManager, Entity skeleton, int3[] bodyPositions, VoxData[] voxes, int3[] positions,int[] parents, byte[] axes)
         {
             Dispose(EntityManager);
             List<Entity> boneList = new List<Entity>();
@@ -123,11 +63,9 @@ namespace Zoxel
                     typeof(Parent),
                     typeof(LocalToParent),
                     typeof(LocalToWorld),
-                    //transform
                     typeof(Translation),
                     typeof(Rotation),
                     typeof(NonUniformScale),
-                    //typeof(Scale),
                     typeof(Bone)
                     );
             }
@@ -140,64 +78,117 @@ namespace Zoxel
                 float3 position = positions[i].ToFloat3() / 32f;
                 position -= totalSize / 2f;
                 position = math.rotate(rot3, position);
-                Bone newBone = new Bone {
+                var vox = voxes[i];
+                int3 halfSize = new int3((vox.size.x / 2), (vox.size.y / 2), (vox.size.z / 2));
+                int3 minusHalfSize = new int3(-vox.size.x / 2, -vox.size.y / 2, -vox.size.z / 2);
+                int3 bodyMidpoint = bodyPositions[i] + halfSize;
+                int3 boneOffset = bodyMidpoint - positions[i];
+                //minusHalfSize = new int3(minusHalfSize.x - (vox.size.x % 2), minusHalfSize.y, minusHalfSize.z - (vox.size.z % 2));
+                //halfSize = new int3(halfSize.x + 1, halfSize.y + 1, halfSize.z + 1);
+                //minusHalfSize = new int3(minusHalfSize.x - 1, minusHalfSize.y - 1, minusHalfSize.z - 1);
+                //halfSize = new int3(halfSize.x + 1, halfSize.y, halfSize.z + 1);
+                if ((SlotAxis)axes[i] == SlotAxis.Left || (SlotAxis)axes[i] == SlotAxis.Right)
+                {
+                    boneOffset = new int3(-boneOffset.x, -boneOffset.y, -boneOffset.z);
+                    //minusHalfSize.x--;
+                }
+                minusHalfSize.x -= (vox.size.x % 2);
+                //boneOffset.x -=  (vox.size.x % 2);
+                Bone newBone = new Bone
+                {
                     position = position,
                     skeleton = skeleton,
-                    voxelInfluence = 6
+                    influenceMin = (boneOffset + minusHalfSize),
+                    influenceMax = (boneOffset + halfSize)
                 };
-                // chest
-                if (i == 0)
-                {
-                    newBone.voxelInfluence = (byte) 22;
-                }
-                // head
-                if (i == 1)
-                {
-                    newBone.voxelInfluence = (byte) 32;
-                }
-                // hips?
-                if (i == 2)
-                {
-                    newBone.voxelInfluence = (byte) 22;
-                }
-                int leftArmBegin = 9;
-                int rightArmBegin = 13;
-                if (i == leftArmBegin || i == rightArmBegin)
-                {
-                    newBone.voxelInfluence = (byte) 12;
-                }
-                // biceps
-                if (i == leftArmBegin + 1 || i == rightArmBegin + 1)
-                {
-                    newBone.voxelInfluence = (byte) 12;
-                }
-                // calfs
-                if (i == leftArmBegin + 2 || i == rightArmBegin + 2)
-                {
-                    newBone.voxelInfluence = (byte) 12;
-                }
-                // hands
-                if (i == leftArmBegin + 3 || i == rightArmBegin + 3)
-                {
-                    newBone.voxelInfluence = (byte) 8;
-                }
-                int leftLegBegin = 3;
-                int rightLegBegin = 6;
-                // feet
-                if (i == leftLegBegin + 2 || i == rightLegBegin + 2)
-                {
-                    newBone.voxelInfluence = (byte) 16;
-                }
                 EntityManager.SetComponentData(bone, newBone);
-                boneList.Add(bone);
-                // set pos
-                EntityManager.SetComponentData(boneList[i], new Parent { Value = skeleton });
+                EntityManager.SetComponentData(bone, new Parent { Value = skeleton });
                 EntityManager.SetComponentData(bone, new Translation { Value = position });
                 EntityManager.SetComponentData(bone, new Rotation { Value = quaternion.identity });
                 EntityManager.SetComponentData(bone, new NonUniformScale { Value = new float3(1,1,1) });
-                
+                boneList.Add(bone);
+            }
+            bones = new BlitableArray<Entity>(boneList.Count, Unity.Collections.Allocator.Persistent);
+            for (int i = 0; i < bones.Length; i++)
+            {
+                bones[i] = boneList[i];
+            }
+            if (Bootstrap.instance.isAddAnimations)
+            {
+                AddAnimations(EntityManager);
+            }
+        }
+
+        public void BakeWeights(EntityManager EntityManager, NativeArray<ZoxelVertex> verticesN, int vertsCount)
+        {
+            var vertices = verticesN.ToArray();
+            boneIndexes = new BlitableArray<byte>(vertsCount, Allocator.Persistent);
+            for (int j = 0; j < boneIndexes.Length; j++)
+            {
+                boneIndexes[j] = 0;
+            }
+            for (int i = 0; i < bones.Length; i++)
+            {
+                var bone = EntityManager.GetComponentData<Bone>(bones[i]);
+                var bonePosition = bone.position;
+                float3 influenceSize = bone.GetInfluenceSize();
+                float3 influenceOffset = bone.GetInfluenceOffset();
+
+                /*float3 influenceSize = 1.0f * ((bone.influenceMax - bone.influenceMin).ToFloat3() / 32f);
+                float3 midPoint = (influenceSize / 2f);
+                float3 influenceOffset = (bone.influenceMax.ToFloat3() / 32f - midPoint);*/
+
+                var influenceMin = bonePosition + influenceOffset - influenceSize / 2f;
+                var influenceMax = bonePosition + influenceOffset + influenceSize / 2f;
+                //Debug.LogError("Baking Weights " + i + " influenceOffset: " + influenceOffset + " influenceSize: " + influenceSize);
+                for (int j = 0; j < vertsCount; j++)
+                {
+                    if (boneIndexes[j] == 0)
+                    {
+                        var vertPosition = vertices[j].position;
+                        if (vertPosition.x >= influenceMin.x && vertPosition.x <= influenceMax.x
+                            && vertPosition.y >= influenceMin.y && vertPosition.y <= influenceMax.y
+                            && vertPosition.z >= influenceMin.z && vertPosition.z <= influenceMax.z)
+                        {
+                            //DebugLines.DrawCubeLines(vertPosition, skeletonRotation.Value, 0.5f * influenceSize, Color.red);
+                            boneIndexes[j] = (byte)(i + 1);
+                        }
+                    }
+                }
+                // influence should have a minimum and max, a bounding box around the bone position
+                    // this can be set in bones when generating and debugged with more box lines
+                    //DrawDebugSphere(chunk.bones[i], influence);
+                    // for each bone, fight weights within radius using vertexes
+                }
+                //influence += influenceAdd;
+            //}
+
+            for (int j = 0; j < boneIndexes.Length; j++)
+            {
+                if (boneIndexes[j] != 0)
+                {
+                    boneIndexes[j] = (byte)((int)boneIndexes[j] - 1);
+                }
+            }
+        }
+
+        private void AddAnimations(EntityManager EntityManager) 
+        {
+            int chestIndex = 0;
+            int headIndex = 1;
+            int hipsIndex = 2;
+            int leftLegBegin = 3;
+            int rightLegBegin = 6;
+            int leftArmBegin = 9;
+            int rightArmBegin = 13;
+            float armSwingLength = 3 / 32f;
+            float swingSpeed = 0.9f;
+            for (int i = 0; i < bones.Length; i++) 
+            {
+                var bone = bones[i];
+                var position = EntityManager.GetComponentData<Bone>(bone).position;
                 // head bob
-                if (i == 1)
+                if (i == headIndex)
                 {
                     EntityManager.AddComponentData(bone, new PositionLerper
                     {
@@ -208,8 +199,6 @@ namespace Zoxel
                         loop = 1
                     });
                 }
-                float armSwingLength = 3 / 32f;
-                float swingSpeed = 0.9f;
                 // left arm animation
                 if (i >= leftArmBegin && i <= leftArmBegin + 3)
                 {
@@ -259,52 +248,86 @@ namespace Zoxel
                     });
                 }
             }
-            // set proper parents for bone heirarchy rather then all relative to skeleton positions
-            /*List<float3> newPositions = new List<float3>();
-            for (int i = 0; i < boneList.Count; i++)
-            {
-                if (i >= parents.Length) {
-                    continue;
-                }
-                int j = parents[i];
-                if (j != -1 && j < boneList.Count)
-                {
-                    EntityManager.SetComponentData(boneList[i], new Parent { Value = boneList[j] });
-                    var bone = EntityManager.GetComponentData<Bone>(boneList[i]);
-                    var boneParent =  EntityManager.GetComponentData<Bone>(boneList[j]);
-                    newPositions.Add(bone.localPosition - boneParent.localPosition);
-                    //UnityEngine.Debug.LogError(i + ":" + bone.localPosition + ":" + newPositions[newPositions.Count - 1] + ", is a sub bone of " + j);
-                }
-                else
-                {
-                    var bone = EntityManager.GetComponentData<Bone>(boneList[i]);
-                    EntityManager.SetComponentData(boneList[i], new Parent { Value = skeleton });
-                    newPositions.Add(bone.localPosition);
-                }
-            }
-            for (int i = 0; i < boneList.Count; i++)
-            {
-                EntityManager.SetComponentData(boneList[i], new Bone {  localPosition = newPositions[i], skeleton = skeleton });
-                EntityManager.SetComponentData(boneList[i], new Translation {  Value = newPositions[i]});
-            }*/
-            bones = new BlitableArray<Entity>(boneList.Count, Unity.Collections.Allocator.Persistent);
-            for (int i = 0; i < bones.Length; i++)
-            {
-                bones[i] = boneList[i];
-            }
         }
+    }
+}
 
         // start at core (first bone)
         // move to any children nodes
         // for all bones, if parent is this index, then set, and then add its child nodes
         // also set positions during this time as minus their parent one
-        private void AddChildren(List<Entity> bones)
+        /*private void AddChildren(List<Entity> bones)
         {
 
-        }
-    }
-}
+        }*/
 
+                // chest
+                /*if (i == chestIndex)
+                {
+                    newBone.voxelInfluence = (byte) 22;
+                }
+                // head
+                if (i == headIndex)
+                {
+                    newBone.voxelInfluence = (byte) 32;
+                }
+                // hips?
+                if (i == hipsIndex)
+                {
+                    newBone.voxelInfluence = (byte) 22;
+                }
+                if (i == leftArmBegin || i == rightArmBegin)
+                {
+                    newBone.voxelInfluence = (byte) 12;
+                }
+                // biceps
+                if (i == leftArmBegin + 1 || i == rightArmBegin + 1)
+                {
+                    newBone.voxelInfluence = (byte) 12;
+                }
+                // calfs
+                if (i == leftArmBegin + 2 || i == rightArmBegin + 2)
+                {
+                    newBone.voxelInfluence = (byte) 12;
+                }
+                // hands
+                if (i == leftArmBegin + 3 || i == rightArmBegin + 3)
+                {
+                    newBone.voxelInfluence = (byte) 8;
+                }
+                // feet
+                if (i == leftLegBegin + 2 || i == rightLegBegin + 2)
+                {
+                    newBone.voxelInfluence = (byte) 16;
+                }*/
+        // set proper parents for bone heirarchy rather then all relative to skeleton positions
+        /*List<float3> newPositions = new List<float3>();
+        for (int i = 0; i < boneList.Count; i++)
+        {
+            if (i >= parents.Length) {
+                continue;
+            }
+            int j = parents[i];
+            if (j != -1 && j < boneList.Count)
+            {
+                EntityManager.SetComponentData(boneList[i], new Parent { Value = boneList[j] });
+                var bone = EntityManager.GetComponentData<Bone>(boneList[i]);
+                var boneParent =  EntityManager.GetComponentData<Bone>(boneList[j]);
+                newPositions.Add(bone.localPosition - boneParent.localPosition);
+                //UnityEngine.Debug.LogError(i + ":" + bone.localPosition + ":" + newPositions[newPositions.Count - 1] + ", is a sub bone of " + j);
+            }
+            else
+            {
+                var bone = EntityManager.GetComponentData<Bone>(boneList[i]);
+                EntityManager.SetComponentData(boneList[i], new Parent { Value = skeleton });
+                newPositions.Add(bone.localPosition);
+            }
+        }
+        for (int i = 0; i < boneList.Count; i++)
+        {
+            EntityManager.SetComponentData(boneList[i], new Bone {  localPosition = newPositions[i], skeleton = skeleton });
+            EntityManager.SetComponentData(boneList[i], new Translation {  Value = newPositions[i]});
+        }*/
         /*
         public void InitializeBones(EntityManager EntityManager, Entity skeleton, SkeletonData meta)
         {

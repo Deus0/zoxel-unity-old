@@ -14,6 +14,7 @@ namespace Zoxel
         public List<VoxOperation> operations;
         public List<int> parents;
         public List<int3> bonePositions;
+        public List<byte> axes;
         //public List<float3> realPositions;
 
         public void Init()
@@ -23,6 +24,7 @@ namespace Zoxel
             operations = new List<VoxOperation>();
             parents = new List<int>();
             bonePositions = new List<int3>();
+            axes = new List<byte>();
         }
     }
 
@@ -74,6 +76,7 @@ namespace Zoxel
                                 bodyLayer.operations.Add(VoxOperation.None);
                                 bodyLayer.parents.Add(-1);
                                 bodyLayer.bonePositions.Add(coreDatam.model.data.size / 2);
+                                bodyLayer.axes.Add((byte)SlotAxis.Center);
                                 //float3 realPosition = coreDatam.model.data.size.ToFloat3()/2f;
                                 //bodyLayer.realPositions.Add(realPosition);
                                 AddChildren(ref equipment,
@@ -115,7 +118,8 @@ namespace Zoxel
                         combinedPositions = VoxData.FixPositions(combinedPositions, addition);
                         bodyLayer.bonePositions = VoxData.FixPositions(bodyLayer.bonePositions, addition);
                         skeleton.SetBody(model.size, combinedPositions, combinedVoxes);
-                        skeleton.SetBones(World.EntityManager, e, bodyLayer.bonePositions.ToArray(), bodyLayer.parents.ToArray());
+                        skeleton.SetBones(World.EntityManager, e, bodyLayer.positions.ToArray(), bodyLayer.voxes.ToArray(), bodyLayer.bonePositions.ToArray(), 
+                            bodyLayer.parents.ToArray(), bodyLayer.axes.ToArray());
                         World.EntityManager.SetComponentData(e, skeleton);
                     }
                 }
@@ -139,7 +143,7 @@ namespace Zoxel
         }*/
 
         bool AddChildren(ref Equipment equipment,
-            ref VoxBuildLayer bodyLayer, ref VoxBuildLayer gearLayer, //ref List<VoxData> voxes, ref List<int3> positions, ref List<VoxOperation> operations, 
+            ref VoxBuildLayer bodyLayer, ref VoxBuildLayer gearLayer,
             VoxOperation lastOperation, Item parentBodyPart, int bodyIndex, int3 position)
         {
             // for all female slots, find an empty one if it is the slot of our male one
@@ -163,40 +167,39 @@ namespace Zoxel
                     var attachedBodyPart = equipment.body[k];
                     if (bodyIndex != k && attachedBodyPart.bodyIndex == bodyIndex && attachedBodyPart.slotIndex == j && meta.ContainsKey(attachedBodyPart.data.id))
                     {
-                        //var possibleConnected = meta[bodyPart.data.id];
                         var attachItem = attachedBodyPart.data;
                         var maleSlot = attachItem.maleSlot;
                         if (maleSlot.id == femaleSlot.id)
                         {
                             var attachedModel = meta[attachItem.id].model.data;       // new part adding to body
                             var operation = lastOperation;
-                            int3 offset = position; //new int3();
-                            if (femaleSlot.axis == ((byte)SlotAxis.Bottom)) //SlotAxis.Bottom && maleSlot.axis == SlotAxis.Top)
+                            if (((VoxOperation)femaleModifier) != VoxOperation.None)
+                            {
+                                operation = ((VoxOperation)femaleModifier);
+                            }
+                            int3 offset = position;
+
+                            // using axis, calculate position offset
+
+                            if (femaleSlot.axis == ((byte)SlotAxis.Bottom))
                             { 
                                 offset += new int3(0, -attachedModel.size.y, 0);
-                                // get offsets x,z based off differences in sizes
-                                //offset.x += parentModel.size.x - attachedModel.size.x;
                                 offset.x += (parentModel.size.x - attachedModel.size.x) / 2;
                                 offset.z += (parentModel.size.z - attachedModel.size.z) / 2;
                             }
                             else if (femaleSlot.axis == ((byte)SlotAxis.Top)) 
-                            //else if (femaleSlot.axis == SlotAxis.Top && maleSlot.axis == SlotAxis.Bottom)
                             { 
                                 offset += new int3(0, parentModel.size.y, 0);
-                                //offset.x += (attachedModel.size.x - parentModel.size.x) / 2;
-                                //offset.z += (attachedModel.size.z - parentModel.size.z) / 2;
                                 offset.x += (parentModel.size.x - attachedModel.size.x) / 2;
                                 offset.z += (parentModel.size.z - attachedModel.size.z) / 2;
                             }
                             else if (femaleSlot.axis == ((byte)SlotAxis.Left)) 
-                            //else if (femaleSlot.axis == SlotAxis.Left && maleSlot.axis == SlotAxis.Right)
                             { 
                                 offset.y += (parentModel.size.y - attachedModel.size.y) / 2;
                                 offset.z += (parentModel.size.z - attachedModel.size.z) / 2;
-                                if (((VoxOperation)femaleModifier) == VoxOperation.FlipX)
+                                if (operation == VoxOperation.FlipX)
                                 {
                                     offset += new int3(parentModel.size.x, 0, 0);
-                                    operation = VoxOperation.FlipX;
                                 }
                                 else
                                 {
@@ -204,14 +207,12 @@ namespace Zoxel
                                 }
                             }
                             else if (femaleSlot.axis == ((byte)SlotAxis.Right)) 
-                           // else if (femaleSlot.axis == SlotAxis.Right && maleSlot.axis == SlotAxis.Left)
                             { 
                                 offset.y += (parentModel.size.y - attachedModel.size.y) / 2;
                                 offset.z += (parentModel.size.z - attachedModel.size.z) / 2;
-                                if (((VoxOperation)femaleModifier) == VoxOperation.FlipX)
+                                if (operation == VoxOperation.FlipX)
                                 {
                                     offset += new int3(-attachedModel.size.x, 0, 0);
-                                    operation = VoxOperation.FlipX;
                                 }
                                 else
                                 {
@@ -223,58 +224,55 @@ namespace Zoxel
                             {
                                 offset +=new int3(-attachItem.offset.x,  attachItem.offset.y,  attachItem.offset.z);
                                 offset +=new int3(-femaleOffset.x,  femaleOffset.y,  femaleOffset.z);
-                            } 
+                            }
                             else 
                             {
                                 offset += attachItem.offset;
                                 offset += femaleOffset;
+                                //Debug.LogError("Norm: Offsetting model by: " + (femaleOffset.x));
+                                if (femaleSlot.axis == ((byte)SlotAxis.Bottom) || femaleSlot.axis == ((byte)SlotAxis.Top))
+                                {
+                                    offset += new int3((attachedModel.size.x % 2), 0, (attachedModel.size.z % 2));
+                                    offset += new int3((parentModel.size.x % 2), 0, (parentModel.size.z % 2));
+                                }
+                            }
+                            int3 bonePosition = offset;
+                            if (femaleSlot.axis == ((byte)SlotAxis.Bottom) || femaleSlot.axis == ((byte)SlotAxis.Top))
+                            {
+                                bonePosition.x += attachedModel.size.x / 2;
+                                bonePosition.z += attachedModel.size.z / 2;
+                            }
+                            else if (femaleSlot.axis == ((byte)SlotAxis.Left) || femaleSlot.axis == ((byte)SlotAxis.Right))
+                            {
+                                bonePosition.y += attachedModel.size.y / 2;
+                                bonePosition.z += attachedModel.size.z / 2;
+                                if (operation == VoxOperation.FlipX)
+                                {
+                                    bonePosition.x += attachedModel.size.x;
+                                }
                             }
                             if (femaleSlot.layer == 0)
                             {
                                 bodyLayer.voxes.Add(attachedModel);
                                 bodyLayer.positions.Add(offset);
                                 bodyLayer.operations.Add(operation);
+                                bodyLayer.axes.Add(femaleSlot.axis);
                                 bodyLayer.parents.Add(bodyIndex);
-                                int3 bonePosition = offset;
-                                if (femaleSlot.axis == ((byte)SlotAxis.Bottom) || femaleSlot.axis == ((byte)SlotAxis.Top))
-                                {
-                                    bonePosition.x += attachedModel.size.x / 2;
-                                    bonePosition.z += attachedModel.size.z / 2;
-                                }
-                                else if (femaleSlot.axis == ((byte)SlotAxis.Left) || femaleSlot.axis == ((byte)SlotAxis.Right))
-                                {
-                                    bonePosition.y += attachedModel.size.y / 2;
-                                    bonePosition.z += attachedModel.size.z / 2;
-                                    if (operation == VoxOperation.FlipX)
-                                    {
-                                        bonePosition.x += attachedModel.size.x;
-                                    }
-                                }
                                 bodyLayer.bonePositions.Add(bonePosition);
-                                //float3 realPosition = (offset + attachedModel.size / 2).ToFloat3();
-                                //Debug.LogError("Position is: " + position + ",  offset: " + offset + ",  realPosition: " + realPosition);
-                                //bodyLayer.realPositions.Add(realPosition);
                             }
                             else
                             {
                                 gearLayer.voxes.Add(attachedModel);
                                 gearLayer.positions.Add(offset);
                                 gearLayer.operations.Add(operation);
+                                gearLayer.axes.Add(femaleSlot.axis);
                                 gearLayer.parents.Add(bodyIndex);
-                                //gearLayer.realPositions.Add(0.5f*((1f / 16f) * (offset.ToFloat3() + (attachedModel.size.ToFloat3() / 2))));
-                            }
-                            //Debug.LogError("Adding " + maleSlot.name + " with item: " + possibleConnected.name
-                            //    + " and offset: " + offset + " and vox size of: " + head.size);
-                            //if (bodyLayer.voxes.Count >= 3)
-                            {
-                                //return false;
+                                gearLayer.bonePositions.Add(bonePosition);
                             }
                             if (!AddChildren(ref equipment,ref bodyLayer, ref gearLayer, operation, attachItem, k, offset))
                             {
                                 return false;
                             }
-                            // use body / previous added position in addition to offset
-                            //offset += new int3(0, head.size.y, 0);
                             break;
                         }
                     }

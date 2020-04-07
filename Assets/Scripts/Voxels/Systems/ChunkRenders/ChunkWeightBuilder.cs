@@ -15,7 +15,7 @@ namespace Zoxel.Voxels
         {
             public void Execute(ref ChunkRendererBuilder chunkRendererBuilder, ref ChunkRenderer chunk, ref ChunkRendererWeights chunkRendererWeights)   //Entity entity, int index,  
             {
-                if ((chunkRendererBuilder.state == 3) && 
+                /*if ((chunkRendererBuilder.state == 3) && 
                     (chunk.hasWeights == 1))
                 {
                     chunkRendererBuilder.state = 4;
@@ -36,7 +36,7 @@ namespace Zoxel.Voxels
                             }
                         }
                     }
-                }
+                }*/
             }
 
             private void DrawDebugSphere(float3 position, float sphereDebugRadius)

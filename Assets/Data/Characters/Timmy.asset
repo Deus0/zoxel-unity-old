@@ -23,14 +23,31 @@ MonoBehaviour:
   quests: []
   questsToGive: []
   items:
-  - {fileID: 11400000, guid: 1283bb233c0560e8b91630b2f6476bb6, type: 2}
+  - {fileID: 0}
   itemPickupRadius: 5
   dropItems: []
-  vox: {fileID: -8959535140834087255, guid: abc87e4ddd32ad34c85c353873bdcb4e, type: 3}
-  body: []
-  equipment: []
-  animator: {fileID: 0}
-  skeleton: {fileID: 11400000, guid: 0d72a2a9afa23b848a2dbfec45519886, type: 2}
+  vox: {fileID: 0}
+  body:
+  - {fileID: -7624148026613651591, guid: c38e455ed460d5ae48594bb951c80dd5, type: 3}
+  - {fileID: -7585642854945373242, guid: dd6a207c4b41340559ae82070eebf29a, type: 3}
+  - {fileID: 1727586372709570010, guid: 9ee76a94f508deb4980d1e6e476a4818, type: 3}
+  - {fileID: -7383457661861002791, guid: f739a158088009741bdcb6370a880aed, type: 3}
+  - {fileID: -6202362112819762984, guid: 3676bb4ddd9bae24d9172ac2c8937585, type: 3}
+  - {fileID: -3671951570112999228, guid: 9a8052e2fae6d82428890f189e25cc9c, type: 3}
+  - {fileID: 7677429994997403465, guid: 2ca334fd7f161224e972bbd666a96040, type: 3}
+  - {fileID: -7383457661861002791, guid: f739a158088009741bdcb6370a880aed, type: 3}
+  - {fileID: -6202362112819762984, guid: 3676bb4ddd9bae24d9172ac2c8937585, type: 3}
+  - {fileID: -3671951570112999228, guid: 9a8052e2fae6d82428890f189e25cc9c, type: 3}
+  - {fileID: 7677429994997403465, guid: 2ca334fd7f161224e972bbd666a96040, type: 3}
+  - {fileID: 7796020589606970766, guid: 47d19fef5428f15418dbf3c15123f866, type: 3}
+  - {fileID: 3153652771158498683, guid: ddd403b7dec2b344883d9d9255d84f85, type: 3}
+  - {fileID: -6183912508347336809, guid: 77b4962f86d274e46b8e65a2dbea713a, type: 3}
+  - {fileID: 7796020589606970766, guid: 47d19fef5428f15418dbf3c15123f866, type: 3}
+  - {fileID: 3153652771158498683, guid: ddd403b7dec2b344883d9d9255d84f85, type: 3}
+  - {fileID: -6183912508347336809, guid: 77b4962f86d274e46b8e65a2dbea713a, type: 3}
+  gear:
+  - {fileID: 2164706817165810311, guid: 47b40f398622f6b45a9610b7d1de95a6, type: 3}
+  - {fileID: -3741016053869477354, guid: 648d4017d7ba2831dac970d7f14b2e36, type: 3}
   spawnSound: {fileID: 11400000, guid: dfc4c18e202770742a5c4ff545161b34, type: 2}
   deathSound: {fileID: 11400000, guid: ab6a39e5d94cc914bbd9bd20b905b9c1, type: 2}
   stats:

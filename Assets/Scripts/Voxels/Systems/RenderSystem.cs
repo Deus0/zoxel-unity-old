@@ -6,9 +6,8 @@ using Unity.Rendering;
 using Unity.Transforms;
 using System;
 
-namespace Zoxel
+namespace Zoxel.Voxels
 {
-
     [DisableAutoCreation]
     public class RenderSystem : ComponentSystem
     {
@@ -16,7 +15,7 @@ namespace Zoxel
     
         protected override void OnCreate()
         {
-            m_Group = GetEntityQuery(typeof(ChunkMesh), typeof(Translation));
+            m_Group = GetEntityQuery(typeof(ChunkMeshLink), typeof(Translation));
         }
     
         protected override void OnUpdate()
@@ -31,10 +30,8 @@ namespace Zoxel
                 float4x4 matrix2 = float4x4.TRS(positionData[i].Value, identityRotation, scale);
                 Matrix4x4 matrix = matrix2;
                 var data = renderData[i];
-                var renderMesh = World.EntityManager.GetSharedComponentData<ChunkMesh>(data);
-                
-                Graphics.DrawMesh(renderMesh.mesh, matrix, //new Matrix4x4(position.m0, position.m1, position.m2, position.m3), 
-                    renderMesh.material, 0);
+                var renderMesh = World.EntityManager.GetSharedComponentData<ChunkMeshLink>(data);
+                Graphics.DrawMesh(renderMesh.mesh, matrix, renderMesh.material, 0);
             }
             positionData.Dispose();
             renderData.Dispose();

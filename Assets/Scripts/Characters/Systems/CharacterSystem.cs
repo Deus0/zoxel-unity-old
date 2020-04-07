@@ -93,6 +93,7 @@ namespace Zoxel
                 typeof(Character),
                 typeof(NearbyCharacters),
                 typeof(Equipment),
+                typeof(Skeleton),
                 // game
                 typeof(Stats),
                 typeof(Skills),

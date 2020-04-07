@@ -27,6 +27,8 @@ namespace Zoxel.Voxels
             // renderers
             modelChunkRenderArchtype = World.EntityManager.CreateArchetype(
                 // important
+                typeof(ChunkMesh),
+                typeof(ChunkMeshAnimation),
                 typeof(ChunkRenderer),
                 typeof(ChunkSides),
                 typeof(ZoxID),
@@ -43,17 +45,6 @@ namespace Zoxel.Voxels
                 typeof(RenderMesh),
                 typeof(Static)
             );
-            worldChunkRenderArchtype = World.EntityManager.CreateArchetype(
-                // important
-                typeof(ChunkRenderer),
-                typeof(ChunkSides),
-                typeof(ZoxID),
-                // renderer
-                typeof(ChunkMesh),
-                // other stuff
-                typeof(Parent),
-                typeof(Translation)
-            );
             // render prefab
             modelChunkRenderPrefab = World.EntityManager.CreateEntity(modelChunkRenderArchtype);
             World.EntityManager.AddComponentData(modelChunkRenderPrefab, new Prefab { });
@@ -63,6 +54,17 @@ namespace Zoxel.Voxels
             renderer.receiveShadows = true;
             World.EntityManager.SetSharedComponentData(modelChunkRenderPrefab, renderer);
             // world chunk prefab
+            worldChunkRenderArchtype = World.EntityManager.CreateArchetype(
+                // important
+                typeof(ZoxID),
+                typeof(ChunkMeshLink),
+                typeof(ChunkMesh),
+                typeof(ChunkRenderer),
+                typeof(ChunkSides),
+                // other stuff
+                typeof(Parent),
+                typeof(Translation)
+            );
             worldChunkRenderPrefab = World.EntityManager.CreateEntity(worldChunkRenderArchtype);
             World.EntityManager.AddComponentData(worldChunkRenderPrefab, new Prefab { });
 
@@ -120,7 +122,7 @@ namespace Zoxel.Voxels
                 }
                 else if (EntityManager.HasComponent<ChunkMesh>(e))
                 {
-                    ChunkMesh renderer = EntityManager.GetSharedComponentData<ChunkMesh>(e);
+                    var renderer = EntityManager.GetSharedComponentData<ChunkMeshLink>(e);
                     GameObject.Destroy(renderer.mesh);
                 }
 				EntityManager.DestroyEntity(e);
@@ -270,6 +272,7 @@ namespace Zoxel.Voxels
                 if (model.id != 0)
                 {
                     ChunkRenderer chunkRender = World.EntityManager.GetComponentData<ChunkRenderer>(renderEntity);
+                    chunkRender.isCenter = 1;
                     List<Color> colors = model.GetColors(); //  new List<Color>(); // 
                     chunkRender.voxelColors = new BlitableArray<float3>(colors.Count, Allocator.Persistent);
                     for (int a = 0; a < colors.Count; a++)
@@ -304,25 +307,22 @@ namespace Zoxel.Voxels
             {
                 World.EntityManager.SetComponentData(chunkRendererEntity, new NonUniformScale { Value = new float3(1,1,1) });
                 World.EntityManager.SetComponentData(chunkRendererEntity, new Rotation { Value = quaternion.identity });
-                RenderMesh renderer = World.EntityManager.GetSharedComponentData<RenderMesh>(chunkRendererEntity);
+                var renderer = World.EntityManager.GetSharedComponentData<RenderMesh>(chunkRendererEntity);
                 renderer.material = material;
                 renderer.subMesh = materialID;
                 renderer.mesh = new Mesh();
+                renderer.mesh.MarkDynamic();
                 World.EntityManager.SetSharedComponentData(chunkRendererEntity, renderer);
             }
-            else if (World.EntityManager.HasComponent<ChunkMesh>(chunkRendererEntity))
+            else if (World.EntityManager.HasComponent<ChunkMeshLink>(chunkRendererEntity))
             {
-                ChunkMesh renderer = World.EntityManager.GetSharedComponentData<ChunkMesh>(chunkRendererEntity);
+                var renderer = World.EntityManager.GetSharedComponentData<ChunkMeshLink>(chunkRendererEntity);
                 renderer.material = material;
                 renderer.mesh = new Mesh();
+                renderer.mesh.MarkDynamic();
                 World.EntityManager.SetSharedComponentData(chunkRendererEntity, renderer);
             }
-            //if (isModel)
-            {
-                AddChunkRenderComponent(chunkRendererEntity, chunkEntity, ref chunk, materialID, skeletonID);
-            }
-            //chunkRenders.Add(id, chunkRendererEntity);
-            //return id;
+            AddChunkRenderComponent(chunkRendererEntity, chunkEntity, ref chunk, materialID, skeletonID);
         }
         public void AddChunkRenderComponent(Entity chunkRenderEntity, Entity chunkEntity, ref Chunk chunk, int materialID, int skeletonID)// byte buildState = 0)
         {
@@ -330,7 +330,7 @@ namespace Zoxel.Voxels
             chunkRender.chunk = chunkEntity;
             chunkRender.materialID = (byte)materialID;
             chunkRender.SetMetaData(voxelSpawnSystem.meta, voxelSpawnSystem.voxelIDs);
-            chunkRender.Init(chunk.Value.voxelDimensions); //, ChunkSpawnSystem.maxCacheVerts, ChunkSpawnSystem.maxCacheTriangles);
+             //, ChunkSpawnSystem.maxCacheVerts, ChunkSpawnSystem.maxCacheTriangles);
             chunkRender.Value = chunk.Value;
             /*if (skeletonID != 0)
             {
@@ -349,6 +349,10 @@ namespace Zoxel.Voxels
             ChunkSides sides = new ChunkSides();
             sides.Init(chunk.Value.voxelDimensions);
             World.EntityManager.SetComponentData(chunkRenderEntity, sides);
+
+            ChunkMesh chunkMesh = new ChunkMesh();
+            chunkMesh.Init(chunk.Value.voxelDimensions);
+            World.EntityManager.SetComponentData(chunkRenderEntity, chunkMesh);
         }
 
     }

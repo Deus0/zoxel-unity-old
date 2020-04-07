@@ -19,29 +19,96 @@ namespace Zoxel.Voxels
 	public class ChunkMeshBuilderSystem : JobComponentSystem
     {
         [BurstCompile]
-		struct ChunkMeshBuilderJob : IJobForEach<ChunkRendererBuilder, ChunkRenderer, ChunkSides> //IJobForEach<ChunkRenderer>
+		struct ChunkMeshBuilderJob : IJobForEach<ChunkMesh, ChunkRendererBuilder, ChunkRenderer, ChunkSides> 
 		{
-            public void Execute(ref ChunkRendererBuilder chunkRendererBuilder, ref ChunkRenderer chunk, ref ChunkSides chunkSides)   //Entity entity, int index,  
+            public void Execute(ref ChunkMesh chunkMesh, ref ChunkRendererBuilder chunkRendererBuilder, ref ChunkRenderer chunkRenderer, ref ChunkSides chunkSides)
 			{
 				if (chunkRendererBuilder.state == 2)
                 {
                     if (chunkSides.sidesUp.Length != 0)
                     {
                         chunkRendererBuilder.state = 3;
-                        GenerateCubeMesh(ref chunk, ref chunkSides);
+                        GenerateCubeMesh(ref chunkMesh, ref chunkRenderer, ref chunkSides);
+                        if (chunkRenderer.isCenter == 1)
+                        {
+                            chunkMesh.vertices = CentreMesh(chunkMesh.vertices);
+                            chunkMesh.vertices = RotateMesh(chunkMesh.vertices);
+                        }
+                        chunkMesh.verticesDirty = 1;
+                        chunkMesh.trianglesDirty = 1;
                     }
                 }
 			}
 
-            private void GenerateCubeMesh(ref ChunkRenderer chunk, ref ChunkSides chunkSides)
+            public BlitableArray<ZoxelVertex> CentreMesh(BlitableArray<ZoxelVertex> vertices)
+            {
+                //mesh.RecalculateBounds();
+                float3 min = new float3(6666,6666,6666);
+                float3 max = new float3(-6666,-6666,-6666);
+                for (int i = 0; i < vertices.Length; i++)
+                {
+                    if (vertices[i].position.x < min.x)
+                    {
+                        min.x = vertices[i].position.x;
+                    }
+                    if (vertices[i].position.y < min.y)
+                    {
+                        min.y = vertices[i].position.y;
+                    }
+                    if (vertices[i].position.z < min.z)
+                    {
+                        min.z = vertices[i].position.z;
+                    }
+                    if (vertices[i].position.x > max.x)
+                    {
+                        max.x = vertices[i].position.x;
+                    }
+                    if (vertices[i].position.y > max.y)
+                    {
+                        max.y = vertices[i].position.y;
+                    }
+                    if (vertices[i].position.z > max.z)
+                    {
+                        max.z = vertices[i].position.z;
+                    }
+                }
+                //float3 min = mesh.bounds.min;
+                float3 extents = (max - min) / 2f; //mesh.bounds.extents;
+                for (int i = 0; i < vertices.Length; i++)
+                {
+                    var verto = vertices[i];
+                    var position = verto.position;
+                    position -= min;
+                    position -= extents;
+                    verto.position = position;
+                    vertices[i] = verto;
+                }
+                return vertices;
+            }
+
+
+            public BlitableArray<ZoxelVertex> RotateMesh(BlitableArray<ZoxelVertex> vertices)
+            {
+                quaternion rot = UnityEngine.Quaternion.Euler(180, 0, 180);
+                for (int i = 0; i < vertices.Length; i++)
+                {
+                    var verto = vertices[i];
+                    var position = verto.position;
+                    position = math.rotate(rot, position);
+                    verto.position = position;
+                    vertices[i] = verto;
+                }
+                return vertices;
+            }
+
+            private void GenerateCubeMesh(ref ChunkMesh chunkMesh, ref ChunkRenderer chunk, ref ChunkSides chunkSides)
             {
                 // used in builder
-                chunk.buildPointer = new BuildPointer();
+                chunkMesh.buildPointer = new ChunkMesh.BuildPointer();
                 int voxelArrayIndex = 0;
                 int sideIndex;
                 int voxelMetaIndex;
                 float3 position = new float3(0, 0, 0);
-               // float3 whiteColor = new float3(1, 1, 1);
                 for (position.x = 0; position.x < chunk.Value.voxelDimensions.x; position.x++)
                 {
                     for (position.y = 0; position.y < chunk.Value.voxelDimensions.y; position.y++)
@@ -60,13 +127,13 @@ namespace Zoxel.Voxels
                                     || (sideIndex == 4 && chunkSides.sidesBack[voxelArrayIndex] != 0)
                                     || (sideIndex == 5 && chunkSides.sidesForward[voxelArrayIndex] != 0))
                                 {
-                                    BuildVoxelSide(ref chunk, sideIndex, voxelMetaIndex, position);
-                                    if (chunk.buildPointer.vertIndex + 4 >= chunk.vertices.Length ||
-                                        chunk.buildPointer.triangleIndex + 6 >= chunk.triangles.Length)
+                                    BuildVoxelSide(ref chunkMesh,  ref chunk, sideIndex, voxelMetaIndex, position);
+                                    /*if (chunk.buildPointer.vertIndex + 4 >= chunk.vertices.Length ||
+                                        chunkMesh.buildPointer.triangleIndex + 6 >= chunk.triangles.Length)
                                     {
                                         //chunk.hasBuiltMeshData = 1;
                                         return;
-                                    }
+                                    }*/
                                 }
                             }
                             voxelArrayIndex++;
@@ -75,13 +142,13 @@ namespace Zoxel.Voxels
                 }
             }
 
-            private void BuildVoxelSide(ref ChunkRenderer chunk, int sideIndex, int voxelMetaIndex, float3 position)
+            private void BuildVoxelSide(ref ChunkMesh chunkMesh, ref ChunkRenderer chunk, int sideIndex, int voxelMetaIndex, float3 position)
             {
                 int arrayIndex;
                 // draw side!
                 for (arrayIndex = 0; arrayIndex < 4; arrayIndex++)
                 {
-                    var vert = chunk.vertices[arrayIndex + chunk.buildPointer.vertIndex];
+                    var vert = chunkMesh.vertices[arrayIndex + chunkMesh.buildPointer.vertIndex];
                     // verts
                     // get cube verts
                     // use an array for model indexes in chunkRender
@@ -152,19 +219,19 @@ namespace Zoxel.Voxels
                     {
                         vert.uv = new float2(0, 0);
                     }
-                    chunk.vertices[arrayIndex + chunk.buildPointer.vertIndex] = vert;
+                    chunkMesh.vertices[arrayIndex + chunkMesh.buildPointer.vertIndex] = vert;
                 }
 
                 // triangle points! (6 indexes instead of 4 verrts)
                 for (arrayIndex = 0; arrayIndex < 6; arrayIndex++)
                 {
-                    chunk.triangles[arrayIndex + chunk.buildPointer.triangleIndex] =
-                        cubeTriangles[sideIndex * 6 + arrayIndex] + chunk.buildPointer.vertIndex;
+                    chunkMesh.triangles[arrayIndex + chunkMesh.buildPointer.triangleIndex] =
+                        cubeTriangles[sideIndex * 6 + arrayIndex] + chunkMesh.buildPointer.vertIndex;
                 }
 
                 // update index
-                chunk.buildPointer.vertIndex += 4;
-                chunk.buildPointer.triangleIndex += 6;
+                chunkMesh.buildPointer.vertIndex += 4;
+                chunkMesh.buildPointer.triangleIndex += 6;
             }
 
             private void GenerateSmoothMesh(ref ChunkRenderer chunk)

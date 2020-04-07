@@ -34,8 +34,10 @@ namespace Zoxel
         public bool isMutateVoxes = false;
         public bool isAnimateRenders = false;
         public bool isMonsters = false;
-        public bool isUseModels = true;
         [Header("Debug Settings")]
+        public bool isDebugWeightColours;
+        public bool isAddAnimations = true;
+        public bool isUseModels = true;
         public bool DebugColliders = true;
         // debugs
         public static bool DebugChunks = false;

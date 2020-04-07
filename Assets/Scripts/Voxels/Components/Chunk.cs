@@ -31,6 +31,26 @@ namespace Zoxel.Voxels
 		public byte hasUpdatedRight;
 		public byte hasUpdatedForward;
 		public byte hasUpdatedBack;
+		
+		public static void Destroy(EntityManager EntityManager, Entity e)
+		{
+			if (EntityManager.Exists(e))
+			{
+				if (EntityManager.HasComponent<Chunk>(e))
+				{
+					Chunk chunk = EntityManager.GetComponentData<Chunk>(e);
+					for (int i = 0; i < chunk.chunkRenders.Length; i++)
+					{
+						if (EntityManager.Exists(chunk.chunkRenders[i]))
+						{
+							EntityManager.DestroyEntity(chunk.chunkRenders[i]);
+						}
+					}
+					chunk.Dispose();
+				}
+				EntityManager.DestroyEntity(e);
+			}
+		}
 
 		public int3 GetVoxelPosition()
         {
@@ -52,19 +72,6 @@ namespace Zoxel.Voxels
 			int xySize = (int)(voxelDimensions.x * voxelDimensions.y);
 			Value.voxelsForward = new BlitableArray<byte>(xySize, Allocator.Persistent);
 			Value.voxelsBack = new BlitableArray<byte>(xySize, Allocator.Persistent);
-		}
-		
-		public static void Destroy(EntityManager EntityManager, Entity e)
-		{
-			if (EntityManager.Exists(e))
-			{
-				if (EntityManager.HasComponent<Chunk>(e))
-				{
-					Chunk chunk = EntityManager.GetComponentData<Chunk>(e);
-					chunk.Dispose();
-				}
-				EntityManager.DestroyEntity(e);
-			}
 		}
 
 		public void Dispose()

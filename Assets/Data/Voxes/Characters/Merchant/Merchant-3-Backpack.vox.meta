@@ -1,0 +1,26 @@
+fileFormatVersion: 2
+guid: 648d4017d7ba2831dac970d7f14b2e36
+ScriptedImporter:
+  internalIDToNameTable: []
+  externalObjects: {}
+  serializedVersion: 2
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+  script: {fileID: 11500000, guid: 5441f7bda96807d409522dc8d0af4b33, type: 3}
+  scale:
+    x: 0.5
+    y: 0.5
+    z: 0.5
+  isItem: 1
+  itemTexture: {fileID: 11400000, guid: 2e863b7a711fd554c89fb2205856610e, type: 2}
+  vox: {fileID: -6305991243689176329, guid: 648d4017d7ba2831dac970d7f14b2e36, type: 3}
+  item: {fileID: -3741016053869477354, guid: 648d4017d7ba2831dac970d7f14b2e36, type: 3}
+  offset:
+    x: -3
+    y: 0
+    z: 2
+  maleSlot: {fileID: 11400000, guid: 54e79129de25df15a94f83dea339550f, type: 2}
+  femaleSlots: []
+  femaleOffsets: []
+  femaleModifiers: 

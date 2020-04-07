@@ -27,5 +27,6 @@ ScriptedImporter:
   - {fileID: 11400000, guid: 333ad04ad689c3f0793ee40ffe9abcc0, type: 2}
   - {fileID: 11400000, guid: 333ad04ad689c3f0793ee40ffe9abcc0, type: 2}
   - {fileID: 11400000, guid: c27a5f85e1f7abbe19e4e95b5f83c5a2, type: 2}
+  - {fileID: 11400000, guid: 54e79129de25df15a94f83dea339550f, type: 2}
   femaleOffsets: []
   femaleModifiers: 0000000000000000000000000100000000000000
